@@ -1,9 +1,9 @@
 #include <baseview.h>
 
-BaseView_vtable table = { BaseView_ctor, BaseView_testa };
+BaseView_vtable BaseView_table = { BaseView_ctor, BaseView_testa };
 
 void BaseView_ctor( BaseView* this, u8 x, u8 y, u8 width, u8 height ) {
-	this->functions = &table;
+	this->functions = &BaseView_table;
 
 	this->x = x;
 	this->y = y;
