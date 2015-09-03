@@ -9,6 +9,7 @@ struct SimpleTextView;
 typedef struct {
 	void ( *SimpleTextView )( struct SimpleTextView*, char* text, u8, u8, u8, u8 );
 	u8 ( *testa )( struct BaseView* );
+	void ( *render )( struct SimpleTextView* );
 } SimpleTextView_vtable;
 
 typedef struct SimpleTextView {
@@ -18,5 +19,6 @@ typedef struct SimpleTextView {
 } SimpleTextView;
 
 void SimpleTextView_ctor( SimpleTextView* this, char* text, u8 x, u8 y, u8 width, u8 height );
+void SimpleTextView_render( SimpleTextView* this );
 
 #endif

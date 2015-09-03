@@ -158,7 +158,7 @@ LOAD /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libm.a
                 0x0000000000000000                __DYNAMIC = 0x0
                 0x0000000001000000                PROVIDE (__stack, 0x1000000)
 
-.text           0x0000000000000000    0x13dac
+.text           0x0000000000000000    0x13e00
  *(.text .text.*)
  .text          0x0000000000000000      0x50e boot/sega.o
  *fill*         0x000000000000050e        0x2 
@@ -610,85 +610,88 @@ LOAD /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libm.a
  .text          0x000000000001040c       0x2e /opt/toolchains/gen/m68k-elf/lib/gcc/m68k-elf/4.8.2/libgcc.a(_umodsi3.o)
                 0x000000000001040c                __umodsi3
  *fill*         0x000000000001043a        0x2 
- .text          0x000000000001043c       0x32 src/baseview.o
+ .text          0x000000000001043c       0x56 src/baseview.o
                 0x000000000001043c                BaseView_ctor
                 0x0000000000010460                BaseView_testa
- *fill*         0x000000000001046e        0x2 
- .text          0x0000000000010470       0x38 src/simpletextview.o
-                0x0000000000010470                SimpleTextView_ctor
- .text          0x00000000000104a8        0x0 src/main.o
- .text.startup  0x00000000000104a8       0x3c src/main.o
-                0x00000000000104a8                main
- .text          0x00000000000104e4      0x4ba src/jsmn.o
-                0x00000000000104e4                jsmn_parse
-                0x000000000001098c                jsmn_init
-                0x00000000000109a0                . = ALIGN (0x4)
- *fill*         0x000000000001099e        0x2 
-                0x00000000000109a0                __CTOR_LIST__ = .
-                0x00000000000109a0        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
+                0x000000000001046e                BaseView_render
+ *fill*         0x0000000000010492        0x2 
+ .text          0x0000000000010494       0x66 src/simpletextview.o
+                0x0000000000010494                SimpleTextView_ctor
+                0x00000000000104cc                SimpleTextView_render
+ *fill*         0x00000000000104fa        0x2 
+ .text          0x00000000000104fc        0x0 src/main.o
+ .text.startup  0x00000000000104fc       0x3c src/main.o
+                0x00000000000104fc                main
+ .text          0x0000000000010538      0x4ba src/jsmn.o
+                0x0000000000010538                jsmn_parse
+                0x00000000000109e0                jsmn_init
+                0x00000000000109f4                . = ALIGN (0x4)
+ *fill*         0x00000000000109f2        0x2 
+                0x00000000000109f4                __CTOR_LIST__ = .
+                0x00000000000109f4        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
  *(.ctors)
-                0x00000000000109a4        0x4 LONG 0x0
-                0x00000000000109a8                __CTOR_END__ = .
-                0x00000000000109a8                __DTOR_LIST__ = .
-                0x00000000000109a8        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
+                0x00000000000109f8        0x4 LONG 0x0
+                0x00000000000109fc                __CTOR_END__ = .
+                0x00000000000109fc                __DTOR_LIST__ = .
+                0x00000000000109fc        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
  *(.dtors)
-                0x00000000000109ac        0x4 LONG 0x0
-                0x00000000000109b0                __DTOR_END__ = .
+                0x0000000000010a00        0x4 LONG 0x0
+                0x0000000000010a04                __DTOR_END__ = .
  *(.rodata .rodata.*)
  .rodata.str1.1
-                0x00000000000109b0      0x13e /opt/toolchains/gen/m68k-elf/lib/libmd.a(sys.o)
+                0x0000000000010a04      0x13e /opt/toolchains/gen/m68k-elf/lib/libmd.a(sys.o)
  .rodata.str1.1
-                0x0000000000010aee       0x21 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp.o)
+                0x0000000000010b42       0x21 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp.o)
                                          0x4c (size before relaxing)
- *fill*         0x0000000000010b0f        0x1 
- .rodata        0x0000000000010b10        0x4 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp.o)
-                0x0000000000010b10                PLAN_A
-                0x0000000000010b12                PLAN_B
+ *fill*         0x0000000000010b63        0x1 
+ .rodata        0x0000000000010b64        0x4 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp.o)
+                0x0000000000010b64                PLAN_A
+                0x0000000000010b66                PLAN_B
  .rodata.str1.1
                 0x0000000000000000        0x2 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tools.o)
- .rodata        0x0000000000010b14      0x104 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_pal.o)
-                0x0000000000010b14                palette_blue
-                0x0000000000010b34                palette_green
-                0x0000000000010b54                palette_red
-                0x0000000000010b74                palette_grey
-                0x0000000000010b94                palette_black
-                0x0000000000010b98                palette_black_all
- .rodata        0x0000000000010c18      0xe40 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_vgm.o)
-                0x0000000000010c18                z80_vgm
- .rodata        0x0000000000011a58      0x6f4 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tab_cnv.o)
-                0x0000000000011a58                cnv_bcd_tab
-                0x0000000000011abc                cnv_8to32_tab
-                0x0000000000011ebc                cnv_8to16_tab
-                0x00000000000120bc                cnv_4to32_tab
-                0x00000000000120fc                cnv_4to16_tab
-                0x000000000001211c                cnv_4to8_tab
-                0x000000000001212c                cnv_2to32_tab
-                0x000000000001213c                cnv_2to16_tab
-                0x0000000000012144                cnv_2to8_tab
-                0x0000000000012148                cnv_2to4_tab
- .rodata        0x000000000001214c      0xc40 /opt/toolchains/gen/m68k-elf/lib/libmd.a(libres.o)
-                0x0000000000012af2                logo_lib
-                0x0000000000012d5c                font_lib
-                0x0000000000012d84                font_pal_lib
- .rodata        0x0000000000012d8c     0x1000 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tab_vol.o)
-                0x0000000000012d8c                tab_vol
- .rodata        0x0000000000013d8c       0x18 /opt/toolchains/gen/m68k-elf/lib/libmd.a(joy.o)
+ .rodata        0x0000000000010b68      0x104 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_pal.o)
+                0x0000000000010b68                palette_blue
+                0x0000000000010b88                palette_green
+                0x0000000000010ba8                palette_red
+                0x0000000000010bc8                palette_grey
+                0x0000000000010be8                palette_black
+                0x0000000000010bec                palette_black_all
+ .rodata        0x0000000000010c6c      0xe40 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_vgm.o)
+                0x0000000000010c6c                z80_vgm
+ .rodata        0x0000000000011aac      0x6f4 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tab_cnv.o)
+                0x0000000000011aac                cnv_bcd_tab
+                0x0000000000011b10                cnv_8to32_tab
+                0x0000000000011f10                cnv_8to16_tab
+                0x0000000000012110                cnv_4to32_tab
+                0x0000000000012150                cnv_4to16_tab
+                0x0000000000012170                cnv_4to8_tab
+                0x0000000000012180                cnv_2to32_tab
+                0x0000000000012190                cnv_2to16_tab
+                0x0000000000012198                cnv_2to8_tab
+                0x000000000001219c                cnv_2to4_tab
+ .rodata        0x00000000000121a0      0xc40 /opt/toolchains/gen/m68k-elf/lib/libmd.a(libres.o)
+                0x0000000000012b46                logo_lib
+                0x0000000000012db0                font_lib
+                0x0000000000012dd8                font_pal_lib
+ .rodata        0x0000000000012de0     0x1000 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tab_vol.o)
+                0x0000000000012de0                tab_vol
+ .rodata        0x0000000000013de0       0x18 /opt/toolchains/gen/m68k-elf/lib/libmd.a(joy.o)
  .rodata.str1.1
-                0x0000000000013da4        0x3 src/main.o
+                0x0000000000013df8        0x3 src/main.o
  *(.gcc_except_table .gcc_except_table.*)
-                0x0000000000013da8                . = ALIGN (0x4)
- *fill*         0x0000000000013da7        0x1 
-                0x0000000000013da8                __INIT_SECTION__ = .
+                0x0000000000013dfc                . = ALIGN (0x4)
+ *fill*         0x0000000000013dfb        0x1 
+                0x0000000000013dfc                __INIT_SECTION__ = .
  *(.init)
-                0x0000000000013da8        0x2 SHORT 0x4e75
-                0x0000000000013daa                __FINI_SECTION__ = .
+                0x0000000000013dfc        0x2 SHORT 0x4e75
+                0x0000000000013dfe                __FINI_SECTION__ = .
  *(.fini)
-                0x0000000000013daa        0x2 SHORT 0x4e75
-                0x0000000000013dac                _etext = .
+                0x0000000000013dfe        0x2 SHORT 0x4e75
+                0x0000000000013e00                _etext = .
  *(.lit)
-                0x0000000000013dac                _stext = SIZEOF (.text)
+                0x0000000000013e00                _stext = SIZEOF (.text)
 
-.data           0x0000000000ff0000       0x10 load address 0x0000000000013dac
+.data           0x0000000000ff0000       0x18 load address 0x0000000000013e00
  *(.got.plt)
  *(.got)
  *(.shdata)
@@ -737,126 +740,126 @@ LOAD /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libm.a
  .data          0x0000000000ff0000        0x0 /opt/toolchains/gen/m68k-elf/lib/gcc/m68k-elf/4.8.2/libgcc.a(_udivsi3.o)
  .data          0x0000000000ff0000        0x0 /opt/toolchains/gen/m68k-elf/lib/gcc/m68k-elf/4.8.2/libgcc.a(_divsi3.o)
  .data          0x0000000000ff0000        0x0 /opt/toolchains/gen/m68k-elf/lib/gcc/m68k-elf/4.8.2/libgcc.a(_umodsi3.o)
- .data          0x0000000000ff0000        0x8 src/baseview.o
+ .data          0x0000000000ff0000        0xc src/baseview.o
                 0x0000000000ff0000                BaseView_table
- .data          0x0000000000ff0008        0x8 src/simpletextview.o
-                0x0000000000ff0008                SimpleTextView_table
- .data          0x0000000000ff0010        0x0 src/main.o
- .data          0x0000000000ff0010        0x0 src/jsmn.o
-                0x0000000000ff0010                _edata = .
-                0x0000000000000010                _sdata = SIZEOF (.data)
+ .data          0x0000000000ff000c        0xc src/simpletextview.o
+                0x0000000000ff000c                SimpleTextView_table
+ .data          0x0000000000ff0018        0x0 src/main.o
+ .data          0x0000000000ff0018        0x0 src/jsmn.o
+                0x0000000000ff0018                _edata = .
+                0x0000000000000018                _sdata = SIZEOF (.data)
 
-.bss            0x0000000000ff0010      0x7be load address 0x0000000000013dbc
-                0x0000000000ff0010                _start = .
+.bss            0x0000000000ff0018      0x7be load address 0x0000000000013e18
+                0x0000000000ff0018                _start = .
  *(.shbss)
  *(.bss .bss.*)
- .bss           0x0000000000ff0010        0x0 boot/sega.o
- .bss           0x0000000000ff0010       0x10 /opt/toolchains/gen/m68k-elf/lib/libmd.a(sys.o)
- .bss           0x0000000000ff0020       0x13 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp.o)
- *fill*         0x0000000000ff0033        0x1 
- .bss           0x0000000000ff0034       0x10 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tools.o)
- .bss           0x0000000000ff0044        0x8 /opt/toolchains/gen/m68k-elf/lib/libmd.a(memory.o)
- .bss           0x0000000000ff004c       0x40 /opt/toolchains/gen/m68k-elf/lib/libmd.a(timer.o)
- .bss           0x0000000000ff008c        0x2 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_ctrl.o)
- *fill*         0x0000000000ff008e        0x2 
- .bss           0x0000000000ff0090        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(ym2612.o)
- .bss           0x0000000000ff0090      0x386 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_pal.o)
- *fill*         0x0000000000ff0416        0x2 
- .bss           0x0000000000ff0418        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(psg.o)
- .bss           0x0000000000ff0418        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_vgm.o)
- .bss           0x0000000000ff0418        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_tile.o)
- .bss           0x0000000000ff0418        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_spr.o)
- .bss           0x0000000000ff0418        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tab_cnv.o)
- .bss           0x0000000000ff0418        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_dma.o)
- .bss           0x0000000000ff0418       0x14 /opt/toolchains/gen/m68k-elf/lib/libmd.a(bmp.o)
- .bss           0x0000000000ff042c        0x4 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tile_cache.o)
- .bss           0x0000000000ff0430        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_bg.o)
- .bss           0x0000000000ff0430        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(smp_null_pcm.o)
- .bss           0x0000000000ff0430        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_tile_a.o)
- .bss           0x0000000000ff0430        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(memory_a.o)
- .bss           0x0000000000ff0430        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_pal_a.o)
- .bss           0x0000000000ff0430        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(sys_a.o)
- .bss           0x0000000000ff0430        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(kdebug.o)
- .bss           0x0000000000ff0430        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(bmp_a.o)
- .bss           0x0000000000ff0430        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(smp_null.o)
- .bss           0x0000000000ff0430        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tools_a.o)
- .bss           0x0000000000ff0430        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_drv1.o)
- .bss           0x0000000000ff0430        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_tfm.o)
- .bss           0x0000000000ff0430        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_drv2.o)
- .bss           0x0000000000ff0430        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_drv3.o)
- .bss           0x0000000000ff0430        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_xgm.o)
- .bss           0x0000000000ff0430        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_mvs.o)
- .bss           0x0000000000ff0430        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(libres.o)
- .bss           0x0000000000ff0430        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tab_vol.o)
- .bss           0x0000000000ff0430        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(maths.o)
- .bss           0x0000000000ff0430       0x12 /opt/toolchains/gen/m68k-elf/lib/libmd.a(sprite_eng.o)
- *fill*         0x0000000000ff0442        0x2 
- .bss           0x0000000000ff0444        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(string.o)
- .bss           0x0000000000ff0444       0x46 /opt/toolchains/gen/m68k-elf/lib/libmd.a(joy.o)
- *fill*         0x0000000000ff048a        0x2 
- .bss           0x0000000000ff048c        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(types.o)
- .bss           0x0000000000ff048c        0x0 /opt/toolchains/gen/m68k-elf/lib/gcc/m68k-elf/4.8.2/libgcc.a(_mulsi3.o)
- .bss           0x0000000000ff048c        0x0 /opt/toolchains/gen/m68k-elf/lib/gcc/m68k-elf/4.8.2/libgcc.a(_udivsi3.o)
- .bss           0x0000000000ff048c        0x0 /opt/toolchains/gen/m68k-elf/lib/gcc/m68k-elf/4.8.2/libgcc.a(_divsi3.o)
- .bss           0x0000000000ff048c        0x0 /opt/toolchains/gen/m68k-elf/lib/gcc/m68k-elf/4.8.2/libgcc.a(_umodsi3.o)
- .bss           0x0000000000ff048c        0x0 src/baseview.o
- .bss           0x0000000000ff048c        0x0 src/simpletextview.o
- .bss           0x0000000000ff048c        0x0 src/main.o
- .bss           0x0000000000ff048c        0x0 src/jsmn.o
+ .bss           0x0000000000ff0018        0x0 boot/sega.o
+ .bss           0x0000000000ff0018       0x10 /opt/toolchains/gen/m68k-elf/lib/libmd.a(sys.o)
+ .bss           0x0000000000ff0028       0x13 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp.o)
+ *fill*         0x0000000000ff003b        0x1 
+ .bss           0x0000000000ff003c       0x10 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tools.o)
+ .bss           0x0000000000ff004c        0x8 /opt/toolchains/gen/m68k-elf/lib/libmd.a(memory.o)
+ .bss           0x0000000000ff0054       0x40 /opt/toolchains/gen/m68k-elf/lib/libmd.a(timer.o)
+ .bss           0x0000000000ff0094        0x2 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_ctrl.o)
+ *fill*         0x0000000000ff0096        0x2 
+ .bss           0x0000000000ff0098        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(ym2612.o)
+ .bss           0x0000000000ff0098      0x386 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_pal.o)
+ *fill*         0x0000000000ff041e        0x2 
+ .bss           0x0000000000ff0420        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(psg.o)
+ .bss           0x0000000000ff0420        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_vgm.o)
+ .bss           0x0000000000ff0420        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_tile.o)
+ .bss           0x0000000000ff0420        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_spr.o)
+ .bss           0x0000000000ff0420        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tab_cnv.o)
+ .bss           0x0000000000ff0420        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_dma.o)
+ .bss           0x0000000000ff0420       0x14 /opt/toolchains/gen/m68k-elf/lib/libmd.a(bmp.o)
+ .bss           0x0000000000ff0434        0x4 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tile_cache.o)
+ .bss           0x0000000000ff0438        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_bg.o)
+ .bss           0x0000000000ff0438        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(smp_null_pcm.o)
+ .bss           0x0000000000ff0438        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_tile_a.o)
+ .bss           0x0000000000ff0438        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(memory_a.o)
+ .bss           0x0000000000ff0438        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_pal_a.o)
+ .bss           0x0000000000ff0438        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(sys_a.o)
+ .bss           0x0000000000ff0438        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(kdebug.o)
+ .bss           0x0000000000ff0438        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(bmp_a.o)
+ .bss           0x0000000000ff0438        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(smp_null.o)
+ .bss           0x0000000000ff0438        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tools_a.o)
+ .bss           0x0000000000ff0438        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_drv1.o)
+ .bss           0x0000000000ff0438        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_tfm.o)
+ .bss           0x0000000000ff0438        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_drv2.o)
+ .bss           0x0000000000ff0438        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_drv3.o)
+ .bss           0x0000000000ff0438        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_xgm.o)
+ .bss           0x0000000000ff0438        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_mvs.o)
+ .bss           0x0000000000ff0438        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(libres.o)
+ .bss           0x0000000000ff0438        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tab_vol.o)
+ .bss           0x0000000000ff0438        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(maths.o)
+ .bss           0x0000000000ff0438       0x12 /opt/toolchains/gen/m68k-elf/lib/libmd.a(sprite_eng.o)
+ *fill*         0x0000000000ff044a        0x2 
+ .bss           0x0000000000ff044c        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(string.o)
+ .bss           0x0000000000ff044c       0x46 /opt/toolchains/gen/m68k-elf/lib/libmd.a(joy.o)
+ *fill*         0x0000000000ff0492        0x2 
+ .bss           0x0000000000ff0494        0x0 /opt/toolchains/gen/m68k-elf/lib/libmd.a(types.o)
+ .bss           0x0000000000ff0494        0x0 /opt/toolchains/gen/m68k-elf/lib/gcc/m68k-elf/4.8.2/libgcc.a(_mulsi3.o)
+ .bss           0x0000000000ff0494        0x0 /opt/toolchains/gen/m68k-elf/lib/gcc/m68k-elf/4.8.2/libgcc.a(_udivsi3.o)
+ .bss           0x0000000000ff0494        0x0 /opt/toolchains/gen/m68k-elf/lib/gcc/m68k-elf/4.8.2/libgcc.a(_divsi3.o)
+ .bss           0x0000000000ff0494        0x0 /opt/toolchains/gen/m68k-elf/lib/gcc/m68k-elf/4.8.2/libgcc.a(_umodsi3.o)
+ .bss           0x0000000000ff0494        0x0 src/baseview.o
+ .bss           0x0000000000ff0494        0x0 src/simpletextview.o
+ .bss           0x0000000000ff0494        0x0 src/main.o
+ .bss           0x0000000000ff0494        0x0 src/jsmn.o
  *(COMMON)
- COMMON         0x0000000000ff048c       0x94 /opt/toolchains/gen/m68k-elf/lib/libmd.a(sys.o)
-                0x0000000000ff048c                illegalInstCB
-                0x0000000000ff0490                errorExceptionCB
-                0x0000000000ff0494                trapvInstCB
-                0x0000000000ff0498                chkInstCB
-                0x0000000000ff049c                registerState
-                0x0000000000ff04dc                srState
-                0x0000000000ff04de                line1x1xCB
-                0x0000000000ff04e2                ext2State
-                0x0000000000ff04e4                traceCB
-                0x0000000000ff04e8                intTrace
-                0x0000000000ff04ea                zeroDivideCB
-                0x0000000000ff04ee                internalExtIntCB
-                0x0000000000ff04f2                internalVIntCB
-                0x0000000000ff04f6                intCB
-                0x0000000000ff04fa                addressErrorCB
-                0x0000000000ff04fe                VIntProcess
-                0x0000000000ff0502                ExtIntProcess
-                0x0000000000ff0506                HIntProcess
-                0x0000000000ff050a                privilegeViolationCB
-                0x0000000000ff050e                pcState
-                0x0000000000ff0512                ext1State
-                0x0000000000ff0514                busErrorCB
-                0x0000000000ff0518                internalHIntCB
-                0x0000000000ff051c                addrState
- COMMON         0x0000000000ff0520        0xe /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp.o)
-                0x0000000000ff0520                slist_adr
-                0x0000000000ff0522                hscrl_adr
-                0x0000000000ff0524                screenHeight
-                0x0000000000ff0526                screenWidth
-                0x0000000000ff0528                aplan_adr
-                0x0000000000ff052a                bplan_adr
-                0x0000000000ff052c                window_adr
- COMMON         0x0000000000ff052e        0x4 /opt/toolchains/gen/m68k-elf/lib/libmd.a(timer.o)
-                0x0000000000ff052e                vtimer
- COMMON         0x0000000000ff0532      0x282 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_spr.o)
-                0x0000000000ff0532                spriteNum
-                0x0000000000ff0534                vdpSpriteCache
- COMMON         0x0000000000ff07b4        0x8 /opt/toolchains/gen/m68k-elf/lib/libmd.a(bmp.o)
-                0x0000000000ff07b4                bmp_buffer_write
-                0x0000000000ff07b8                bmp_buffer_read
- COMMON         0x0000000000ff07bc        0x4 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tile_cache.o)
-                0x0000000000ff07bc                uploads
- COMMON         0x0000000000ff07c0        0x8 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_bg.o)
-                0x0000000000ff07c0                text_basetile
-                0x0000000000ff07c2                curTileInd
-                0x0000000000ff07c4                text_plan
- COMMON         0x0000000000ff07c8        0x2 /opt/toolchains/gen/m68k-elf/lib/libmd.a(maths.o)
-                0x0000000000ff07c8                randbase
- COMMON         0x0000000000ff07ca        0x4 /opt/toolchains/gen/m68k-elf/lib/libmd.a(sprite_eng.o)
-                0x0000000000ff07ca                VDPSpriteCache
-                0x0000000000ff07ce                _bend = .
-                0x0000000000ff07ce                end = _bend
+ COMMON         0x0000000000ff0494       0x94 /opt/toolchains/gen/m68k-elf/lib/libmd.a(sys.o)
+                0x0000000000ff0494                illegalInstCB
+                0x0000000000ff0498                errorExceptionCB
+                0x0000000000ff049c                trapvInstCB
+                0x0000000000ff04a0                chkInstCB
+                0x0000000000ff04a4                registerState
+                0x0000000000ff04e4                srState
+                0x0000000000ff04e6                line1x1xCB
+                0x0000000000ff04ea                ext2State
+                0x0000000000ff04ec                traceCB
+                0x0000000000ff04f0                intTrace
+                0x0000000000ff04f2                zeroDivideCB
+                0x0000000000ff04f6                internalExtIntCB
+                0x0000000000ff04fa                internalVIntCB
+                0x0000000000ff04fe                intCB
+                0x0000000000ff0502                addressErrorCB
+                0x0000000000ff0506                VIntProcess
+                0x0000000000ff050a                ExtIntProcess
+                0x0000000000ff050e                HIntProcess
+                0x0000000000ff0512                privilegeViolationCB
+                0x0000000000ff0516                pcState
+                0x0000000000ff051a                ext1State
+                0x0000000000ff051c                busErrorCB
+                0x0000000000ff0520                internalHIntCB
+                0x0000000000ff0524                addrState
+ COMMON         0x0000000000ff0528        0xe /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp.o)
+                0x0000000000ff0528                slist_adr
+                0x0000000000ff052a                hscrl_adr
+                0x0000000000ff052c                screenHeight
+                0x0000000000ff052e                screenWidth
+                0x0000000000ff0530                aplan_adr
+                0x0000000000ff0532                bplan_adr
+                0x0000000000ff0534                window_adr
+ COMMON         0x0000000000ff0536        0x4 /opt/toolchains/gen/m68k-elf/lib/libmd.a(timer.o)
+                0x0000000000ff0536                vtimer
+ COMMON         0x0000000000ff053a      0x282 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_spr.o)
+                0x0000000000ff053a                spriteNum
+                0x0000000000ff053c                vdpSpriteCache
+ COMMON         0x0000000000ff07bc        0x8 /opt/toolchains/gen/m68k-elf/lib/libmd.a(bmp.o)
+                0x0000000000ff07bc                bmp_buffer_write
+                0x0000000000ff07c0                bmp_buffer_read
+ COMMON         0x0000000000ff07c4        0x4 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tile_cache.o)
+                0x0000000000ff07c4                uploads
+ COMMON         0x0000000000ff07c8        0x8 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_bg.o)
+                0x0000000000ff07c8                text_basetile
+                0x0000000000ff07ca                curTileInd
+                0x0000000000ff07cc                text_plan
+ COMMON         0x0000000000ff07d0        0x2 /opt/toolchains/gen/m68k-elf/lib/libmd.a(maths.o)
+                0x0000000000ff07d0                randbase
+ COMMON         0x0000000000ff07d2        0x4 /opt/toolchains/gen/m68k-elf/lib/libmd.a(sprite_eng.o)
+                0x0000000000ff07d2                VDPSpriteCache
+                0x0000000000ff07d6                _bend = .
+                0x0000000000ff07d6                end = _bend
 
 .stab
  *(.stab)
