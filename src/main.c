@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <baseview.h>
 #include <simpletextview.h>
+#include <utility.h>
 
 int main( void ) {
 	VDP_resetScreen();
@@ -17,11 +18,11 @@ int main( void ) {
 	SimpleTextView_ctor( &textView, "Hi", 2, 2 );
 
 	BaseView* textAsBase = ( BaseView* ) &textView;
-	
-	char debug[50];
-	sprintf( debug, "Polymorphic test: %d", textAsBase->functions->testa( textAsBase ) );
 
-	VDP_drawText( "ok", 0, 0 );
-	VDP_drawText( debug, 1, 1 );
+	root.functions->addChildView( &root, ( BaseView* ) &textView );
+	root.functions->render( &root, FALSE );
+
+	VDP_drawText( "012345678901234567890", 0, 0 );
+
 	while(1);
 }
