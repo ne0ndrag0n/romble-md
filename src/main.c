@@ -15,9 +15,11 @@ int main( void ) {
 
 	SimpleTextView textView;
 	SimpleTextView_ctor( &textView, "Hi", 2, 2 );
+
+	BaseView* textAsBase = ( BaseView* ) &textView;
 	
 	char debug[50];
-	sprintf( debug, "%d", textView.super.functions->testa( &textView.super ) );
+	sprintf( debug, "Polymorphic test: %d", textAsBase->functions->testa( textAsBase ) );
 
 	VDP_drawText( "ok", 0, 0 );
 	VDP_drawText( debug, 1, 1 );

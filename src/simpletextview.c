@@ -3,7 +3,7 @@
 #include <string.h>
 #include <vdp_bg.h>
 
-SimpleTextView_vtable SimpleTextView_table = { SimpleTextView_ctor, BaseView_testa, SimpleTextView_render };
+SimpleTextView_vtable SimpleTextView_table = { SimpleTextView_ctor, SimpleTextView_testa, SimpleTextView_render };
 
 void SimpleTextView_ctor( SimpleTextView* this, char* text, u8 x, u8 y ) {
 	u8 width = strlen( text );
@@ -18,4 +18,10 @@ void SimpleTextView_render( SimpleTextView* this ) {
 	BaseView_render( &this->super );
 
 	VDP_drawText( this->text, this->super.absX, this->super.absY );
+}
+
+u8 SimpleTextView_testa( SimpleTextView* this ) {
+	u8 result = BaseView_testa( ( BaseView* ) this );
+
+	return result + 200;
 }
