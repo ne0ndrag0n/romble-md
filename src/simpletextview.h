@@ -11,6 +11,7 @@ typedef struct {
 	u8 ( *testa )( struct BaseView* );
 	void ( *render )( struct SimpleTextView* );
 	void ( *addChildView )( struct BaseView*, struct BaseView* );
+	void ( *setPlane )( struct BaseView*, u16 );
 } SimpleTextView_vtable;
 
 typedef struct SimpleTextView {

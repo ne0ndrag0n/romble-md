@@ -4,10 +4,13 @@
 #include <baseview.h>
 #include <simpletextview.h>
 #include <utility.h>
+#include <res/globals.h>
+#include <vdp_pal.h>
+#include <romble.h>
 
 int main( void ) {
-	VDP_resetScreen();
-	VDP_resetSprites();
+
+	Romble_init();
 
 	// Let's try nesting two views
 	// First create the root view

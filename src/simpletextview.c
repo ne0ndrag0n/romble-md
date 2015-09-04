@@ -10,7 +10,8 @@ SimpleTextView_vtable SimpleTextView_table = {
 	SimpleTextView_ctor, 
 	BaseView_testa, 
 	SimpleTextView_render,
-	BaseView_addChildView
+	BaseView_addChildView,
+	BaseView_setPlane
 };
 
 void SimpleTextView_ctor( SimpleTextView* this, char* text, u8 x, u8 y ) {

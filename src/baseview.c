@@ -9,12 +9,14 @@
 #include <lang.h>
 #include <res/globals.h>
 #include <utility.h>
+#include <vdp.h>
 
 BaseView_vtable BaseView_table = { 
 	BaseView_ctor, 
 	BaseView_testa, 
 	BaseView_render,
-	BaseView_addChildView
+	BaseView_addChildView,
+	BaseView_setPlane
 };
 
 void BaseView_ctor( BaseView* this, u8 x, u8 y, u8 width, u8 height ) {
@@ -26,8 +28,10 @@ void BaseView_ctor( BaseView* this, u8 x, u8 y, u8 width, u8 height ) {
 	this->width = width;
 	this->height = height;
 
-	this->children = this->parent = NULL;
+	this->children = NULL;
+	this->parent = NULL;
 	this->numChildren = 0;
+	this->plane = VDP_PLAN_A;
 }
 
 u8 BaseView_testa( BaseView* this ) {
@@ -80,4 +84,8 @@ void BaseView_addChildView( BaseView* this, BaseView* childView ) {
 	// After resized, set the last elemnt in the array to childView
 	childView->parent = this;
 	this->children[ this->numChildren - 1 ] = childView;
+}
+
+void BaseView_setPlane( BaseView* this, u16 plane ) {
+	this->plane = plane;
 }

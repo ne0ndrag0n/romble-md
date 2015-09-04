@@ -4,6 +4,13 @@
 #define FALSE 0
 #define TRUE 1
 
+#include <types.h>
+
 typedef char bool;
+
+extern u16 TILES_USED;
+
+extern const u32 BoxDrawingCharacters[ 32 ];
+extern const u16 StandardColours[ 16 ];
 
 #endif

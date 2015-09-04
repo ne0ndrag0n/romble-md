@@ -2,6 +2,7 @@
 #define BASEVIEW
 
 #include <types.h>
+#include <vdp.h>
 #include <res/globals.h>
 
 struct BaseView;
@@ -11,6 +12,7 @@ typedef struct {
 	u8 ( *testa )( struct BaseView* );
 	void ( *render )( struct BaseView* );
 	void ( *addChildView )( struct BaseView*, struct BaseView* );
+	void ( *setPlane )( struct BaseView*, u16 );
 } BaseView_vtable;
 
 typedef struct BaseView {
@@ -23,9 +25,11 @@ typedef struct BaseView {
 	u8 absX;
 	u8 absY;
 
+	u8 numChildren;
+	u16 plane;
+
 	struct BaseView* parent;
 	struct BaseView** children;
-	u8 numChildren;
 
 	BaseView_vtable *functions;
 } BaseView;
@@ -35,5 +39,7 @@ u8 BaseView_testa( BaseView* this );
 
 void BaseView_render( BaseView* this );
 void BaseView_addChildView( BaseView* this, BaseView* childView );
+
+void BaseView_setPlane( BaseView* this, u16 plane );
 
 #endif
