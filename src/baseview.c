@@ -34,7 +34,7 @@ u8 BaseView_testa( BaseView* this ) {
 	return this->width + this->height;
 }
 
-void BaseView_render( BaseView* this, bool skipChildren ) {
+void BaseView_render( BaseView* this ) {
 	// If this view has no parent, set absX and absY to where the view is placed....else, add the absX and absY of the parent
 	if( this->parent == NULL ) {
 		this->absX = this->x;
@@ -45,13 +45,13 @@ void BaseView_render( BaseView* this, bool skipChildren ) {
 	}
 	
 	// Place and render children
-	if( skipChildren == FALSE && this->children != NULL ) {
+	if( this->children != NULL ) {
 		size_t i;
 
 		for( i = 0; i != this->numChildren; i++ ) {
 			BaseView* view = this->children[ i ];
 
-			view->functions->render( view, skipChildren );
+			view->functions->render( view );
 		}
 	}
 }

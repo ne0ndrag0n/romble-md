@@ -9,7 +9,7 @@ struct BaseView;
 typedef struct {
 	void ( *BaseView )( struct BaseView*, u8, u8, u8, u8 );
 	u8 ( *testa )( struct BaseView* );
-	void ( *render )( struct BaseView*, bool );
+	void ( *render )( struct BaseView* );
 	void ( *addChildView )( struct BaseView*, struct BaseView* );
 } BaseView_vtable;
 
@@ -33,7 +33,7 @@ typedef struct BaseView {
 void BaseView_ctor( BaseView* this, u8 x, u8 y, u8 width, u8 height );
 u8 BaseView_testa( BaseView* this );
 
-void BaseView_render( BaseView* this, bool skipChildren );
+void BaseView_render( BaseView* this );
 void BaseView_addChildView( BaseView* this, BaseView* childView );
 
 #endif

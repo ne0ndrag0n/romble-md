@@ -32,7 +32,7 @@ void SimpleTextView_ctor( SimpleTextView* this, char* text, u8 x, u8 y ) {
 void SimpleTextView_render( SimpleTextView* this ) {
 	BaseView* super = ( BaseView* ) this;
 
-	BaseView_render( ( BaseView* ) this, FALSE );
+	BaseView_render( ( BaseView* ) this );
 
 	VDP_drawText( this->text, super->absX, super->absY );
 }

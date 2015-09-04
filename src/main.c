@@ -12,15 +12,13 @@ int main( void ) {
 	// Let's try nesting two views
 	// First create the root view
 	BaseView root;
-	BaseView_ctor( &root, 0, 0, 30, 18 );
+	BaseView_ctor( &root, 0, 0, 40, 28 );
 
 	SimpleTextView textView;
 	SimpleTextView_ctor( &textView, "Hi", 2, 2 );
 
-	BaseView* textAsBase = ( BaseView* ) &textView;
-
 	root.functions->addChildView( &root, ( BaseView* ) &textView );
-	root.functions->render( &root, FALSE );
+	root.functions->render( &root );
 
 	VDP_drawText( "012345678901234567890", 0, 0 );
 
