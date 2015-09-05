@@ -190,7 +190,7 @@ LOAD /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libm.a
                 0x0000000000000000                __DYNAMIC = 0x0
                 0x0000000001000000                PROVIDE (__stack, 0x1000000)
 
-.text           0x0000000000000000    0x167b4
+.text           0x0000000000000000    0x16808
  *(.text .text.*)
  .text          0x0000000000000000      0x50e boot/sega.o
  *fill*         0x000000000000050e        0x2 
@@ -646,141 +646,142 @@ LOAD /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libm.a
                 0x000000000001043c                BoxView_ctor
                 0x0000000000010480                BoxView_render
  *fill*         0x00000000000105f6        0x2 
- .text          0x00000000000105f8      0x250 src/baseview.o
+ .text          0x00000000000105f8      0x2a2 src/baseview.o
                 0x00000000000105f8                BaseView_ctor
                 0x0000000000010630                BaseView_testa
                 0x000000000001063e                BaseView_render
                 0x00000000000106d0                BaseView_setPlane
                 0x00000000000106dc                BaseView_addChildView
                 0x00000000000107ac                BaseView_placeTile
- .text          0x0000000000010848       0x26 src/utility.o
-                0x0000000000010848                Debug_print
- *fill*         0x000000000001086e        0x2 
- .text          0x0000000000010870       0xbc src/simpletextview.o
-                0x0000000000010870                SimpleTextView_ctor
-                0x00000000000108fe                SimpleTextView_render
- .text          0x000000000001092c        0x0 src/main.o
- .text.startup  0x000000000001092c       0xaa src/main.o
-                0x000000000001092c                main
- *fill*         0x00000000000109d6        0x2 
- .text          0x00000000000109d8      0x4ba src/jsmn.o
-                0x00000000000109d8                jsmn_parse
-                0x0000000000010e80                jsmn_init
- *fill*         0x0000000000010e92        0x2 
- .text          0x0000000000010e94       0x68 src/romble.o
-                0x0000000000010e94                Romble_loadTiles
-                0x0000000000010ec8                Romble_init
- .text          0x0000000000010efc        0x0 res/globals.o
- .text          0x0000000000010efc       0x22 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-calloc.o)
-                0x0000000000010efc                calloc
- *fill*         0x0000000000010f1e        0x2 
- .text          0x0000000000010f20      0x12c /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-callocr.o)
-                0x0000000000010f20                _calloc_r
- .text          0x000000000001104c        0x0 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-impure.o)
- .text          0x000000000001104c       0x38 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-malloc.o)
-                0x000000000001104c                malloc
-                0x0000000000011068                free
- .text          0x0000000000011084      0xc98 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-mallocr.o)
-                0x000000000001134a                _malloc_r
- .text          0x0000000000011d1c       0x10 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-mlock.o)
-                0x0000000000011d1c                __malloc_lock
-                0x0000000000011d24                __malloc_unlock
- .text          0x0000000000011d2c       0x22 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-realloc.o)
-                0x0000000000011d2c                realloc
- *fill*         0x0000000000011d4e        0x2 
- .text          0x0000000000011d50      0xb02 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-reallocr.o)
-                0x0000000000011d50                _realloc_r
- *fill*         0x0000000000012852        0x2 
- .text          0x0000000000012854       0x42 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-sbrkr.o)
-                0x0000000000012854                _sbrk_r
- *fill*         0x0000000000012896        0x2 
- .text          0x0000000000012898      0x630 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-freer.o)
-                0x0000000000012898                _free_r
-                0x0000000000012d3a                _malloc_trim_r
- .text          0x0000000000012ec8      0x19e /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-memmove.o)
-                0x0000000000012ec8                memmove
- *fill*         0x0000000000013066        0x2 
- .text          0x0000000000013068      0x238 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-reent.o)
-                0x0000000000013068                cleanup_glue
-                0x00000000000130a0                _reclaim_reent
-                0x0000000000013228                _wrapup_reent
- .text          0x00000000000132a0       0x32 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libnosys.a(sbrk.o)
-                0x00000000000132a0                sbrk
-                0x00000000000132d4                . = ALIGN (0x4)
- *fill*         0x00000000000132d2        0x2 
-                0x00000000000132d4                __CTOR_LIST__ = .
-                0x00000000000132d4        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
+ *fill*         0x000000000001089a        0x2 
+ .text          0x000000000001089c       0x26 src/utility.o
+                0x000000000001089c                Debug_print
+ *fill*         0x00000000000108c2        0x2 
+ .text          0x00000000000108c4       0xbc src/simpletextview.o
+                0x00000000000108c4                SimpleTextView_ctor
+                0x0000000000010952                SimpleTextView_render
+ .text          0x0000000000010980        0x0 src/main.o
+ .text.startup  0x0000000000010980       0xaa src/main.o
+                0x0000000000010980                main
+ *fill*         0x0000000000010a2a        0x2 
+ .text          0x0000000000010a2c      0x4ba src/jsmn.o
+                0x0000000000010a2c                jsmn_parse
+                0x0000000000010ed4                jsmn_init
+ *fill*         0x0000000000010ee6        0x2 
+ .text          0x0000000000010ee8       0x68 src/romble.o
+                0x0000000000010ee8                Romble_loadTiles
+                0x0000000000010f1c                Romble_init
+ .text          0x0000000000010f50        0x0 res/globals.o
+ .text          0x0000000000010f50       0x22 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-calloc.o)
+                0x0000000000010f50                calloc
+ *fill*         0x0000000000010f72        0x2 
+ .text          0x0000000000010f74      0x12c /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-callocr.o)
+                0x0000000000010f74                _calloc_r
+ .text          0x00000000000110a0        0x0 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-impure.o)
+ .text          0x00000000000110a0       0x38 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-malloc.o)
+                0x00000000000110a0                malloc
+                0x00000000000110bc                free
+ .text          0x00000000000110d8      0xc98 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-mallocr.o)
+                0x000000000001139e                _malloc_r
+ .text          0x0000000000011d70       0x10 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-mlock.o)
+                0x0000000000011d70                __malloc_lock
+                0x0000000000011d78                __malloc_unlock
+ .text          0x0000000000011d80       0x22 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-realloc.o)
+                0x0000000000011d80                realloc
+ *fill*         0x0000000000011da2        0x2 
+ .text          0x0000000000011da4      0xb02 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-reallocr.o)
+                0x0000000000011da4                _realloc_r
+ *fill*         0x00000000000128a6        0x2 
+ .text          0x00000000000128a8       0x42 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-sbrkr.o)
+                0x00000000000128a8                _sbrk_r
+ *fill*         0x00000000000128ea        0x2 
+ .text          0x00000000000128ec      0x630 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-freer.o)
+                0x00000000000128ec                _free_r
+                0x0000000000012d8e                _malloc_trim_r
+ .text          0x0000000000012f1c      0x19e /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-memmove.o)
+                0x0000000000012f1c                memmove
+ *fill*         0x00000000000130ba        0x2 
+ .text          0x00000000000130bc      0x238 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-reent.o)
+                0x00000000000130bc                cleanup_glue
+                0x00000000000130f4                _reclaim_reent
+                0x000000000001327c                _wrapup_reent
+ .text          0x00000000000132f4       0x32 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libnosys.a(sbrk.o)
+                0x00000000000132f4                sbrk
+                0x0000000000013328                . = ALIGN (0x4)
+ *fill*         0x0000000000013326        0x2 
+                0x0000000000013328                __CTOR_LIST__ = .
+                0x0000000000013328        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
  *(.ctors)
-                0x00000000000132d8        0x4 LONG 0x0
-                0x00000000000132dc                __CTOR_END__ = .
-                0x00000000000132dc                __DTOR_LIST__ = .
-                0x00000000000132dc        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
+                0x000000000001332c        0x4 LONG 0x0
+                0x0000000000013330                __CTOR_END__ = .
+                0x0000000000013330                __DTOR_LIST__ = .
+                0x0000000000013330        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
  *(.dtors)
-                0x00000000000132e0        0x4 LONG 0x0
-                0x00000000000132e4                __DTOR_END__ = .
+                0x0000000000013334        0x4 LONG 0x0
+                0x0000000000013338                __DTOR_END__ = .
  *(.rodata .rodata.*)
  .rodata.str1.1
-                0x00000000000132e4      0x13e /opt/toolchains/gen/m68k-elf/lib/libmd.a(sys.o)
+                0x0000000000013338      0x13e /opt/toolchains/gen/m68k-elf/lib/libmd.a(sys.o)
  .rodata.str1.1
-                0x0000000000013422       0x21 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp.o)
+                0x0000000000013476       0x21 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp.o)
                                          0x4c (size before relaxing)
- *fill*         0x0000000000013443        0x1 
- .rodata        0x0000000000013444        0x4 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp.o)
-                0x0000000000013444                PLAN_A
-                0x0000000000013446                PLAN_B
+ *fill*         0x0000000000013497        0x1 
+ .rodata        0x0000000000013498        0x4 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp.o)
+                0x0000000000013498                PLAN_A
+                0x000000000001349a                PLAN_B
  .rodata.str1.1
                 0x0000000000000000        0x2 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tools.o)
- .rodata        0x0000000000013448      0x104 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_pal.o)
-                0x0000000000013448                palette_blue
-                0x0000000000013468                palette_green
-                0x0000000000013488                palette_red
-                0x00000000000134a8                palette_grey
-                0x00000000000134c8                palette_black
-                0x00000000000134cc                palette_black_all
- .rodata        0x000000000001354c      0xe40 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_vgm.o)
-                0x000000000001354c                z80_vgm
- .rodata        0x000000000001438c      0x6f4 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tab_cnv.o)
-                0x000000000001438c                cnv_bcd_tab
-                0x00000000000143f0                cnv_8to32_tab
-                0x00000000000147f0                cnv_8to16_tab
-                0x00000000000149f0                cnv_4to32_tab
-                0x0000000000014a30                cnv_4to16_tab
-                0x0000000000014a50                cnv_4to8_tab
-                0x0000000000014a60                cnv_2to32_tab
-                0x0000000000014a70                cnv_2to16_tab
-                0x0000000000014a78                cnv_2to8_tab
-                0x0000000000014a7c                cnv_2to4_tab
- .rodata        0x0000000000014a80      0xc40 /opt/toolchains/gen/m68k-elf/lib/libmd.a(libres.o)
-                0x0000000000015426                logo_lib
-                0x0000000000015690                font_lib
-                0x00000000000156b8                font_pal_lib
- .rodata        0x00000000000156c0     0x1000 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tab_vol.o)
-                0x00000000000156c0                tab_vol
- .rodata        0x00000000000166c0       0x18 /opt/toolchains/gen/m68k-elf/lib/libmd.a(joy.o)
+ .rodata        0x000000000001349c      0x104 /opt/toolchains/gen/m68k-elf/lib/libmd.a(vdp_pal.o)
+                0x000000000001349c                palette_blue
+                0x00000000000134bc                palette_green
+                0x00000000000134dc                palette_red
+                0x00000000000134fc                palette_grey
+                0x000000000001351c                palette_black
+                0x0000000000013520                palette_black_all
+ .rodata        0x00000000000135a0      0xe40 /opt/toolchains/gen/m68k-elf/lib/libmd.a(z80_vgm.o)
+                0x00000000000135a0                z80_vgm
+ .rodata        0x00000000000143e0      0x6f4 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tab_cnv.o)
+                0x00000000000143e0                cnv_bcd_tab
+                0x0000000000014444                cnv_8to32_tab
+                0x0000000000014844                cnv_8to16_tab
+                0x0000000000014a44                cnv_4to32_tab
+                0x0000000000014a84                cnv_4to16_tab
+                0x0000000000014aa4                cnv_4to8_tab
+                0x0000000000014ab4                cnv_2to32_tab
+                0x0000000000014ac4                cnv_2to16_tab
+                0x0000000000014acc                cnv_2to8_tab
+                0x0000000000014ad0                cnv_2to4_tab
+ .rodata        0x0000000000014ad4      0xc40 /opt/toolchains/gen/m68k-elf/lib/libmd.a(libres.o)
+                0x000000000001547a                logo_lib
+                0x00000000000156e4                font_lib
+                0x000000000001570c                font_pal_lib
+ .rodata        0x0000000000015714     0x1000 /opt/toolchains/gen/m68k-elf/lib/libmd.a(tab_vol.o)
+                0x0000000000015714                tab_vol
+ .rodata        0x0000000000016714       0x18 /opt/toolchains/gen/m68k-elf/lib/libmd.a(joy.o)
  .rodata.str1.1
-                0x00000000000166d8       0x1c src/baseview.o
+                0x000000000001672c       0x1c src/baseview.o
  .rodata.str1.1
                 0x0000000000000000       0x1c src/simpletextview.o
  .rodata.str1.1
-                0x00000000000166f4       0x16 src/main.o
- .rodata        0x000000000001670a       0xa0 res/globals.o
-                0x000000000001670a                StandardColours
-                0x000000000001672a                BoxDrawingCharacters
- .rodata        0x00000000000167aa        0x6 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-impure.o)
-                0x00000000000167ac                _global_impure_ptr
+                0x0000000000016748       0x16 src/main.o
+ .rodata        0x000000000001675e       0xa0 res/globals.o
+                0x000000000001675e                StandardColours
+                0x000000000001677e                BoxDrawingCharacters
+ .rodata        0x00000000000167fe        0x6 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-impure.o)
+                0x0000000000016800                _global_impure_ptr
  *(.gcc_except_table .gcc_except_table.*)
-                0x00000000000167b0                . = ALIGN (0x4)
-                0x00000000000167b0                __INIT_SECTION__ = .
+                0x0000000000016804                . = ALIGN (0x4)
+                0x0000000000016804                __INIT_SECTION__ = .
  *(.init)
-                0x00000000000167b0        0x2 SHORT 0x4e75
-                0x00000000000167b2                __FINI_SECTION__ = .
+                0x0000000000016804        0x2 SHORT 0x4e75
+                0x0000000000016806                __FINI_SECTION__ = .
  *(.fini)
-                0x00000000000167b2        0x2 SHORT 0x4e75
-                0x00000000000167b4                _etext = .
+                0x0000000000016806        0x2 SHORT 0x4e75
+                0x0000000000016808                _etext = .
  *(.lit)
-                0x00000000000167b4                _stext = SIZEOF (.text)
+                0x0000000000016808                _stext = SIZEOF (.text)
 
-.data           0x0000000000ff0000      0x880 load address 0x00000000000167b4
+.data           0x0000000000ff0000      0x880 load address 0x0000000000016808
  *(.got.plt)
  *(.got)
  *(.shdata)
@@ -861,7 +862,7 @@ LOAD /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libm.a
                 0x0000000000ff0880                _edata = .
                 0x0000000000000880                _sdata = SIZEOF (.data)
 
-.bss            0x0000000000ff0880      0x804 load address 0x0000000000017034
+.bss            0x0000000000ff0880      0x804 load address 0x0000000000017088
                 0x0000000000ff0880                _start = .
  *(.shbss)
  *(.bss .bss.*)

@@ -98,7 +98,7 @@ void BaseView_placeTile( BaseView* this, u8 x, u8 y, u8 pal, u16 tileIndex, bool
 	u8 absX = x + this->absX;
 	u8 absY = y + this->absY;
 
-	if( absX < ( this->absX + this->width ) && absY < ( this->absY + this->height ) ) {
+	if( ( this->parent == NULL ) || ( absX < ( this->parent->absX + this->parent->width ) && absY < ( this->parent->absY + this->parent->height ) ) ) {
 		VDP_setTileMapXY( this->plane, TILE_ATTR_FULL( pal, PRIORITY_LOW, flipV, flipH, tileIndex ), absX, absY );
 	}
 }
