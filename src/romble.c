@@ -13,7 +13,7 @@ void Romble_init() {
 	VDP_setPalette( PAL0, StandardColours );
 
 	// Placed directly at the beginning
-	Romble_loadTiles( BoxDrawingCharacters, 4 );
+	Romble_loadTiles( BoxDrawingCharacters, 3 );
 }
 
 u16 Romble_loadTiles( const u32* tiles, u16 run ) {

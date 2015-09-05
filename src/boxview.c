@@ -27,8 +27,8 @@ void BoxView_render( BoxView* this ) {
 
 	// Place corner tiles
 	placeTile( ( BaseView* ) this, 0, 0, PAL0, this->boxDrawingIndex, FALSE, FALSE );
-	placeTile( ( BaseView* ) this, ( ( BaseView* )this )->width - 1, 0, PAL0, this->boxDrawingIndex + 2, FALSE, FALSE );
-	placeTile( ( BaseView* ) this, ( ( BaseView* )this )->width - 1, ( ( BaseView* ) this )->height - 1, PAL0, this->boxDrawingIndex + 2, TRUE, FALSE );
+	placeTile( ( BaseView* ) this, ( ( BaseView* )this )->width - 1, 0, PAL0, this->boxDrawingIndex, FALSE, TRUE );
+	placeTile( ( BaseView* ) this, ( ( BaseView* )this )->width - 1, ( ( BaseView* ) this )->height - 1, PAL0, this->boxDrawingIndex, TRUE, TRUE );
 	placeTile( ( BaseView* ) this, 0, ( ( BaseView* ) this )->height - 1, PAL0, this->boxDrawingIndex, TRUE, FALSE );
 
 	// Place tile runs
@@ -41,7 +41,7 @@ void BoxView_render( BoxView* this ) {
 
 	for( i = 1; i != ( ( BaseView* ) this )->height - 1; i++ ) {
 		// Vertical runs
-		placeTile( ( BaseView* ) this, 0, i, PAL0, this->boxDrawingIndex + 3, FALSE, FALSE );
-		placeTile( ( BaseView* ) this, ( ( BaseView* ) this )->width - 1, i, PAL0, this->boxDrawingIndex + 3, FALSE, FALSE );
+		placeTile( ( BaseView* ) this, 0, i, PAL0, this->boxDrawingIndex + 2, FALSE, FALSE );
+		placeTile( ( BaseView* ) this, ( ( BaseView* ) this )->width - 1, i, PAL0, this->boxDrawingIndex + 2, FALSE, FALSE );
 	}
 }

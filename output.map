@@ -190,7 +190,7 @@ LOAD /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libm.a
                 0x0000000000000000                __DYNAMIC = 0x0
                 0x0000000001000000                PROVIDE (__stack, 0x1000000)
 
-.text           0x0000000000000000    0x16808
+.text           0x0000000000000000    0x167e8
  *(.text .text.*)
  .text          0x0000000000000000      0x50e boot/sega.o
  *fill*         0x000000000000050e        0x2 
@@ -764,24 +764,24 @@ LOAD /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libm.a
                 0x0000000000000000       0x1c src/simpletextview.o
  .rodata.str1.1
                 0x0000000000016748       0x16 src/main.o
- .rodata        0x000000000001675e       0xa0 res/globals.o
+ .rodata        0x000000000001675e       0x80 res/globals.o
                 0x000000000001675e                StandardColours
                 0x000000000001677e                BoxDrawingCharacters
- .rodata        0x00000000000167fe        0x6 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-impure.o)
-                0x0000000000016800                _global_impure_ptr
+ .rodata        0x00000000000167de        0x6 /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libc.a(lib_a-impure.o)
+                0x00000000000167e0                _global_impure_ptr
  *(.gcc_except_table .gcc_except_table.*)
-                0x0000000000016804                . = ALIGN (0x4)
-                0x0000000000016804                __INIT_SECTION__ = .
+                0x00000000000167e4                . = ALIGN (0x4)
+                0x00000000000167e4                __INIT_SECTION__ = .
  *(.init)
-                0x0000000000016804        0x2 SHORT 0x4e75
-                0x0000000000016806                __FINI_SECTION__ = .
+                0x00000000000167e4        0x2 SHORT 0x4e75
+                0x00000000000167e6                __FINI_SECTION__ = .
  *(.fini)
-                0x0000000000016806        0x2 SHORT 0x4e75
-                0x0000000000016808                _etext = .
+                0x00000000000167e6        0x2 SHORT 0x4e75
+                0x00000000000167e8                _etext = .
  *(.lit)
-                0x0000000000016808                _stext = SIZEOF (.text)
+                0x00000000000167e8                _stext = SIZEOF (.text)
 
-.data           0x0000000000ff0000      0x880 load address 0x0000000000016808
+.data           0x0000000000ff0000      0x880 load address 0x00000000000167e8
  *(.got.plt)
  *(.got)
  *(.shdata)
@@ -862,7 +862,7 @@ LOAD /opt/toolchains/gen/m68k-elf/m68k-elf/lib/libm.a
                 0x0000000000ff0880                _edata = .
                 0x0000000000000880                _sdata = SIZEOF (.data)
 
-.bss            0x0000000000ff0880      0x804 load address 0x0000000000017088
+.bss            0x0000000000ff0880      0x804 load address 0x0000000000017068
                 0x0000000000ff0880                _start = .
  *(.shbss)
  *(.bss .bss.*)
