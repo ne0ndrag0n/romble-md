@@ -5,7 +5,7 @@
 
 BoxView_vtable BoxView_table = { 
 	BoxView_ctor, 
-	BaseView_testa, 
+	BaseView_dtor, 
 	BoxView_render,
 	BaseView_addChildView,
 	BaseView_setPlane,

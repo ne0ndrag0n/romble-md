@@ -15,7 +15,7 @@
 
 BaseView_vtable BaseView_table = { 
 	BaseView_ctor, 
-	BaseView_testa, 
+	BaseView_dtor, 
 	BaseView_render,
 	BaseView_addChildView,
 	BaseView_setPlane,
@@ -37,8 +37,8 @@ void BaseView_ctor( BaseView* this, u8 x, u8 y, u8 width, u8 height ) {
 	this->plane = VDP_PLAN_A;
 }
 
-u8 BaseView_testa( BaseView* this ) {
-	return this->width + this->height;
+void BaseView_dtor( BaseView* this ) {
+	free( this->children );
 }
 
 void BaseView_render( BaseView* this ) {

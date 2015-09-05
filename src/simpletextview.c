@@ -8,7 +8,7 @@
 
 SimpleTextView_vtable SimpleTextView_table = { 
 	SimpleTextView_ctor, 
-	BaseView_testa, 
+	SimpleTextView_dtor, 
 	SimpleTextView_render,
 	BaseView_addChildView,
 	BaseView_setPlane,
@@ -29,6 +29,12 @@ void SimpleTextView_ctor( SimpleTextView* this, char* text, u8 x, u8 y ) {
 
 	// Fix the incompatible pointer types warning
 	this->super.functions = &SimpleTextView_table;
+}
+
+void SimpleTextView_dtor( SimpleTextView* this ) {
+	free( this->text );
+
+	BaseView_dtor( ( BaseView* ) this );
 }
 
 void SimpleTextView_render( SimpleTextView* this ) {

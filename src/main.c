@@ -24,7 +24,7 @@ int main( void ) {
 	BoxView nested;
 	BoxView_ctor( &nested, TILE_USERINDEX, 1, 1, 10, 5 );
 
-	( ( BaseView* ) &nested )->functions->addChildView( ( BaseView* ) &childView, ( BaseView* ) &nested );
+	nested.super.functions->addChildView( ( BaseView* ) &childView, ( BaseView* ) &nested );
 	root.functions->addChildView( &root, ( BaseView* ) &childView );
 	root.functions->render( &root );
 
