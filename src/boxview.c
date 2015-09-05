@@ -36,12 +36,12 @@ void BoxView_render( BoxView* this ) {
 	for( i = 1; i != ( ( BaseView* ) this )->width - 1; i++ ) {
 		// Horizontal runs
 		placeTile( ( BaseView* ) this, i, 0, PAL0, this->boxDrawingIndex + 1, FALSE, FALSE );
-		placeTile( ( BaseView* ) this, i, ( ( BaseView* ) this )->height - 1, PAL0, this->boxDrawingIndex + 1, FALSE, FALSE );
+		placeTile( ( BaseView* ) this, i, ( ( BaseView* ) this )->height - 1, PAL0, this->boxDrawingIndex + 1, TRUE, FALSE );
 	}
 
 	for( i = 1; i != ( ( BaseView* ) this )->height - 1; i++ ) {
 		// Vertical runs
-		placeTile( ( BaseView* ) this, 0, i, PAL0, this->boxDrawingIndex + 2, FALSE, FALSE );
+		placeTile( ( BaseView* ) this, 0, i, PAL0, this->boxDrawingIndex + 2, FALSE, TRUE );
 		placeTile( ( BaseView* ) this, ( ( BaseView* ) this )->width - 1, i, PAL0, this->boxDrawingIndex + 2, FALSE, FALSE );
 	}
 }

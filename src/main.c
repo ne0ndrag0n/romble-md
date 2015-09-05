@@ -28,7 +28,5 @@ int main( void ) {
 	root.functions->addChildView( &root, ( BaseView* ) &childView );
 	root.functions->render( &root );
 
-	VDP_drawText( "012345678901234567890", 0, 0 );
-
 	while(1);
 }
