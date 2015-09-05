@@ -10,13 +10,16 @@
 #include <res/globals.h>
 #include <utility.h>
 #include <vdp.h>
+#include <vdp_tile.h>
+#include <stdio.h>
 
 BaseView_vtable BaseView_table = { 
 	BaseView_ctor, 
 	BaseView_testa, 
 	BaseView_render,
 	BaseView_addChildView,
-	BaseView_setPlane
+	BaseView_setPlane,
+	BaseView_placeTile
 };
 
 void BaseView_ctor( BaseView* this, u8 x, u8 y, u8 width, u8 height ) {
@@ -88,4 +91,14 @@ void BaseView_addChildView( BaseView* this, BaseView* childView ) {
 
 void BaseView_setPlane( BaseView* this, u16 plane ) {
 	this->plane = plane;
+}
+
+void BaseView_placeTile( BaseView* this, u8 x, u8 y, u8 pal, u16 tileIndex, bool flipV, bool flipH ) {
+	// If x or y lie outside the boundaries, the tile will not be visible. Do not draw it.
+	u8 absX = x + this->absX;
+	u8 absY = y + this->absY;
+
+	if( absX < ( this->absX + this->width ) && absY < ( this->absY + this->height ) ) {
+		VDP_setTileMapXY( this->plane, TILE_ATTR_FULL( pal, PRIORITY_LOW, flipV, flipH, tileIndex ), absX, absY );
+	}
 }

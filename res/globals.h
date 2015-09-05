@@ -3,6 +3,8 @@
 
 #define FALSE 0
 #define TRUE 1
+#define PRIORITY_LOW 0
+#define PRIORITY_HIGH 1
 
 #include <types.h>
 

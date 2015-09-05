@@ -3,6 +3,7 @@
 
 #include <types.h>
 #include <baseview.h>
+#include <res/globals.h>
 
 struct SimpleTextView;
 
@@ -12,6 +13,7 @@ typedef struct {
 	void ( *render )( struct SimpleTextView* );
 	void ( *addChildView )( struct BaseView*, struct BaseView* );
 	void ( *setPlane )( struct BaseView*, u16 );
+	void ( *placeTile )( struct BaseView*, u8, u8, u8, u16, bool, bool );
 } SimpleTextView_vtable;
 
 typedef struct SimpleTextView {
