@@ -23,27 +23,36 @@ void BoxView_ctor( BoxView* this, u16 boxDrawingIndex, u16 fillTileIndex, u8 x, 
 }
 
 void BoxView_render( BoxView* this ) {
-	BaseView_render( ( BaseView* ) this );
+	BaseView* super = ( BaseView* ) this;
+
+	BaseView_render( super );
 
 	void ( *placeTile )( struct BaseView*, u8, u8, u8, u16, bool, bool ) = this->super.functions->placeTile;
 
 	// Place corner tiles
-	placeTile( ( BaseView* ) this, 0, 0, PAL0, this->boxDrawingIndex, FALSE, FALSE );
-	placeTile( ( BaseView* ) this, ( ( BaseView* )this )->width - 1, 0, PAL0, this->boxDrawingIndex, FALSE, TRUE );
-	placeTile( ( BaseView* ) this, ( ( BaseView* )this )->width - 1, ( ( BaseView* ) this )->height - 1, PAL0, this->boxDrawingIndex, TRUE, TRUE );
-	placeTile( ( BaseView* ) this, 0, ( ( BaseView* ) this )->height - 1, PAL0, this->boxDrawingIndex, TRUE, FALSE );
+	placeTile( super, 0, 0, PAL0, this->boxDrawingIndex, FALSE, FALSE );
+	placeTile( super, super->width - 1, 0, PAL0, this->boxDrawingIndex, FALSE, TRUE );
+	placeTile( super, super->width - 1, super->height - 1, PAL0, this->boxDrawingIndex, TRUE, TRUE );
+	placeTile( super, 0, super->height - 1, PAL0, this->boxDrawingIndex, TRUE, FALSE );
 
 	// Place tile runs
-	size_t i;
-	for( i = 1; i != ( ( BaseView* ) this )->width - 1; i++ ) {
+	size_t i, j;
+	for( i = 1; i != super->width - 1; i++ ) {
 		// Horizontal runs
-		placeTile( ( BaseView* ) this, i, 0, PAL0, this->boxDrawingIndex + 1, FALSE, FALSE );
-		placeTile( ( BaseView* ) this, i, ( ( BaseView* ) this )->height - 1, PAL0, this->boxDrawingIndex + 1, TRUE, FALSE );
+		placeTile( super, i, 0, PAL0, this->boxDrawingIndex + 1, FALSE, FALSE );
+		placeTile( super, i, super->height - 1, PAL0, this->boxDrawingIndex + 1, TRUE, FALSE );
 	}
 
-	for( i = 1; i != ( ( BaseView* ) this )->height - 1; i++ ) {
+	for( i = 1; i != super->height - 1; i++ ) {
 		// Vertical runs
-		placeTile( ( BaseView* ) this, 0, i, PAL0, this->boxDrawingIndex + 2, FALSE, TRUE );
-		placeTile( ( BaseView* ) this, ( ( BaseView* ) this )->width - 1, i, PAL0, this->boxDrawingIndex + 2, FALSE, FALSE );
+		placeTile( super, 0, i, PAL0, this->boxDrawingIndex + 2, FALSE, TRUE );
+		placeTile( super, super->width - 1, i, PAL0, this->boxDrawingIndex + 2, FALSE, FALSE );
+	}
+
+	// Make the inside solid
+	for ( i = 1; i != super->height - 1; i++ ) {
+		for( j = 1; j != super->width - 1; j++ ) {
+			placeTile( super, j, i, PAL0, this->fillTileIndex, FALSE, FALSE );
+		}
 	}
 }
