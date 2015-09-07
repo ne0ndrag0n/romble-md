@@ -122,7 +122,7 @@ void BaseView_placeTileSeries( BaseView* this, u8 x, u8 y, u8 w, u8 h, u8 pal, u
 			placeTile( this, x + i, y + j, pal, tileIndex, FALSE, FALSE );
 
 			if( autoInc == TRUE ) {
-				pal++;
+				tileIndex++;
 			}
 		}
 	}
