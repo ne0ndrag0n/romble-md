@@ -20,7 +20,11 @@ int main( void ) {
 	BoxView childView;
 	BoxView_ctor( &childView, TILE_USERINDEX, 5, 0, 1, 20, 21 );
 
+	SimpleTextView testText;
+	SimpleTextView_ctor( &testText, "Spam & eggs", 2, 2 );
+
 	root.functions->addChildView( &root, ( BaseView* ) &childView );
+	childView.super.functions->addChildView( ( BaseView* ) &childView, ( BaseView* ) &testText );
 	root.functions->render( &root );
 
 	while(1);

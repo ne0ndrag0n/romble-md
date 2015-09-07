@@ -10,7 +10,9 @@ struct BoxView;
 typedef struct {
 	void ( *BoxView )( struct BoxView*, u16, u16, u8, u8, u8, u8 );
 	void ( *destroy )( struct BaseView* );
-	void ( *render )( struct BoxView* );
+	void ( *render )( struct BoxView* );	
+	void ( *position )( struct BaseView* );
+	void ( *renderChildren )( struct BaseView* );
 	void ( *addChildView )( struct BaseView*, struct BaseView* );
 	void ( *setPlane )( struct BaseView*, u16 );
 	void ( *placeTile )( struct BaseView*, u8, u8, u8, u16, bool, bool );

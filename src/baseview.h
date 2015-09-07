@@ -11,6 +11,8 @@ typedef struct {
 	void ( *BaseView )( struct BaseView*, u8, u8, u8, u8 );
 	void ( *destroy )( struct BaseView* );
 	void ( *render )( struct BaseView* );
+	void ( *position )( struct BaseView* );
+	void ( *renderChildren )( struct BaseView* );
 	void ( *addChildView )( struct BaseView*, struct BaseView* );
 	void ( *setPlane )( struct BaseView*, u16 );
 	void ( *placeTile )( struct BaseView*, u8, u8, u8, u16, bool, bool );
@@ -45,6 +47,8 @@ void BaseView_dtor( BaseView* this );
 u8 BaseView_testa( BaseView* this );
 
 void BaseView_render( BaseView* this );
+void BaseView_position( BaseView* this );
+void BaseView_renderChildren( BaseView* this );
 void BaseView_addChildView( BaseView* this, BaseView* childView );
 
 void BaseView_setPlane( BaseView* this, u16 plane );

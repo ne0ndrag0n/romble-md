@@ -17,6 +17,8 @@ BaseView_vtable BaseView_table = {
 	BaseView_ctor, 
 	BaseView_dtor, 
 	BaseView_render,
+	BaseView_position,
+	BaseView_renderChildren,
 	BaseView_addChildView,
 	BaseView_setPlane,
 	BaseView_placeTile,
@@ -47,6 +49,12 @@ void BaseView_dtor( BaseView* this ) {
 }
 
 void BaseView_render( BaseView* this ) {
+	this->functions->position( this );
+
+	this->functions->renderChildren( this );
+}
+
+void BaseView_position( BaseView* this ) {
 	// If this view has no parent, set absX and absY to where the view is placed....else, add the absX and absY of the parent
 	if( this->parent == NULL ) {
 		this->absX = this->x;
@@ -55,7 +63,9 @@ void BaseView_render( BaseView* this ) {
 		this->absX = this->x + this->parent->absX;
 		this->absY = this->y + this->parent->absY;
 	}
-	
+}
+
+void BaseView_renderChildren( BaseView* this ) {
 	// Place and render children
 	if( this->children != NULL ) {
 		size_t i;

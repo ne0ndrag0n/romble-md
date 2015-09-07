@@ -10,6 +10,8 @@ SimpleTextView_vtable SimpleTextView_table = {
 	SimpleTextView_ctor, 
 	SimpleTextView_dtor, 
 	SimpleTextView_render,
+	BaseView_position,
+	BaseView_renderChildren,
 	BaseView_addChildView,
 	BaseView_setPlane,
 	BaseView_placeTile,

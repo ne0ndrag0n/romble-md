@@ -11,6 +11,8 @@ typedef struct {
 	void ( *SimpleTextView )( struct SimpleTextView*, char* text, u8, u8 );
 	void ( *destroy )( struct SimpleTextView* );
 	void ( *render )( struct SimpleTextView* );
+	void ( *position )( struct BaseView* );
+	void ( *renderChildren )( struct BaseView* );
 	void ( *addChildView )( struct BaseView*, struct BaseView* );
 	void ( *setPlane )( struct BaseView*, u16 );
 	void ( *placeTile )( struct BaseView*, u8, u8, u8, u16, bool, bool );

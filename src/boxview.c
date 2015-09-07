@@ -7,6 +7,8 @@ BoxView_vtable BoxView_table = {
 	BoxView_ctor, 
 	BaseView_dtor, 
 	BoxView_render,
+	BaseView_position,
+	BaseView_renderChildren,
 	BaseView_addChildView,
 	BaseView_setPlane,
 	BaseView_placeTile,
@@ -50,9 +52,10 @@ void BoxView_render( BoxView* this ) {
 	}
 
 	// Make the inside solid
+	/*
 	for ( i = 1; i != super->height - 1; i++ ) {
 		for( j = 1; j != super->width - 1; j++ ) {
 			placeTile( super, j, i, PAL0, this->fillTileIndex, FALSE, FALSE );
 		}
-	}
+	}*/
 }
