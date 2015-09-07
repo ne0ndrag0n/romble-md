@@ -9,12 +9,14 @@ BoxView_vtable BoxView_table = {
 	BoxView_render,
 	BaseView_addChildView,
 	BaseView_setPlane,
-	BaseView_placeTile
+	BaseView_placeTile,
+	BaseView_placeTileSeries
 };
 
-void BoxView_ctor( BoxView* this, u16 boxDrawingIndex, u8 x, u8 y, u8 width, u8 height ) {
+void BoxView_ctor( BoxView* this, u16 boxDrawingIndex, u16 fillTileIndex, u8 x, u8 y, u8 width, u8 height ) {
 	BaseView_ctor( ( BaseView* ) this, x, y, width, height );
 	
+	this->fillTileIndex = fillTileIndex;
 	this->boxDrawingIndex = boxDrawingIndex;
 
 	this->super.functions = &BoxView_table;

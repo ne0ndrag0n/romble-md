@@ -18,13 +18,8 @@ int main( void ) {
 	BaseView_ctor( &root, 0, 0, 40, 28 );
 
 	BoxView childView;
-	BoxView_ctor( &childView, TILE_USERINDEX, 3, 3, 20, 20 );
+	BoxView_ctor( &childView, TILE_USERINDEX, 5, 0, 1, 20, 21 );
 
-	// Nested boxviews!
-	BoxView nested;
-	BoxView_ctor( &nested, TILE_USERINDEX, 1, 1, 10, 5 );
-
-	nested.super.functions->addChildView( ( BaseView* ) &childView, ( BaseView* ) &nested );
 	root.functions->addChildView( &root, ( BaseView* ) &childView );
 	root.functions->render( &root );
 

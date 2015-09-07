@@ -14,6 +14,7 @@ typedef struct {
 	void ( *addChildView )( struct BaseView*, struct BaseView* );
 	void ( *setPlane )( struct BaseView*, u16 );
 	void ( *placeTile )( struct BaseView*, u8, u8, u8, u16, bool, bool );
+	void ( *placeTileSeries )( struct BaseView*, u8, u8, u8, u8, u8, u16, bool );
 } BaseView_vtable;
 
 typedef struct BaseView {
@@ -25,6 +26,9 @@ typedef struct BaseView {
 
 	u8 absX;
 	u8 absY;
+
+	u8 scrollX;
+	u8 scrollY;
 
 	u8 numChildren;
 	u16 plane;
@@ -45,5 +49,7 @@ void BaseView_addChildView( BaseView* this, BaseView* childView );
 
 void BaseView_setPlane( BaseView* this, u16 plane );
 void BaseView_placeTile( BaseView* this, u8 x, u8 y, u8 pal, u16 tileIndex, bool flipV, bool flipH );
+
+void BaseView_placeTileSeries( BaseView* this, u8 x, u8 y, u8 w, u8 h, u8 pal, u16 tileIndex, bool autoInc );
 
 #endif
