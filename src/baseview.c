@@ -22,7 +22,8 @@ BaseView_vtable BaseView_table = {
 	BaseView_addChildView,
 	BaseView_setPlane,
 	BaseView_placeTile,
-	BaseView_placeTileSeries
+	BaseView_placeTileSeries,
+	BaseView_checkTileBoundary
 };
 
 void BaseView_ctor( BaseView* this, u8 x, u8 y, u8 width, u8 height ) {
@@ -113,10 +114,8 @@ void BaseView_placeTile( BaseView* this, u8 x, u8 y, u8 pal, u16 tileIndex, bool
 	u8 absX = x + this->absX + this->scrollX;
 	u8 absY = y + this->absY + this->scrollY;
 
-	u8 boundaryX = this->absX + this->width - 1;
-	u8 boundaryY = this->absY + this->height - 1;
-
-	if( ( this->parent == NULL ) || ( absX <= boundaryX && absY <= boundaryY && absX >= this->absX && absY >= this->absY ) ) {
+	// Check that the tile can be placed within this container as well as all parent containers
+	if( this->functions->checkTileBoundary( this, absX, absY ) ) {
 		VDP_setTileMapXY( this->plane, TILE_ATTR_FULL( pal, PRIORITY_LOW, flipV, flipH, tileIndex ), absX, absY );
 	}
 }
@@ -135,5 +134,21 @@ void BaseView_placeTileSeries( BaseView* this, u8 x, u8 y, u8 w, u8 h, u8 pal, u
 				tileIndex++;
 			}
 		}
+	}
+}
+
+bool BaseView_checkTileBoundary( BaseView* this, u8 x, u8 y ) {
+	
+	// Check self
+	u8 boundaryX = this->absX + this->width - 1;
+	u8 boundaryY = this->absY + this->height - 1;
+	
+	bool result = ( x >= this->absX && y >= this->absY && x <= boundaryX && y <= boundaryY ) ? TRUE : FALSE;
+
+	if( result == FALSE || this->parent == NULL ) {
+		// If we hit the base element, or if the result evaluated to FALSE, do not check any longer and return the result
+		return result;
+	} else {
+		return this->parent->functions->checkTileBoundary( this->parent, x, y );
 	}
 }

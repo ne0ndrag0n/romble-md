@@ -18,13 +18,17 @@ int main( void ) {
 	BaseView_ctor( &root, 0, 0, 40, 28 );
 
 	BoxView childView;
-	BoxView_ctor( &childView, TILE_USERINDEX, 5, 0, 1, 20, 21 );
+	BoxView_ctor( &childView, TILE_USERINDEX, 5, 2, 2, 12, 12 );
 
-	SimpleTextView testText;
-	SimpleTextView_ctor( &testText, "Spam & eggs", 2, 2 );
+	BoxView test;
+	BoxView_ctor( &test, TILE_USERINDEX, 5, 2, 2, 12, 12 );
+
+	BoxView anotherTest;
+	BoxView_ctor( &anotherTest, TILE_USERINDEX, 5, 2, 2, 12, 12 );
 
 	root.functions->addChildView( &root, ( BaseView* ) &childView );
-	childView.super.functions->addChildView( ( BaseView* ) &childView, ( BaseView* ) &testText );
+	childView.super.functions->addChildView( ( BaseView* ) &childView, ( BaseView* ) &test );
+	test.super.functions->addChildView( ( BaseView* ) &test, ( BaseView* ) &anotherTest );
 	root.functions->render( &root );
 
 	while(1);

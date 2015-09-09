@@ -17,6 +17,7 @@ typedef struct {
 	void ( *setPlane )( struct BaseView*, u16 );
 	void ( *placeTile )( struct BaseView*, u8, u8, u8, u16, bool, bool );
 	void ( *placeTileSeries )( struct BaseView*, u8, u8, u8, u8, u8, u16, bool );
+	bool ( *checkTileBoundary )( struct BaseView*, u8, u8 );
 } SimpleTextView_vtable;
 
 typedef struct SimpleTextView {

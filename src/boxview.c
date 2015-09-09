@@ -12,7 +12,8 @@ BoxView_vtable BoxView_table = {
 	BaseView_addChildView,
 	BaseView_setPlane,
 	BaseView_placeTile,
-	BaseView_placeTileSeries
+	BaseView_placeTileSeries,
+	BaseView_checkTileBoundary
 };
 
 void BoxView_ctor( BoxView* this, u16 boxDrawingIndex, u16 fillTileIndex, u8 x, u8 y, u8 width, u8 height ) {
