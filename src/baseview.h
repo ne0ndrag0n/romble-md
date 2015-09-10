@@ -8,30 +8,30 @@
 struct BaseView;
 
 typedef struct {
-	void ( *BaseView )( struct BaseView*, u8, u8, u8, u8 );
+	void ( *BaseView )( struct BaseView*, s16, s16, s16, s16 );
 	void ( *destroy )( struct BaseView* );
 	void ( *render )( struct BaseView* );
 	void ( *position )( struct BaseView* );
 	void ( *renderChildren )( struct BaseView* );
 	void ( *addChildView )( struct BaseView*, struct BaseView* );
 	void ( *setPlane )( struct BaseView*, u16 );
-	void ( *placeTile )( struct BaseView*, u8, u8, u8, u16, bool, bool );
-	void ( *placeTileSeries )( struct BaseView*, u8, u8, u8, u8, u8, u16, bool );
-	bool ( *checkTileBoundary )( struct BaseView*, u8, u8 );
+	void ( *placeTile )( struct BaseView*, s16, s16, u8, u16, bool, bool );
+	void ( *placeTileSeries )( struct BaseView*, s16, s16, s16, s16, u8, u16, bool );
+	bool ( *checkTileBoundary )( struct BaseView*, s16, s16 );
 } BaseView_vtable;
 
 typedef struct BaseView {
-	u8 x;
-	u8 y;
+	s16 x;
+	s16 y;
 
-	u8 width;
-	u8 height;
+	s16 width;
+	s16 height;
 
-	u8 absX;
-	u8 absY;
+	s16 absX;
+	s16 absY;
 
-	u8 scrollX;
-	u8 scrollY;
+	s16 scrollX;
+	s16 scrollY;
 
 	u8 numChildren;
 	u16 plane;
@@ -42,7 +42,7 @@ typedef struct BaseView {
 	BaseView_vtable *functions;
 } BaseView;
 
-void BaseView_ctor( BaseView* this, u8 x, u8 y, u8 width, u8 height );
+void BaseView_ctor( BaseView* this, s16 x, s16 y, s16 width, s16 height );
 void BaseView_dtor( BaseView* this );
 
 u8 BaseView_testa( BaseView* this );
@@ -53,10 +53,10 @@ void BaseView_renderChildren( BaseView* this );
 void BaseView_addChildView( BaseView* this, BaseView* childView );
 
 void BaseView_setPlane( BaseView* this, u16 plane );
-void BaseView_placeTile( BaseView* this, u8 x, u8 y, u8 pal, u16 tileIndex, bool flipV, bool flipH );
+void BaseView_placeTile( BaseView* this, s16 x, s16 y, u8 pal, u16 tileIndex, bool flipV, bool flipH );
 
-void BaseView_placeTileSeries( BaseView* this, u8 x, u8 y, u8 w, u8 h, u8 pal, u16 tileIndex, bool autoInc );
+void BaseView_placeTileSeries( BaseView* this, s16 x, s16 y, s16 w, s16 h, u8 pal, u16 tileIndex, bool autoInc );
 
-bool BaseView_checkTileBoundary( BaseView* this, u8 x, u8 y );
+bool BaseView_checkTileBoundary( BaseView* this, s16 x, s16 y );
 
 #endif

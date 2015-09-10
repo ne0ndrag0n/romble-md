@@ -19,7 +19,7 @@ SimpleTextView_vtable SimpleTextView_table = {
 	BaseView_checkTileBoundary
 };
 
-void SimpleTextView_ctor( SimpleTextView* this, char* text, u8 x, u8 y ) {
+void SimpleTextView_ctor( SimpleTextView* this, char* text, s16 x, s16 y ) {
 	u8 width = strlen( text );
 	
 	BaseView_ctor( ( BaseView* ) this, x, y, width, 1 );

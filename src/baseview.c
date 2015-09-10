@@ -26,7 +26,7 @@ BaseView_vtable BaseView_table = {
 	BaseView_checkTileBoundary
 };
 
-void BaseView_ctor( BaseView* this, u8 x, u8 y, u8 width, u8 height ) {
+void BaseView_ctor( BaseView* this, s16 x, s16 y, s16 width, s16 height ) {
 	this->functions = &BaseView_table;
 
 	this->x = x;
@@ -109,10 +109,10 @@ void BaseView_setPlane( BaseView* this, u16 plane ) {
 	this->plane = plane;
 }
 
-void BaseView_placeTile( BaseView* this, u8 x, u8 y, u8 pal, u16 tileIndex, bool flipV, bool flipH ) {
+void BaseView_placeTile( BaseView* this, s16 x, s16 y, u8 pal, u16 tileIndex, bool flipV, bool flipH ) {
 	// If x or y lie outside the boundaries, the tile will not be visible. Do not draw it.
-	u8 absX = x + this->absX + this->scrollX;
-	u8 absY = y + this->absY + this->scrollY;
+	s16 absX = x + this->absX + this->scrollX;
+	s16 absY = y + this->absY + this->scrollY;
 
 	// Check that the tile can be placed within this container as well as all parent containers
 	if( this->functions->checkTileBoundary( this, absX, absY ) ) {
@@ -120,11 +120,11 @@ void BaseView_placeTile( BaseView* this, u8 x, u8 y, u8 pal, u16 tileIndex, bool
 	}
 }
 
-void BaseView_placeTileSeries( BaseView* this, u8 x, u8 y, u8 w, u8 h, u8 pal, u16 tileIndex, bool autoInc ) {
+void BaseView_placeTileSeries( BaseView* this, s16 x, s16 y, s16 w, s16 h, u8 pal, u16 tileIndex, bool autoInc ) {
 	u8 tilePos = tileIndex;
 	u8 i = 0, j = 0;
 	
-	void ( *placeTile )( struct BaseView*, u8, u8, u8, u16, bool, bool ) = this->functions->placeTile;
+	void ( *placeTile )( struct BaseView*, s16, s16, u8, u16, bool, bool ) = this->functions->placeTile;
 
 	for( j = 0; j != h; j++ ) {
 		for( i = 0; i != w; i++ ) {
@@ -137,11 +137,11 @@ void BaseView_placeTileSeries( BaseView* this, u8 x, u8 y, u8 w, u8 h, u8 pal, u
 	}
 }
 
-bool BaseView_checkTileBoundary( BaseView* this, u8 x, u8 y ) {
+bool BaseView_checkTileBoundary( BaseView* this, s16 x, s16 y ) {
 	
 	// Check self
-	u8 boundaryX = this->absX + this->width - 1;
-	u8 boundaryY = this->absY + this->height - 1;
+	s16 boundaryX = this->absX + this->width - 1;
+	s16 boundaryY = this->absY + this->height - 1;
 	
 	bool result = ( x >= this->absX && y >= this->absY && x <= boundaryX && y <= boundaryY ) ? TRUE : FALSE;
 

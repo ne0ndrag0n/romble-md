@@ -16,7 +16,7 @@ BoxView_vtable BoxView_table = {
 	BaseView_checkTileBoundary
 };
 
-void BoxView_ctor( BoxView* this, u16 boxDrawingIndex, u16 fillTileIndex, u8 x, u8 y, u8 width, u8 height ) {
+void BoxView_ctor( BoxView* this, u16 boxDrawingIndex, u16 fillTileIndex, s16 x, s16 y, s16 width, s16 height ) {
 	BaseView_ctor( ( BaseView* ) this, x, y, width, height );
 	
 	this->fillTileIndex = fillTileIndex;
@@ -30,7 +30,7 @@ void BoxView_render( BoxView* this ) {
 
 	BaseView_render( super );
 
-	void ( *placeTile )( struct BaseView*, u8, u8, u8, u16, bool, bool ) = this->super.functions->placeTile;
+	void ( *placeTile )( struct BaseView*, s16, s16, u8, u16, bool, bool ) = this->super.functions->placeTile;
 
 	// Place corner tiles
 	placeTile( super, 0, 0, PAL0, this->boxDrawingIndex, FALSE, FALSE );

@@ -24,12 +24,14 @@ int main( void ) {
 	BoxView_ctor( &test, TILE_USERINDEX, 5, 2, 2, 12, 12 );
 
 	BoxView anotherTest;
-	BoxView_ctor( &anotherTest, TILE_USERINDEX, 5, 2, 2, 12, 12 );
+	BoxView_ctor( &anotherTest, TILE_USERINDEX, 5, 2, 2, 32, 32 );
 
 	root.functions->addChildView( &root, ( BaseView* ) &childView );
 	childView.super.functions->addChildView( ( BaseView* ) &childView, ( BaseView* ) &test );
 	test.super.functions->addChildView( ( BaseView* ) &test, ( BaseView* ) &anotherTest );
 	root.functions->render( &root );
+
+	VDP_drawText( "Ok", 0, 0 );
 
 	while(1);
 }
