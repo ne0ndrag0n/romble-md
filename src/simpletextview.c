@@ -5,6 +5,7 @@
 #include <vdp_bg.h>
 #include <res/lang.h>
 #include <res/globals.h>
+#include <utility.h>
 
 SimpleTextView_vtable SimpleTextView_table = { 
 	SimpleTextView_ctor, 
@@ -44,8 +45,15 @@ void SimpleTextView_dtor( SimpleTextView* this ) {
 void SimpleTextView_render( SimpleTextView* this ) {
 	BaseView* super = ( BaseView* ) this;
 
-	BaseView_render( ( BaseView* ) this );
+	super->functions->position( super );
 
-	VDP_drawText( this->text, super->absX, super->absY );
+	void ( *placeTile )( struct BaseView*, s16, s16, u8, u16, bool, bool ) = super->functions->placeTile;
+
+	// Place this->text character by character (visibility verification will be done each step of the way)
+	size_t i;
+	size_t len = strlen( this->text );
+	for( i = 0; i != len; i++ ) {
+		placeTile( super, i, 0, PAL0, TILE_FONTINDEX + ( this->text[ i ] - 32 ), FALSE, FALSE );
+	}
 }
 

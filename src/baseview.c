@@ -61,8 +61,8 @@ void BaseView_position( BaseView* this ) {
 		this->absX = this->x;
 		this->absY = this->y;
 	} else {
-		this->absX = this->x + this->parent->absX;
-		this->absY = this->y + this->parent->absY;
+		this->absX = this->x + this->parent->absX + this->parent->scrollX;
+		this->absY = this->y + this->parent->absY + this->parent->scrollY;
 	}
 }
 
@@ -111,8 +111,8 @@ void BaseView_setPlane( BaseView* this, u16 plane ) {
 
 void BaseView_placeTile( BaseView* this, s16 x, s16 y, u8 pal, u16 tileIndex, bool flipV, bool flipH ) {
 	// If x or y lie outside the boundaries, the tile will not be visible. Do not draw it.
-	s16 absX = x + this->absX + this->scrollX;
-	s16 absY = y + this->absY + this->scrollY;
+	s16 absX = x + this->absX;
+	s16 absY = y + this->absY;
 
 	// Check that the tile can be placed within this container as well as all parent containers
 	if( this->functions->checkTileBoundary( this, absX, absY ) ) {

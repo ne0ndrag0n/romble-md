@@ -20,18 +20,14 @@ int main( void ) {
 	BoxView childView;
 	BoxView_ctor( &childView, TILE_USERINDEX, 5, 2, 2, 12, 12 );
 
-	BoxView test;
-	BoxView_ctor( &test, TILE_USERINDEX, 5, 2, 2, 12, 12 );
-
-	BoxView anotherTest;
-	BoxView_ctor( &anotherTest, TILE_USERINDEX, 5, 2, 2, 32, 32 );
+	SimpleTextView text;
+	SimpleTextView_ctor( &text, "This should overflow about now", -2, 2 );
 
 	root.functions->addChildView( &root, ( BaseView* ) &childView );
-	childView.super.functions->addChildView( ( BaseView* ) &childView, ( BaseView* ) &test );
-	test.super.functions->addChildView( ( BaseView* ) &test, ( BaseView* ) &anotherTest );
+	childView.super.functions->addChildView( ( BaseView* ) &childView, ( BaseView* ) &text );
 	root.functions->render( &root );
 
-	VDP_drawText( "Ok", 0, 0 );
+	Debug_print( "Ok" );
 
 	while(1);
 }
