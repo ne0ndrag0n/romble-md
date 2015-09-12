@@ -4,6 +4,8 @@
 #include <vdp_bg.h>
 #include <res/globals.h>
 
+u16 BOX_DRAWING_INDEX;
+
 void Romble_init() {
 	VDP_resetScreen();
 	VDP_resetSprites();
@@ -13,11 +15,11 @@ void Romble_init() {
 	VDP_setPalette( PAL0, StandardColours );
 
 	// Placed directly at the beginning
-	Romble_loadTiles( BoxDrawingCharacters, 3 );
+	BOX_DRAWING_INDEX = Romble_loadTiles( BoxDrawingCharacters, 3 );
 }
 
 u16 Romble_loadTiles( const u32* tiles, u16 run ) {
 	VDP_loadTileData( tiles, TILE_USERINDEX + TILES_USED, run, TRUE );
 
-	TILES_USED = TILES_USED + run;
+	return TILES_USED = TILES_USED + run;
 }

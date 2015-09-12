@@ -18,7 +18,7 @@ int main( void ) {
 	BaseView_ctor( &root, 0, 0, 40, 28 );
 
 	BoxView childView;
-	BoxView_ctor( &childView, TILE_USERINDEX, 5, 2, 2, 12, 12 );
+	BoxView_ctor( &childView, TILE_USERINDEX, BOX_DRAWING_INDEX, 2, 2, 12, 12 );
 
 	SimpleTextView text;
 	SimpleTextView_ctor( &text, "This should overflow about now", -2, 2 );
