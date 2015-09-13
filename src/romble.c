@@ -6,6 +6,7 @@
 #include <joymanager.h>
 #include <stdlib.h>
 #include <stddef.h>
+#include <sys.h>
 
 u16 BOX_DRAWING_INDEX;
 JoyManager* joyManager;
@@ -29,4 +30,10 @@ u16 Romble_loadTiles( const u32* tiles, u16 run ) {
 	VDP_loadTileData( tiles, TILE_USERINDEX + TILES_USED, run, TRUE );
 
 	return TILES_USED = TILES_USED + run;
+}
+
+void Romble_assert( bool condition, char* failMessage ) {
+	if ( condition == FALSE ) {
+		SYS_die( failMessage );
+	}
 }
