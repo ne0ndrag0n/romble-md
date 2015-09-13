@@ -3,8 +3,12 @@
 #include <vdp_pal.h>
 #include <vdp_bg.h>
 #include <res/globals.h>
+#include <joymanager.h>
+#include <stdlib.h>
+#include <stddef.h>
 
 u16 BOX_DRAWING_INDEX;
+JoyManager* joyManager;
 
 void Romble_init() {
 	VDP_resetScreen();
@@ -16,6 +20,9 @@ void Romble_init() {
 
 	// Placed directly at the beginning
 	BOX_DRAWING_INDEX = Romble_loadTiles( BoxDrawingCharacters, 3 );
+
+	joyManager = calloc( 1, sizeof( JoyManager ) );
+	JoyManager_ctor( joyManager, 64, 64 );
 }
 
 u16 Romble_loadTiles( const u32* tiles, u16 run ) {
