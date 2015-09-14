@@ -2,6 +2,7 @@
 #define JOYMANAGER
 
 #include <types.h>
+#include <res/globals.h>
 
 struct JoyManager;
 
@@ -29,6 +30,7 @@ typedef struct JoyManager {
 
 	u8 registerableX;
 	u8 registerableY;
+	u16 haloTilesIndex;
 	SelectableElement*** registeredElements;
 } JoyManager;
 
@@ -37,6 +39,8 @@ void JoyManager_dtor( JoyManager* this );
 
 void JoyManager_registerElement( JoyManager* this, s16 x, s16 y, s16 w, s16 h );
 void JoyManager_unregisterElement( JoyManager* this, s16 x, s16 y );
+
+void JoyManager_displayCursor( JoyManager* this, bool show );
 
 SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, ElementRetrieval method );
 
