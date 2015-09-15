@@ -4,6 +4,8 @@
 #include <types.h>
 #include <res/globals.h>
 
+extern const u32 HaloTiles[ 24 ];
+
 struct JoyManager;
 
 typedef struct SelectableElement {
@@ -41,6 +43,7 @@ void JoyManager_registerElement( JoyManager* this, s16 x, s16 y, s16 w, s16 h );
 void JoyManager_unregisterElement( JoyManager* this, s16 x, s16 y );
 
 void JoyManager_displayCursor( JoyManager* this, bool show );
+void JoyManager_renderSprites( JoyManager* this );
 
 SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, ElementRetrieval method );
 
