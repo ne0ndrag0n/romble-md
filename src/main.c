@@ -46,6 +46,11 @@ int main( void ) {
 
 	root.functions->render( &root );
 
+	BaseView* box1 = ( BaseView* ) &childView1;
+	JoyManager_registerElement( joyManager, box1->absX, box1->absY, box1->width, box1->height );
+	joyManager->currentElement = joyManager->registeredElements[ box1->absX ][ box1->absY ];
+	JoyManager_displayCursor( joyManager, TRUE );
+
 	Debug_print( "Ok" );
 
 	while(1);

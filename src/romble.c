@@ -27,9 +27,13 @@ void Romble_init() {
 }
 
 u16 Romble_loadTiles( const u32* tiles, u16 run ) {
-	VDP_loadTileData( tiles, TILE_USERINDEX + TILES_USED, run, TRUE );
+	u16 loadPoint = TILE_USERINDEX + TILES_USED;
 
-	return TILES_USED = TILES_USED + run;
+	VDP_loadTileData( tiles, loadPoint, run, TRUE );
+
+	TILES_USED = TILES_USED + run;
+
+	return loadPoint;
 }
 
 void Romble_assert( bool condition, char* failMessage ) {

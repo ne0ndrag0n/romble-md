@@ -3,6 +3,7 @@
 
 #include <types.h>
 #include <res/globals.h>
+#include <vdp_spr.h>
 
 extern const u32 HaloTiles[ 24 ];
 
@@ -29,7 +30,7 @@ typedef struct SelectableElementList {
 
 typedef struct JoyManager {
 	SelectableElement* currentElement;
-
+	SpriteDef* corners;
 	u8 registerableX;
 	u8 registerableY;
 	u16 haloTilesIndex;

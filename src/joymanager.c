@@ -9,6 +9,7 @@
 #include <vdp.h>
 #include <vdp_spr.h>
 #include <vdp_pal.h>
+#include <utility.h>
 
 const u32 HaloTiles[ 24 ] = {
 	0x00000000, 0x00000000, 0x00333333, 0x003BBBBB, 0x003BBBBB, 0x003BB333, 0x003BB300, 0x003BB300, 	//  Tile: 0
@@ -30,6 +31,7 @@ void JoyManager_ctor( JoyManager* this, u8 registerableX, u8 registerableY ) {
 	this->registerableX = registerableX;
 	this->registerableY = registerableY;
 
+	this->corners = calloc( 4, sizeof( SpriteDef ) );
 	this->haloTilesIndex = Romble_loadTiles( HaloTiles, 3 );
 }
 
@@ -38,6 +40,7 @@ void JoyManager_dtor( JoyManager* this ) {
 	
 	// todo: clear the subelements in this->registeredElements!
 
+	free( this->corners );
 	free( this->registeredElements );
 }
 
@@ -71,33 +74,40 @@ void JoyManager_renderSprites( JoyManager* this ) {
 	s16 absY = this->currentElement->y * 8;
 
 	SpriteDef upperLeft = { 
-		absX - 8,
-		absY - 8,
+		absX - 4,
+		absY - 4,
 		TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, FALSE, FALSE, this->haloTilesIndex ),
+		SPRITE_SIZE( 1, 1 ),
 		1
 	};
+	VDP_setSpriteP( 0, &upperLeft );
+
+
 	SpriteDef upperRight = { 
-		absX + ( this->currentElement->w * 8 ),
-		absY - 8,
-		TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, TRUE, FALSE, this->haloTilesIndex ),
+		absX + ( this->currentElement->w * 8 ) - 4,
+		absY - 4,
+		TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, FALSE, TRUE, this->haloTilesIndex ),
+		SPRITE_SIZE( 1, 1 ),
 		2
 	};
+	VDP_setSpriteP( 1, &upperRight );
+
 	SpriteDef lowerRight = { 
-		this->currentElement->x + this->currentElement->w,
-		this->currentElement->y + 1,
-		TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, FALSE, FALSE, this->haloTilesIndex ),
+		absX + ( this->currentElement->w * 8 ) - 4,
+		absY + ( this->currentElement->h * 8 ) - 4,
+		TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, TRUE, TRUE, this->haloTilesIndex ),
+		SPRITE_SIZE( 1, 1 ),
 		3
 	};
+	VDP_setSpriteP( 2, &lowerRight );
+
 	SpriteDef lowerLeft = { 
-		this->currentElement->x - 1,
-		this->currentElement->y - 8,
-		TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, FALSE, FALSE, this->haloTilesIndex ),
+		absX - 4,
+		absY + ( this->currentElement->h * 8 ) - 4,
+		TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, TRUE, FALSE, this->haloTilesIndex ),
+		SPRITE_SIZE( 1, 1 ),
 		0
 	};
-
-	VDP_setSpriteP( 0, &upperLeft );
-	VDP_setSpriteP( 1, &upperRight );
-	VDP_setSpriteP( 2, &lowerRight );
 	VDP_setSpriteP( 3, &lowerLeft );
 
 	VDP_updateSprites();
