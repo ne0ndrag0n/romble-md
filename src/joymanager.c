@@ -32,6 +32,7 @@ void JoyManager_ctor( JoyManager* this, u8 registerableX, u8 registerableY ) {
 	this->registerableY = registerableY;
 
 	this->haloTilesIndex = Romble_loadTiles( HaloTiles, 3 );
+	this->currentElement = NULL;
 }
 
 void JoyManager_dtor( JoyManager* this ) {
