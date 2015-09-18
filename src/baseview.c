@@ -46,7 +46,9 @@ void BaseView_ctor( BaseView* this, s16 x, s16 y, s16 width, s16 height ) {
 }
 
 void BaseView_dtor( BaseView* this ) {
+	// todo: free all children
 	free( this->children );
+	this->children = NULL;
 }
 
 void BaseView_render( BaseView* this ) {

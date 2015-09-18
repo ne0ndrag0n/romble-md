@@ -37,10 +37,12 @@ void JoyManager_ctor( JoyManager* this, u8 registerableX, u8 registerableY ) {
 
 void JoyManager_dtor( JoyManager* this ) {
 	free( this->currentElement );
+	this->currentElement = NULL;
 	
 	// todo: clear the subelements in this->registeredElements!
 
 	free( this->registeredElements );
+	this->registeredElements = NULL;
 }
 
 void JoyManager_registerElement( JoyManager* this, s16 x, s16 y, s16 w, s16 h ) {
