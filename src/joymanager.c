@@ -39,7 +39,6 @@ void JoyManager_dtor( JoyManager* this ) {
 	
 	// todo: clear the subelements in this->registeredElements!
 
-	free( this->corners );
 	free( this->registeredElements );
 }
 
