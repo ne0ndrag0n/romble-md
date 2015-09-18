@@ -31,7 +31,6 @@ void JoyManager_ctor( JoyManager* this, u8 registerableX, u8 registerableY ) {
 	this->registerableX = registerableX;
 	this->registerableY = registerableY;
 
-	this->corners = calloc( 4, sizeof( SpriteDef ) );
 	this->haloTilesIndex = Romble_loadTiles( HaloTiles, 3 );
 }
 
@@ -73,42 +72,34 @@ void JoyManager_renderSprites( JoyManager* this ) {
 	s16 absX = this->currentElement->x * 8;
 	s16 absY = this->currentElement->y * 8;
 
-	SpriteDef upperLeft = { 
-		absX - 4,
-		absY - 4,
-		TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, FALSE, FALSE, this->haloTilesIndex ),
-		SPRITE_SIZE( 1, 1 ),
-		1
-	};
-	VDP_setSpriteP( 0, &upperLeft );
+	// setup corners
+	this->corners[ 0 ].posx = absX - 4;
+	this->corners[ 0 ].posy = absY - 4;
+	this->corners[ 0 ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, FALSE, FALSE, this->haloTilesIndex );
+	this->corners[ 0 ].size = SPRITE_SIZE( 1, 1 );
+	this->corners[ 0 ].link = 1;
+	VDP_setSpriteP( 0, &( this->corners[ 0 ] ) );
 
+	this->corners[ 1 ].posx = absX + ( this->currentElement->w * 8 ) - 4;
+	this->corners[ 1 ].posy = absY - 4;
+	this->corners[ 1 ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, FALSE, TRUE, this->haloTilesIndex );
+	this->corners[ 1 ].size = SPRITE_SIZE( 1, 1 );
+	this->corners[ 1 ].link = 2;
+	VDP_setSpriteP( 1, &( this->corners[ 1 ] ) );
 
-	SpriteDef upperRight = { 
-		absX + ( this->currentElement->w * 8 ) - 4,
-		absY - 4,
-		TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, FALSE, TRUE, this->haloTilesIndex ),
-		SPRITE_SIZE( 1, 1 ),
-		2
-	};
-	VDP_setSpriteP( 1, &upperRight );
+	this->corners[ 2 ].posx = absX + ( this->currentElement->w * 8 ) - 4;
+	this->corners[ 2 ].posy = absY + ( this->currentElement->h * 8 ) - 4;
+	this->corners[ 2 ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, TRUE, TRUE, this->haloTilesIndex );
+	this->corners[ 2 ].size = SPRITE_SIZE( 1, 1 );
+	this->corners[ 2 ].link = 3;
+	VDP_setSpriteP( 2, &( this->corners[ 2 ] ) );
 
-	SpriteDef lowerRight = { 
-		absX + ( this->currentElement->w * 8 ) - 4,
-		absY + ( this->currentElement->h * 8 ) - 4,
-		TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, TRUE, TRUE, this->haloTilesIndex ),
-		SPRITE_SIZE( 1, 1 ),
-		3
-	};
-	VDP_setSpriteP( 2, &lowerRight );
-
-	SpriteDef lowerLeft = { 
-		absX - 4,
-		absY + ( this->currentElement->h * 8 ) - 4,
-		TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, TRUE, FALSE, this->haloTilesIndex ),
-		SPRITE_SIZE( 1, 1 ),
-		0
-	};
-	VDP_setSpriteP( 3, &lowerLeft );
+	this->corners[ 3 ].posx = absX - 4;
+	this->corners[ 3 ].posy = absY + ( this->currentElement->h * 8 ) - 4;
+	this->corners[ 3 ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, TRUE, FALSE, this->haloTilesIndex );
+	this->corners[ 3 ].size = SPRITE_SIZE( 1, 1 );
+	this->corners[ 3 ].link = 0;
+	VDP_setSpriteP( 3, &( this->corners[ 3 ] ) );
 
 	VDP_updateSprites();
 }

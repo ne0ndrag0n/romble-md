@@ -30,7 +30,7 @@ typedef struct SelectableElementList {
 
 typedef struct JoyManager {
 	SelectableElement* currentElement;
-	SpriteDef* corners;
+	SpriteDef corners[ 4 ];
 	u8 registerableX;
 	u8 registerableY;
 	u16 haloTilesIndex;
