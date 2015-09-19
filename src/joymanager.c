@@ -10,6 +10,9 @@
 #include <vdp_spr.h>
 #include <vdp_pal.h>
 #include <utility.h>
+#include <joy.h>
+
+JoyManager* joyManager;
 
 const u32 HaloTiles[ 24 ] = {
 	0x00000000, 0x00000000, 0x00333333, 0x003BBBBB, 0x003BBBBB, 0x003BB333, 0x003BB300, 0x003BB300, 	//  Tile: 0
@@ -33,6 +36,9 @@ void JoyManager_ctor( JoyManager* this, u8 registerableX, u8 registerableY ) {
 
 	this->haloTilesIndex = Romble_loadTiles( HaloTiles, 3 );
 	this->currentElement = NULL;
+
+	JOY_init();
+	JOY_setEventHandler( &JoyManager_handlerBridge );
 }
 
 void JoyManager_dtor( JoyManager* this ) {
@@ -159,4 +165,8 @@ SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, E
 	}
 
 	return result;
+}
+
+void JoyManager_handlerBridge( u16 joy, u16 changed, u16 state ) {
+
 }

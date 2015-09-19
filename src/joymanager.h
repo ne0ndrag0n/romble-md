@@ -37,6 +37,8 @@ typedef struct JoyManager {
 	SelectableElement*** registeredElements;
 } JoyManager;
 
+extern JoyManager* joyManager;
+
 void JoyManager_ctor( JoyManager* this, u8 registerableX, u8 registerableY );
 void JoyManager_dtor( JoyManager* this );
 
@@ -47,5 +49,7 @@ void JoyManager_displayCursor( JoyManager* this, bool show );
 void JoyManager_renderSprites( JoyManager* this );
 
 SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, ElementRetrieval method );
+
+void JoyManager_handlerBridge( u16 joy, u16 changed, u16 state );
 
 #endif

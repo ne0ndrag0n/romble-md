@@ -9,7 +9,6 @@
 #include <sys.h>
 
 u16 BOX_DRAWING_INDEX;
-JoyManager* joyManager;
 
 void Romble_init() {
 	VDP_resetScreen();
