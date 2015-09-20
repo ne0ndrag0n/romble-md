@@ -168,5 +168,9 @@ SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, E
 }
 
 void JoyManager_handlerBridge( u16 joy, u16 changed, u16 state ) {
-
+	switch( joy ) {
+		case JOY_1:
+			
+			break;
+	}
 }
