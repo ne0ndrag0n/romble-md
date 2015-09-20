@@ -74,6 +74,18 @@ void JoyManager_displayCursor( JoyManager* this, bool show ) {
 void JoyManager_renderSprites( JoyManager* this ) {
 	// Render a square of sprites around this->currentElement
 	VDP_resetSprites();
+	
+	JoyManager_positionSprites( this );
+	
+	VDP_setSpriteP( 0, &( this->corners[ 0 ] ) );
+	VDP_setSpriteP( 1, &( this->corners[ 1 ] ) );
+	VDP_setSpriteP( 2, &( this->corners[ 2 ] ) );
+	VDP_setSpriteP( 3, &( this->corners[ 3 ] ) );
+
+	VDP_updateSprites();
+}
+
+void JoyManager_positionSprites( JoyManager* this ) {
 	s16 absX = this->currentElement->x * 8;
 	s16 absY = this->currentElement->y * 8;
 
@@ -83,30 +95,24 @@ void JoyManager_renderSprites( JoyManager* this ) {
 	this->corners[ 0 ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, FALSE, FALSE, this->haloTilesIndex );
 	this->corners[ 0 ].size = SPRITE_SIZE( 1, 1 );
 	this->corners[ 0 ].link = 1;
-	VDP_setSpriteP( 0, &( this->corners[ 0 ] ) );
 
 	this->corners[ 1 ].posx = absX + ( this->currentElement->w * 8 ) - 4;
 	this->corners[ 1 ].posy = absY - 4;
 	this->corners[ 1 ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, FALSE, TRUE, this->haloTilesIndex );
 	this->corners[ 1 ].size = SPRITE_SIZE( 1, 1 );
 	this->corners[ 1 ].link = 2;
-	VDP_setSpriteP( 1, &( this->corners[ 1 ] ) );
 
 	this->corners[ 2 ].posx = absX + ( this->currentElement->w * 8 ) - 4;
 	this->corners[ 2 ].posy = absY + ( this->currentElement->h * 8 ) - 4;
 	this->corners[ 2 ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, TRUE, TRUE, this->haloTilesIndex );
 	this->corners[ 2 ].size = SPRITE_SIZE( 1, 1 );
 	this->corners[ 2 ].link = 3;
-	VDP_setSpriteP( 2, &( this->corners[ 2 ] ) );
 
 	this->corners[ 3 ].posx = absX - 4;
 	this->corners[ 3 ].posy = absY + ( this->currentElement->h * 8 ) - 4;
 	this->corners[ 3 ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, TRUE, FALSE, this->haloTilesIndex );
 	this->corners[ 3 ].size = SPRITE_SIZE( 1, 1 );
 	this->corners[ 3 ].link = 0;
-	VDP_setSpriteP( 3, &( this->corners[ 3 ] ) );
-
-	VDP_updateSprites();
 }
 
 void JoyManager_moveToNearest( JoyManager* this, SelectableElementList* neighbourhood ) {
@@ -130,11 +136,10 @@ void JoyManager_moveToNearest( JoyManager* this, SelectableElementList* neighbou
 		// There should be at least one element found here, if not, assertion failed
 		Romble_assert( nearest != NULL, EXCEPTION_NULL_POINTER" ("__FILE__","S__LINE__")" );
 		
-		// Compute the change in width and height - these will be used to expand/contract sprites 1, 2, and 3
-		s16 changeInWidth = nearest->w - this->currentElement->w;
-		s16 changeInHeight = nearest->h - this->currentElement->h;
-		
-		
+		// TODO: Linear interpolation animation, for now just move the box
+		this->currentElement = nearest;
+		JoyManager_positionSprites( this );
+		VDP_updateSprites();
 		
 		free( neighbourhood->list );
 	} else {

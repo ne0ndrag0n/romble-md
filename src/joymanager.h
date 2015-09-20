@@ -50,6 +50,7 @@ void JoyManager_registerElement( JoyManager* this, s16 x, s16 y, s16 w, s16 h );
 void JoyManager_unregisterElement( JoyManager* this, s16 x, s16 y );
 
 void JoyManager_displayCursor( JoyManager* this, bool show );
+void JoyManager_positionSprites( JoyManager* this );
 void JoyManager_renderSprites( JoyManager* this );
 void JoyManager_moveToNearest( JoyManager* this, SelectableElementList* neighbourhood );
 
