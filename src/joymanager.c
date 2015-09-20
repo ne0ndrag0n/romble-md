@@ -68,11 +68,8 @@ void JoyManager_displayCursor( JoyManager* this, bool show ) {
 	// If show is true, call the renderSprites function
 	if( show == TRUE ) {
 		JoyManager_renderSprites( this );
-	} else {
-
 	}
 }
-
 
 void JoyManager_renderSprites( JoyManager* this ) {
 	// Render a square of sprites around this->currentElement
@@ -112,6 +109,39 @@ void JoyManager_renderSprites( JoyManager* this ) {
 	VDP_updateSprites();
 }
 
+void JoyManager_moveToNearest( JoyManager* this, SelectableElementList* neighbourhood ) {
+	SelectableElement* nearest = NULL;
+	s16 currentDistance = 0;
+	s16 lastKnownDistance = MAXIMUM_DISTANCE;
+	size_t i;
+	
+	if( neighbourhood->length > 0 ) {
+		for( i = 0; i != neighbourhood->length; i++ ) {
+			currentDistance = DISTANCE( 
+				this->currentElement->x, neighbourhood->list[ i ]->x, 
+				this->currentElement->y, neighbourhood->list[ i ]->y 
+			);
+			if( currentDistance < lastKnownDistance ) {
+				nearest = neighbourhood->list[ i ];
+				lastKnownDistance = currentDistance;
+			}
+		}
+		
+		// There should be at least one element found here, if not, assertion failed
+		Romble_assert( nearest != NULL, EXCEPTION_NULL_POINTER" ("__FILE__","S__LINE__")" );
+		
+		// Compute the change in width and height - these will be used to expand/contract sprites 1, 2, and 3
+		s16 changeInWidth = nearest->w - this->currentElement->w;
+		s16 changeInHeight = nearest->h - this->currentElement->h;
+		
+		
+		
+		free( neighbourhood->list );
+	} else {
+		// Can't move anywhere - call on sound subsystem to play a "donk" noise
+	}
+}
+
 SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, ElementRetrieval method ) {
 	// Use ElementRetrieval method to determine what pointers to return
 	size_t y, x, stopY, stopX;
@@ -119,7 +149,7 @@ SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, E
 
 	switch( method ) {
 
-		case GREATER_THAN_X:
+		case ElementRetrieval_GREATER_THAN_X:
 			// For each y, return non-null pointers for this->currentElement->x + 1 to this->registerableX - 1
 			y = 0; 
 			stopY = this->registerableY;
@@ -127,7 +157,7 @@ SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, E
 			x = this->currentElement->x + 1; 
 			stopX = this->registerableX;
 			break;
-		case LESS_THAN_X:
+		case ElementRetrieval_LESS_THAN_X:
 			// For each y, return non-null pointers for 0 to this->currentElement->x
 			y = 0;
 			stopY = this->registerableY;
@@ -135,7 +165,7 @@ SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, E
 			x = 0;
 			stopX = this->currentElement->x;
 			break;
-		case GREATER_THAN_Y:
+		case ElementRetrieval_GREATER_THAN_Y:
 			// For each x, return non-null pointers for this->currentElement->y + 1 to this->registerableY - 1
 			y = this->currentElement->y + 1;
 			stopY = this->registerableY;
@@ -143,7 +173,7 @@ SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, E
 			x = 0;
 			stopX = this->registerableX;
 			break;
-		case LESS_THAN_Y:
+		case ElementRetrieval_LESS_THAN_Y:
 			// For each x, return non-null pointers for 0 to this->currentElement->y - 1
 			y = 0;
 			stopY = this->currentElement->y;
@@ -159,6 +189,8 @@ SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, E
 				SelectableElement** resized = realloc( result.list, sizeof( SelectableElement* ) * ++result.length );
 				Romble_assert( resized != NULL, EXCEPTION_OUT_OF_MEMORY );
 
+				result.list = resized;
+
 				result.list[ result.length - 1 ] = this->registeredElements[ y ][ x ];
 			}
 		}
@@ -167,10 +199,40 @@ SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, E
 	return result;
 }
 
-void JoyManager_handlerBridge( u16 joy, u16 changed, u16 state ) {
+void JoyManager_handleInput( JoyManager* this, u16 joy, u16 changed, u16 state ) {
 	switch( joy ) {
 		case JOY_1:
+			// we can probably do better with a sparse array of function pointers
+			if( state & BUTTON_UP ) {
+				SelectableElementList usableElements = JoyManager_retrieveSelectableElements( this, ElementRetrieval_LESS_THAN_Y );
+				JoyManager_moveToNearest( this, &usableElements );
+				break;
+			}
 			
+			if( state & BUTTON_DOWN ) {
+				SelectableElementList usableElements = JoyManager_retrieveSelectableElements( this, ElementRetrieval_GREATER_THAN_Y );
+				JoyManager_moveToNearest( this, &usableElements );
+				break;
+			}
+
+			if( state & BUTTON_LEFT ) {
+				SelectableElementList usableElements = JoyManager_retrieveSelectableElements( this, ElementRetrieval_LESS_THAN_X );
+				JoyManager_moveToNearest( this, &usableElements );
+				break;
+			}
+
+			if( state & BUTTON_RIGHT ) {
+				SelectableElementList usableElements = JoyManager_retrieveSelectableElements( this, ElementRetrieval_GREATER_THAN_X );
+				JoyManager_moveToNearest( this, &usableElements );
+				break;
+			}
 			break;
 	}
+}
+
+/**
+ * Bridge the expected input from the SGDK joy driver to the instance of the global joyManager
+ */
+void JoyManager_handlerBridge( u16 joy, u16 changed, u16 state ) {
+	JoyManager_handleInput( joyManager, joy, changed, state );
 }

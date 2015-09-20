@@ -5,6 +5,10 @@
 #include <res/globals.h>
 #include <vdp_spr.h>
 
+// bloody hell, it's like lisp
+#define DISTANCE( x2, x1, y2, y1 ) ( ( ( x2 ) - ( x1 ) )*( ( x2 ) - ( x1 ) ) ) + ( ( ( y2 ) - ( y1 ) )*( ( y2 ) - ( y1 ) ) )
+#define MAXIMUM_DISTANCE	32767
+
 extern const u32 HaloTiles[ 24 ];
 
 struct JoyManager;
@@ -17,10 +21,10 @@ typedef struct SelectableElement {
 } SelectableElement;
 
 typedef enum {
-	GREATER_THAN_X,
-	LESS_THAN_X,
-	GREATER_THAN_Y,
-	LESS_THAN_Y
+	ElementRetrieval_GREATER_THAN_X,
+	ElementRetrieval_LESS_THAN_X,
+	ElementRetrieval_GREATER_THAN_Y,
+	ElementRetrieval_LESS_THAN_Y
 } ElementRetrieval;
 
 typedef struct SelectableElementList {
@@ -47,9 +51,11 @@ void JoyManager_unregisterElement( JoyManager* this, s16 x, s16 y );
 
 void JoyManager_displayCursor( JoyManager* this, bool show );
 void JoyManager_renderSprites( JoyManager* this );
+void JoyManager_moveToNearest( JoyManager* this, SelectableElementList* neighbourhood );
 
 SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, ElementRetrieval method );
 
 void JoyManager_handlerBridge( u16 joy, u16 changed, u16 state );
+void JoyManager_handleInput( JoyManager* this, u16 joy, u16 changed, u16 state );
 
 #endif
