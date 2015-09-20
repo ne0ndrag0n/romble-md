@@ -39,6 +39,8 @@ void JoyManager_ctor( JoyManager* this, u8 registerableX, u8 registerableY ) {
 
 	JOY_init();
 	JOY_setEventHandler( &JoyManager_handlerBridge );
+	
+	VDP_resetSprites();
 }
 
 void JoyManager_dtor( JoyManager* this ) {
@@ -52,16 +54,16 @@ void JoyManager_dtor( JoyManager* this ) {
 }
 
 void JoyManager_registerElement( JoyManager* this, s16 x, s16 y, s16 w, s16 h ) {
-	this->registeredElements[ x ][ y ] = malloc( sizeof( SelectableElement ) );
+	this->registeredElements[ y ][ x ] = malloc( sizeof( SelectableElement ) );
 
-	this->registeredElements[ x ][ y ]->x = x;
-	this->registeredElements[ x ][ y ]->y = y;
-	this->registeredElements[ x ][ y ]->w = w;
-	this->registeredElements[ x ][ y ]->h = h;
+	this->registeredElements[ y ][ x ]->x = x;
+	this->registeredElements[ y ][ x ]->y = y;
+	this->registeredElements[ y ][ x ]->w = w;
+	this->registeredElements[ y ][ x ]->h = h;
 }
 
 void JoyManager_unregisterElement( JoyManager* this, s16 x, s16 y ) {
-	free( this->registeredElements[ x ][ y ] );
+	free( this->registeredElements[ y ][ x ] );
 }
 
 void JoyManager_displayCursor( JoyManager* this, bool show ) {
@@ -73,16 +75,8 @@ void JoyManager_displayCursor( JoyManager* this, bool show ) {
 
 void JoyManager_renderSprites( JoyManager* this ) {
 	// Render a square of sprites around this->currentElement
-	VDP_resetSprites();
-	
-	JoyManager_positionSprites( this );
-	
-	VDP_setSpriteP( 0, &( this->corners[ 0 ] ) );
-	VDP_setSpriteP( 1, &( this->corners[ 1 ] ) );
-	VDP_setSpriteP( 2, &( this->corners[ 2 ] ) );
-	VDP_setSpriteP( 3, &( this->corners[ 3 ] ) );
-
-	VDP_updateSprites();
+	JoyManager_positionSprites( this );	
+	VDP_setSpritesDirect( 0, this->corners, 4 );
 }
 
 void JoyManager_positionSprites( JoyManager* this ) {
@@ -120,7 +114,7 @@ void JoyManager_moveToNearest( JoyManager* this, SelectableElementList* neighbou
 	s16 currentDistance = 0;
 	s16 lastKnownDistance = MAXIMUM_DISTANCE;
 	size_t i;
-	
+
 	if( neighbourhood->length > 0 ) {
 		for( i = 0; i != neighbourhood->length; i++ ) {
 			currentDistance = DISTANCE( 
@@ -138,8 +132,7 @@ void JoyManager_moveToNearest( JoyManager* this, SelectableElementList* neighbou
 		
 		// TODO: Linear interpolation animation, for now just move the box
 		this->currentElement = nearest;
-		JoyManager_positionSprites( this );
-		VDP_updateSprites();
+		JoyManager_renderSprites( this );
 		
 		free( neighbourhood->list );
 	} else {
@@ -149,7 +142,7 @@ void JoyManager_moveToNearest( JoyManager* this, SelectableElementList* neighbou
 
 SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, ElementRetrieval method ) {
 	// Use ElementRetrieval method to determine what pointers to return
-	size_t y, x, stopY, stopX;
+	s16 y, x, stopY, stopX, xIndex;
 	SelectableElementList result = { NULL, 0 };
 
 	switch( method ) {
@@ -187,16 +180,17 @@ SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, E
 			stopX = this->registerableX;
 			break;
 	}
+	
 
-	for( ; y != stopY; y++ ) {
-		for( ; x != stopX; x++ ) {
-			if( this->registeredElements[ y ][ x ] != NULL ) {
+	for( ; y != stopY; y++ ) {		
+		for( xIndex = x; xIndex != stopX; xIndex++ ) {		
+			if( this->registeredElements[ y ][ xIndex ] != NULL ) {
 				SelectableElement** resized = realloc( result.list, sizeof( SelectableElement* ) * ++result.length );
 				Romble_assert( resized != NULL, EXCEPTION_OUT_OF_MEMORY );
 
 				result.list = resized;
 
-				result.list[ result.length - 1 ] = this->registeredElements[ y ][ x ];
+				result.list[ result.length - 1 ] = this->registeredElements[ y ][ xIndex ];
 			}
 		}
 	}

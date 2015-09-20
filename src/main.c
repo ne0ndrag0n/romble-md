@@ -48,6 +48,10 @@ int main( void ) {
 
 	BaseView* box1 = ( BaseView* ) &childView1;
 	JoyManager_registerElement( joyManager, box1->absX, box1->absY, box1->width, box1->height );
+	
+	BaseView* box2 = ( BaseView* ) &childView2;
+	JoyManager_registerElement( joyManager, box2->absX, box2->absY, box2->width, box2->height );
+	
 	joyManager->currentElement = joyManager->registeredElements[ box1->absX ][ box1->absY ];
 	JoyManager_displayCursor( joyManager, TRUE );
 
