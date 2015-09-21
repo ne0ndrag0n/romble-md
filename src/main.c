@@ -25,7 +25,7 @@ int main( void ) {
 	BoxView_ctor( &childView2, TILE_USERINDEX, BOX_DRAWING_INDEX, 5, 6, 10, 3 );
 
 	BoxView childView3;
-	BoxView_ctor( &childView3, TILE_USERINDEX, BOX_DRAWING_INDEX, 2, 10, 10, 3 );
+	BoxView_ctor( &childView3, TILE_USERINDEX, BOX_DRAWING_INDEX, 2, 10, 25, 5 );
 
 	SimpleTextView text1;
 	SimpleTextView_ctor( &text1, "Option 1", 1, 1 );
@@ -34,7 +34,7 @@ int main( void ) {
 	SimpleTextView_ctor( &text2, "Option 2", 1, 1 );
 
 	SimpleTextView text3;
-	SimpleTextView_ctor( &text3, "Option 3", 1, 1 );
+	SimpleTextView_ctor( &text3, "Option 3 is supersized!", 1, 1 );
 
 	childView1.super.functions->addChildView( ( BaseView* ) &childView1, ( BaseView* ) &text1 );
 	childView2.super.functions->addChildView( ( BaseView* ) &childView2, ( BaseView* ) &text2 );
@@ -58,7 +58,7 @@ int main( void ) {
 	joyManager->currentElement = joyManager->registeredElements[ box1->absX ][ box1->absY ];
 	JoyManager_displayCursor( joyManager, TRUE );
 
-	Debug_print( "Ok" );
+	Debug_print( "Romble "__DATE__" "__TIME__ );
 
 	while(1);
 }

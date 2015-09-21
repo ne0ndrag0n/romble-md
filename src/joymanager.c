@@ -142,15 +142,44 @@ void JoyManager_moveToNearest( JoyManager* this, SelectableElementList* neighbou
 }
 
 void JoyManager_animateCursorMovement( JoyManager* this, SelectableElement* newLocation ) {
-	this->currentElement = newLocation;
-	JoyManager_renderSprites( this );
-	
+	SelectableElement currentPosition = { 0 };
+
 	s16 startX = this->currentElement->x * 8;
 	s16 endX   = newLocation->x * 8;
 	
 	s16 startY = this->currentElement->y * 8;
 	s16 endY   = newLocation->y * 8;
 	
+	s16 startW = this->currentElement->w * 8;
+	s16 endW   = newLocation->w * 8;
+	
+	s16 startH = this->currentElement->h * 8;
+	s16 endH   = newLocation->h * 8;
+	
+	size_t i;
+	for( i = 0; i <= 100; i+=2 ) {
+		currentPosition.x = Utility_lerp( endX, startX, i );
+		currentPosition.y = Utility_lerp( endY, startY, i );
+		currentPosition.w = Utility_lerp( endW, startW, i );
+		currentPosition.h = Utility_lerp( endH, startH, i );
+		
+		this->corners[ SELECTOR_UPPER_LEFT ].posx = currentPosition.x - 4;
+		this->corners[ SELECTOR_UPPER_LEFT ].posy = currentPosition.y - 4;
+
+		this->corners[ SELECTOR_UPPER_RIGHT ].posx = currentPosition.x + currentPosition.w - 4;
+		this->corners[ SELECTOR_UPPER_RIGHT ].posy = currentPosition.y - 4;
+
+		this->corners[ SELECTOR_LOWER_RIGHT ].posx = currentPosition.x + currentPosition.w - 4;
+		this->corners[ SELECTOR_LOWER_RIGHT ].posy = currentPosition.y + currentPosition.h - 4;
+
+		this->corners[ SELECTOR_LOWER_LEFT ].posx = currentPosition.x - 4;
+		this->corners[ SELECTOR_LOWER_LEFT ].posy = currentPosition.y + currentPosition.h - 4;
+
+		VDP_waitVSync();
+		VDP_setSpritesDirect( 0, this->corners, 4 );
+	}
+	
+	this->currentElement = newLocation;
 }
 
 SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, ElementRetrieval method ) {
