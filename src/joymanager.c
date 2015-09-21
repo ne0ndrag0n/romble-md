@@ -77,13 +77,13 @@ void JoyManager_displayCursor( JoyManager* this, bool show ) {
 
 void JoyManager_renderSprites( JoyManager* this ) {
 	// Render a square of sprites around this->currentElement
-	JoyManager_positionSprites( this );	
+	JoyManager_positionSprites( this, this->currentElement );	
 	VDP_setSpritesDirect( 0, this->corners, 4 );
 }
 
-void JoyManager_positionSprites( JoyManager* this ) {
-	s16 absX = this->currentElement->x * 8;
-	s16 absY = this->currentElement->y * 8;
+void JoyManager_positionSprites( JoyManager* this, SelectableElement* targetElement ) {
+	s16 absX = targetElement->x * 8;
+	s16 absY = targetElement->y * 8;
 
 	// setup corners
 	this->corners[ SELECTOR_UPPER_LEFT ].posx = absX - 4;
@@ -92,20 +92,20 @@ void JoyManager_positionSprites( JoyManager* this ) {
 	this->corners[ SELECTOR_UPPER_LEFT ].size = SPRITE_SIZE( 1, 1 );
 	this->corners[ SELECTOR_UPPER_LEFT ].link = SELECTOR_UPPER_RIGHT;
 
-	this->corners[ SELECTOR_UPPER_RIGHT ].posx = absX + ( this->currentElement->w * 8 ) - 4;
+	this->corners[ SELECTOR_UPPER_RIGHT ].posx = absX + ( targetElement->w * 8 ) - 4;
 	this->corners[ SELECTOR_UPPER_RIGHT ].posy = absY - 4;
 	this->corners[ SELECTOR_UPPER_RIGHT ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, FALSE, TRUE, this->haloTilesIndex );
 	this->corners[ SELECTOR_UPPER_RIGHT ].size = SPRITE_SIZE( 1, 1 );
 	this->corners[ SELECTOR_UPPER_RIGHT ].link = SELECTOR_LOWER_RIGHT;
 
-	this->corners[ SELECTOR_LOWER_RIGHT ].posx = absX + ( this->currentElement->w * 8 ) - 4;
-	this->corners[ SELECTOR_LOWER_RIGHT ].posy = absY + ( this->currentElement->h * 8 ) - 4;
+	this->corners[ SELECTOR_LOWER_RIGHT ].posx = absX + ( targetElement->w * 8 ) - 4;
+	this->corners[ SELECTOR_LOWER_RIGHT ].posy = absY + ( targetElement->h * 8 ) - 4;
 	this->corners[ SELECTOR_LOWER_RIGHT ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, TRUE, TRUE, this->haloTilesIndex );
 	this->corners[ SELECTOR_LOWER_RIGHT ].size = SPRITE_SIZE( 1, 1 );
 	this->corners[ SELECTOR_LOWER_RIGHT ].link = SELECTOR_LOWER_LEFT;
 
 	this->corners[ SELECTOR_LOWER_LEFT ].posx = absX - 4;
-	this->corners[ SELECTOR_LOWER_LEFT ].posy = absY + ( this->currentElement->h * 8 ) - 4;
+	this->corners[ SELECTOR_LOWER_LEFT ].posy = absY + ( targetElement->h * 8 ) - 4;
 	this->corners[ SELECTOR_LOWER_LEFT ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, TRUE, FALSE, this->haloTilesIndex );
 	this->corners[ SELECTOR_LOWER_LEFT ].size = SPRITE_SIZE( 1, 1 );
 	this->corners[ SELECTOR_LOWER_LEFT ].link = SPRITE_LIST_END;
@@ -131,16 +131,26 @@ void JoyManager_moveToNearest( JoyManager* this, SelectableElementList* neighbou
 		
 		// There should be at least one element found here, if not, assertion failed
 		Romble_assert( nearest != NULL, EXCEPTION_NULL_POINTER" ("__FILE__","S__LINE__")" );
-		
-		// TODO: Linear interpolation animation, for now just move the box
-		this->currentElement = nearest;
-		JoyManager_renderSprites( this );
+
+		JoyManager_animateCursorMovement( this, nearest );
 		
 		free( neighbourhood->list );
 		neighbourhood->list = NULL;
 	} else {
 		// Can't move anywhere - call on sound subsystem to play a "donk" noise
 	}
+}
+
+void JoyManager_animateCursorMovement( JoyManager* this, SelectableElement* newLocation ) {
+	this->currentElement = newLocation;
+	JoyManager_renderSprites( this );
+	
+	s16 startX = this->currentElement->x * 8;
+	s16 endX   = newLocation->x * 8;
+	
+	s16 startY = this->currentElement->y * 8;
+	s16 endY   = newLocation->y * 8;
+	
 }
 
 SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, ElementRetrieval method ) {
