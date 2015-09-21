@@ -53,13 +53,14 @@ void JoyManager_dtor( JoyManager* this ) {
 	this->registeredElements = NULL;
 }
 
-void JoyManager_registerElement( JoyManager* this, s16 x, s16 y, s16 w, s16 h ) {
+void JoyManager_registerElement( JoyManager* this, s16 x, s16 y, s16 w, s16 h, JoyManager_Callback callback ) {
 	this->registeredElements[ y ][ x ] = malloc( sizeof( SelectableElement ) );
 
 	this->registeredElements[ y ][ x ]->x = x;
 	this->registeredElements[ y ][ x ]->y = y;
 	this->registeredElements[ y ][ x ]->w = w;
 	this->registeredElements[ y ][ x ]->h = h;
+	this->registeredElements[ y ][ x ]->callback = callback;
 }
 
 void JoyManager_unregisterElement( JoyManager* this, s16 x, s16 y ) {
@@ -106,7 +107,7 @@ void JoyManager_positionSprites( JoyManager* this ) {
 	this->corners[ SELECTOR_LOWER_LEFT ].posy = absY + ( this->currentElement->h * 8 ) - 4;
 	this->corners[ SELECTOR_LOWER_LEFT ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, TRUE, FALSE, this->haloTilesIndex );
 	this->corners[ SELECTOR_LOWER_LEFT ].size = SPRITE_SIZE( 1, 1 );
-	this->corners[ SELECTOR_LOWER_LEFT ].link = NULL;
+	this->corners[ SELECTOR_LOWER_LEFT ].link = SPRITE_LIST_END;
 }
 
 void JoyManager_moveToNearest( JoyManager* this, SelectableElementList* neighbourhood ) {
@@ -198,11 +199,12 @@ SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, E
 	return result;
 }
 
-void JoyManager_handleInput( JoyManager* this, u16 joy, u16 changed, u16 state ) {
+void JoyManager_handleInput( JoyManager* this, u16 joy, u16 changed, u16 state ) {	
 	switch( joy ) {
 		case JOY_1:
 			// we can probably do better with a sparse array of function pointers
-			if( state & BUTTON_UP ) {
+			
+			if( state & BUTTON_UP ) {				
 				SelectableElementList usableElements = JoyManager_retrieveSelectableElements( this, ElementRetrieval_LESS_THAN_Y );
 				JoyManager_moveToNearest( this, &usableElements );
 				break;
