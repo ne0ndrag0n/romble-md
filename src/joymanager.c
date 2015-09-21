@@ -84,29 +84,29 @@ void JoyManager_positionSprites( JoyManager* this ) {
 	s16 absY = this->currentElement->y * 8;
 
 	// setup corners
-	this->corners[ 0 ].posx = absX - 4;
-	this->corners[ 0 ].posy = absY - 4;
-	this->corners[ 0 ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, FALSE, FALSE, this->haloTilesIndex );
-	this->corners[ 0 ].size = SPRITE_SIZE( 1, 1 );
-	this->corners[ 0 ].link = 1;
+	this->corners[ SELECTOR_UPPER_LEFT ].posx = absX - 4;
+	this->corners[ SELECTOR_UPPER_LEFT ].posy = absY - 4;
+	this->corners[ SELECTOR_UPPER_LEFT ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, FALSE, FALSE, this->haloTilesIndex );
+	this->corners[ SELECTOR_UPPER_LEFT ].size = SPRITE_SIZE( 1, 1 );
+	this->corners[ SELECTOR_UPPER_LEFT ].link = SELECTOR_UPPER_RIGHT;
 
-	this->corners[ 1 ].posx = absX + ( this->currentElement->w * 8 ) - 4;
-	this->corners[ 1 ].posy = absY - 4;
-	this->corners[ 1 ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, FALSE, TRUE, this->haloTilesIndex );
-	this->corners[ 1 ].size = SPRITE_SIZE( 1, 1 );
-	this->corners[ 1 ].link = 2;
+	this->corners[ SELECTOR_UPPER_RIGHT ].posx = absX + ( this->currentElement->w * 8 ) - 4;
+	this->corners[ SELECTOR_UPPER_RIGHT ].posy = absY - 4;
+	this->corners[ SELECTOR_UPPER_RIGHT ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, FALSE, TRUE, this->haloTilesIndex );
+	this->corners[ SELECTOR_UPPER_RIGHT ].size = SPRITE_SIZE( 1, 1 );
+	this->corners[ SELECTOR_UPPER_RIGHT ].link = SELECTOR_LOWER_RIGHT;
 
-	this->corners[ 2 ].posx = absX + ( this->currentElement->w * 8 ) - 4;
-	this->corners[ 2 ].posy = absY + ( this->currentElement->h * 8 ) - 4;
-	this->corners[ 2 ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, TRUE, TRUE, this->haloTilesIndex );
-	this->corners[ 2 ].size = SPRITE_SIZE( 1, 1 );
-	this->corners[ 2 ].link = 3;
+	this->corners[ SELECTOR_LOWER_RIGHT ].posx = absX + ( this->currentElement->w * 8 ) - 4;
+	this->corners[ SELECTOR_LOWER_RIGHT ].posy = absY + ( this->currentElement->h * 8 ) - 4;
+	this->corners[ SELECTOR_LOWER_RIGHT ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, TRUE, TRUE, this->haloTilesIndex );
+	this->corners[ SELECTOR_LOWER_RIGHT ].size = SPRITE_SIZE( 1, 1 );
+	this->corners[ SELECTOR_LOWER_RIGHT ].link = SELECTOR_LOWER_LEFT;
 
-	this->corners[ 3 ].posx = absX - 4;
-	this->corners[ 3 ].posy = absY + ( this->currentElement->h * 8 ) - 4;
-	this->corners[ 3 ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, TRUE, FALSE, this->haloTilesIndex );
-	this->corners[ 3 ].size = SPRITE_SIZE( 1, 1 );
-	this->corners[ 3 ].link = 0;
+	this->corners[ SELECTOR_LOWER_LEFT ].posx = absX - 4;
+	this->corners[ SELECTOR_LOWER_LEFT ].posy = absY + ( this->currentElement->h * 8 ) - 4;
+	this->corners[ SELECTOR_LOWER_LEFT ].tile_attr = TILE_ATTR_FULL( PAL0, PRIORITY_HIGH, TRUE, FALSE, this->haloTilesIndex );
+	this->corners[ SELECTOR_LOWER_LEFT ].size = SPRITE_SIZE( 1, 1 );
+	this->corners[ SELECTOR_LOWER_LEFT ].link = NULL;
 }
 
 void JoyManager_moveToNearest( JoyManager* this, SelectableElementList* neighbourhood ) {

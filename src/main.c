@@ -22,7 +22,7 @@ int main( void ) {
 	BoxView_ctor( &childView1, TILE_USERINDEX, BOX_DRAWING_INDEX, 2, 2, 10, 3 );
 
 	BoxView childView2;
-	BoxView_ctor( &childView2, TILE_USERINDEX, BOX_DRAWING_INDEX, 2, 6, 10, 3 );
+	BoxView_ctor( &childView2, TILE_USERINDEX, BOX_DRAWING_INDEX, 5, 6, 10, 3 );
 
 	BoxView childView3;
 	BoxView_ctor( &childView3, TILE_USERINDEX, BOX_DRAWING_INDEX, 2, 10, 10, 3 );
@@ -51,6 +51,9 @@ int main( void ) {
 	
 	BaseView* box2 = ( BaseView* ) &childView2;
 	JoyManager_registerElement( joyManager, box2->absX, box2->absY, box2->width, box2->height );
+	
+	BaseView* box3 = ( BaseView* ) &childView3;
+	JoyManager_registerElement( joyManager, box3->absX, box3->absY, box3->width, box3->height );
 	
 	joyManager->currentElement = joyManager->registeredElements[ box1->absX ][ box1->absY ];
 	JoyManager_displayCursor( joyManager, TRUE );

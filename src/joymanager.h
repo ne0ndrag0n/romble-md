@@ -7,7 +7,12 @@
 
 // bloody hell, it's like lisp
 #define DISTANCE( x2, x1, y2, y1 ) ( ( ( x2 ) - ( x1 ) )*( ( x2 ) - ( x1 ) ) ) + ( ( ( y2 ) - ( y1 ) )*( ( y2 ) - ( y1 ) ) )
-#define MAXIMUM_DISTANCE	32767
+
+#define MAXIMUM_DISTANCE		32767
+#define SELECTOR_UPPER_LEFT 	0
+#define SELECTOR_UPPER_RIGHT	1
+#define	SELECTOR_LOWER_RIGHT	2
+#define SELECTOR_LOWER_LEFT		3
 
 extern const u32 HaloTiles[ 24 ];
 
