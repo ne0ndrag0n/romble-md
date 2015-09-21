@@ -17,8 +17,8 @@
 #define	SPRITE_LIST_END			0
 
 extern const u32 HaloTiles[ 24 ];
-typedef u16 JoyManager_Button;
-typedef void ( *JoyManager_Callback )( void*, JoyManager_Button );
+typedef u16 JoyManager_ButtonState;
+typedef void ( *JoyManager_Callback )( void*, JoyManager_ButtonState );
 
 struct JoyManager;
 

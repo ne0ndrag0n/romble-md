@@ -65,6 +65,7 @@ void JoyManager_registerElement( JoyManager* this, s16 x, s16 y, s16 w, s16 h, J
 
 void JoyManager_unregisterElement( JoyManager* this, s16 x, s16 y ) {
 	free( this->registeredElements[ y ][ x ] );
+	this->registeredElements[ y ][ x ] = NULL;
 }
 
 void JoyManager_displayCursor( JoyManager* this, bool show ) {
@@ -136,6 +137,7 @@ void JoyManager_moveToNearest( JoyManager* this, SelectableElementList* neighbou
 		JoyManager_renderSprites( this );
 		
 		free( neighbourhood->list );
+		neighbourhood->list = NULL;
 	} else {
 		// Can't move anywhere - call on sound subsystem to play a "donk" noise
 	}
