@@ -86,20 +86,16 @@ void BaseView_addChildView( BaseView* this, BaseView* childView ) {
 	if( this->children == NULL ) {
 		this->children = ( BaseView** ) malloc( sizeof( BaseView* ) );
 		
-		if( this->children == NULL ) {
-			SYS_die( EXCEPTION_OUT_OF_MEMORY );
-		}
+		Romble_assert( this->children != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 
 		this->numChildren++;
 	} else {
 
 		this->numChildren++;
 		BaseView** resizedArray = ( BaseView** ) realloc( this->children, this->numChildren );
-		if( resizedArray == NULL ) {
-			SYS_die( EXCEPTION_OUT_OF_MEMORY );
-		} else {
-			this->children = resizedArray;
-		}
+		Romble_assert( resizedArray != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
+		
+		this->children = resizedArray;
 	}
 	
 	// After resized, set the last elemnt in the array to childView

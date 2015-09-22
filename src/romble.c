@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <sys.h>
+#include <lang.h>
 
 u16 BOX_DRAWING_INDEX;
 
@@ -22,6 +23,7 @@ void Romble_init() {
 	BOX_DRAWING_INDEX = Romble_loadTiles( BoxDrawingCharacters, 3 );
 
 	joyManager = calloc( 1, sizeof( JoyManager ) );
+	Romble_assert( joyManager != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 	JoyManager_ctor( joyManager, 64, 64 );
 }
 

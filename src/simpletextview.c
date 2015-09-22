@@ -6,6 +6,7 @@
 #include <res/lang.h>
 #include <res/globals.h>
 #include <utility.h>
+#include <lang.h>
 
 SimpleTextView_vtable SimpleTextView_table = { 
 	SimpleTextView_ctor, 
@@ -26,11 +27,10 @@ void SimpleTextView_ctor( SimpleTextView* this, char* text, s16 x, s16 y ) {
 	BaseView_ctor( ( BaseView* ) this, x, y, width, 1 );
 
 	this->text = ( char * ) calloc( width + 1, sizeof( char ) );
-	if( this->text ) {
-		strcpy( this->text, text );
-	} else {
-		SYS_die( EXCEPTION_OUT_OF_MEMORY );
-	}
+	Romble_assert( this->text != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
+	
+	strcpy( this->text, text );
+
 
 	// Fix the incompatible pointer types warning
 	this->super.functions = &SimpleTextView_table;

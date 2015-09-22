@@ -23,12 +23,12 @@ const u32 HaloTiles[ 24 ] = {
 void JoyManager_ctor( JoyManager* this, u8 registerableX, u8 registerableY ) {
 	this->registeredElements = calloc( registerableY, sizeof( SelectableElement** ) );
 
-	Romble_assert( this->registeredElements != NULL, EXCEPTION_OUT_OF_MEMORY );
+	Romble_assert( this->registeredElements != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 
 	size_t i;
 	for( i = 0; i < registerableY; i++ ) {
 		this->registeredElements[ i ] = calloc( registerableX, sizeof( SelectableElement* ) );
-		Romble_assert( this->registeredElements[ i ] != NULL, EXCEPTION_OUT_OF_MEMORY );
+		Romble_assert( this->registeredElements[ i ] != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 	}
 
 	this->registerableX = registerableX;
@@ -130,7 +130,7 @@ void JoyManager_moveToNearest( JoyManager* this, SelectableElementList* neighbou
 		}
 		
 		// There should be at least one element found here, if not, assertion failed
-		Romble_assert( nearest != NULL, EXCEPTION_NULL_POINTER" ("__FILE__","S__LINE__")" );
+		Romble_assert( nearest != NULL, FILE_LINE( EXCEPTION_NULL_POINTER ) );
 
 		JoyManager_animateCursorMovement( this, nearest );
 		
@@ -228,7 +228,7 @@ SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, E
 		for( xIndex = x; xIndex != stopX; xIndex++ ) {		
 			if( this->registeredElements[ y ][ xIndex ] != NULL ) {
 				SelectableElement** resized = realloc( result.list, sizeof( SelectableElement* ) * ++result.length );
-				Romble_assert( resized != NULL, EXCEPTION_OUT_OF_MEMORY );
+				Romble_assert( resized != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 
 				result.list = resized;
 

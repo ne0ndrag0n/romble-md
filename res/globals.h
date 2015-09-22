@@ -10,6 +10,8 @@
 #define S_( x ) S( x )
 #define S__LINE__ S_( __LINE__ )
 
+#define FILE_LINE( x )  x"("__FILE__","S__LINE__")"
+
 #include <types.h>
 
 typedef char bool;
