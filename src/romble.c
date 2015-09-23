@@ -24,7 +24,7 @@ void Romble_init() {
 
 	joyManager = calloc( 1, sizeof( JoyManager ) );
 	Romble_assert( joyManager != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
-	JoyManager_ctor( joyManager, 64, 64 );
+	JoyManager_ctor( joyManager, 40, 28 );
 }
 
 u16 Romble_loadTiles( const u32* tiles, u16 run ) {

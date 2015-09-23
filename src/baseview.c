@@ -12,6 +12,7 @@
 #include <vdp.h>
 #include <vdp_tile.h>
 #include <stdio.h>
+#include <joy.h>
 
 BaseView_vtable BaseView_table = { 
 	BaseView_ctor, 

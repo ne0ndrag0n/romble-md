@@ -11,6 +11,8 @@
 #define S__LINE__ S_( __LINE__ )
 
 #define FILE_LINE( x )  x"("__FILE__","S__LINE__")"
+#define CLASS( definition, instance ) ( ( definition* ) instance )
+#define FREE_AND_NULL( pointer ) free( pointer ); pointer = NULL;
 
 #include <types.h>
 
