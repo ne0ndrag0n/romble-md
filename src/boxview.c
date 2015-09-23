@@ -30,7 +30,7 @@ void BoxView_render( BoxView* this ) {
 
 	BaseView_render( super );
 
-	void ( *placeTile )( struct BaseView*, s16, s16, u8, u16, bool, bool ) = this->super.functions->placeTile;
+	void ( *placeTile )( struct BaseView*, s16, s16, u8, u16, bool, bool ) = FUNCTIONS( BoxView, BaseView, this )->placeTile;
 
 	// Place corner tiles
 	placeTile( super, 0, 0, PAL0, this->boxDrawingIndex, FALSE, FALSE );

@@ -39,7 +39,7 @@ typedef struct BaseView {
 	struct BaseView* parent;
 	struct BaseView** children;
 
-	BaseView_vtable *functions;
+	vtable functions;
 } BaseView;
 
 void BaseView_ctor( BaseView* this, s16 x, s16 y, s16 width, s16 height );

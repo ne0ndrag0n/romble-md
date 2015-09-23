@@ -41,13 +41,13 @@ void TestView_ctor( TestView* this, s16 x, s16 y, s16 width, s16 height ) {
 	SimpleTextView_ctor( this->hiText, "Say Hi", 1, 1 );
 	
 	// Add text to hiBox
-	CLASS( BaseView, this->hiBox )->functions->addChildView( 
+	FUNCTIONS( TestView, BaseView, this )->addChildView( 
 		CLASS( BaseView, this->hiBox ), 
 		CLASS( BaseView, this->hiText ) 
 	);
 	
 	// Add hiBox to child view
-	CLASS( BaseView, this )->functions->addChildView(
+	FUNCTIONS( TestView, BaseView, this )->addChildView(
 		CLASS( BaseView, this ),
 		CLASS( BaseView, this->hiBox )
 	);

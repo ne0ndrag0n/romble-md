@@ -46,9 +46,9 @@ void SimpleTextView_dtor( SimpleTextView* this ) {
 void SimpleTextView_render( SimpleTextView* this ) {
 	BaseView* super = ( BaseView* ) this;
 
-	super->functions->position( super );
+	FUNCTIONS( SimpleTextView, BaseView, this )->position( super );
 
-	void ( *placeTile )( struct BaseView*, s16, s16, u8, u16, bool, bool ) = super->functions->placeTile;
+	void ( *placeTile )( struct BaseView*, s16, s16, u8, u16, bool, bool ) = FUNCTIONS( SimpleTextView, BaseView, this )->placeTile;
 
 	// Place this->text character by character (visibility verification will be done each step of the way)
 	size_t i;

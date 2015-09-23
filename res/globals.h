@@ -18,6 +18,7 @@
 #include <types.h>
 
 typedef char bool;
+typedef void* vtable;
 
 extern u16 TILES_USED;
 

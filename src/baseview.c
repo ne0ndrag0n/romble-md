@@ -53,9 +53,9 @@ void BaseView_dtor( BaseView* this ) {
 }
 
 void BaseView_render( BaseView* this ) {
-	this->functions->position( this );
+	FUNCTIONS( BaseView, BaseView, this )->position( this );
 
-	this->functions->renderChildren( this );
+	FUNCTIONS( BaseView, BaseView, this )->renderChildren( this );
 }
 
 void BaseView_position( BaseView* this ) {
@@ -77,7 +77,7 @@ void BaseView_renderChildren( BaseView* this ) {
 		for( i = 0; i != this->numChildren; i++ ) {
 			BaseView* view = this->children[ i ];
 
-			view->functions->render( view );
+			FUNCTIONS( BaseView, BaseView, view )->render( view );
 		}
 	}
 }
@@ -114,7 +114,7 @@ void BaseView_placeTile( BaseView* this, s16 x, s16 y, u8 pal, u16 tileIndex, bo
 	s16 absY = y + this->absY;
 
 	// Check that the tile can be placed within this container as well as all parent containers
-	if( this->functions->checkTileBoundary( this, absX, absY ) ) {
+	if( FUNCTIONS( BaseView, BaseView, this )->checkTileBoundary( this, absX, absY ) ) {
 		VDP_setTileMapXY( this->plane, TILE_ATTR_FULL( pal, PRIORITY_LOW, flipV, flipH, tileIndex ), absX, absY );
 	}
 }
@@ -123,7 +123,7 @@ void BaseView_placeTileSeries( BaseView* this, s16 x, s16 y, s16 w, s16 h, u8 pa
 	u8 tilePos = tileIndex;
 	u8 i = 0, j = 0;
 	
-	void ( *placeTile )( struct BaseView*, s16, s16, u8, u16, bool, bool ) = this->functions->placeTile;
+	void ( *placeTile )( struct BaseView*, s16, s16, u8, u16, bool, bool ) = FUNCTIONS( BaseView, BaseView, this )->placeTile;
 
 	for( j = 0; j != h; j++ ) {
 		for( i = 0; i != w; i++ ) {
@@ -148,6 +148,6 @@ bool BaseView_checkTileBoundary( BaseView* this, s16 x, s16 y ) {
 		// If we hit the base element, or if the result evaluated to FALSE, do not check any longer and return the result
 		return result;
 	} else {
-		return this->parent->functions->checkTileBoundary( this->parent, x, y );
+		return FUNCTIONS( BaseView, BaseView, this->parent )->checkTileBoundary( this->parent, x, y );
 	}
 }
