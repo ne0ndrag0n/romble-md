@@ -13,6 +13,7 @@
 #define FILE_LINE( x )  x"("__FILE__","S__LINE__")"
 #define CLASS( definition, instance ) ( ( definition* ) instance )
 #define FREE_AND_NULL( pointer ) free( pointer ); pointer = NULL;
+#define FUNCTIONS( definition, base, instance ) ( definition_vtable* )( ( ( base* ) instance )->functions )
 
 #include <types.h>
 
