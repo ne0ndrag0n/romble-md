@@ -55,6 +55,6 @@ void TestView_ctor( TestView* this, s16 x, s16 y, s16 width, s16 height ) {
 }
 
 void TestView_dtor( TestView* this ) {
-	FREE_AND_NULL( this->hiBox );
-	FREE_AND_NULL( this->hiText );
+	FREE_AND_NULL( this->hiBox )
+	FREE_AND_NULL( this->hiText )
 }
