@@ -22,11 +22,11 @@ const struct
     char notes[40];                 /* Memo (40) */
     char region[16];                /* Country Support (16) */
 } rom_header = {
-    "SEGA MEGA DRIVE ",
-    "(C)FLEMTEAM 2013",
-    "SAMPLE PROGRAM                                  ",
-    "SAMPLE PROGRAM                                  ",
-    "GM 00000000-00",
+    "SEGA GENESIS    ",
+    "(C)OAKT 2015.SEP",
+    "ROMBLE GAME CLIENT                              ",
+    "ROMBLE GAME CLIENT                              ",
+    "GM B16B00B5-00",
     0x0000,
     "JD              ",
     0x00000000,
@@ -37,7 +37,7 @@ const struct
     0x0000,
     0x00200000,
     0x002001FF,
-    "            ",
-    "DEMONSTRATION PROGRAM                   ",
+    "MOOAKT00.00 ",
+    "oaktree romble-md client \"Gordon\"     ",
     "JUE             "
 };
