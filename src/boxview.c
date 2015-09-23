@@ -39,7 +39,7 @@ void BoxView_render( BoxView* this ) {
 	placeTile( super, 0, super->height - 1, PAL0, this->boxDrawingIndex, TRUE, FALSE );
 
 	// Place tile runs
-	size_t i, j;
+	size_t i;
 	for( i = 1; i != super->width - 1; i++ ) {
 		// Horizontal runs
 		placeTile( super, i, 0, PAL0, this->boxDrawingIndex + 1, FALSE, FALSE );

@@ -7,6 +7,7 @@
 #include <res/globals.h>
 #include <utility.h>
 #include <lang.h>
+#include <romble.h>
 
 SimpleTextView_vtable SimpleTextView_table = { 
 	SimpleTextView_ctor, 

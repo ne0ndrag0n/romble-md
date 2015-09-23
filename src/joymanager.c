@@ -184,7 +184,7 @@ void JoyManager_animateCursorMovement( JoyManager* this, SelectableElement* newL
 
 SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, ElementRetrieval method ) {
 	// Use ElementRetrieval method to determine what pointers to return
-	s16 y, x, stopY, stopX, xIndex;
+	s16 y = 0, x = 0, stopY = 0, stopX = 0, xIndex = 0;
 	SelectableElementList result = { NULL, 0 };
 
 	switch( method ) {

@@ -13,6 +13,7 @@
 #include <vdp_tile.h>
 #include <stdio.h>
 #include <joy.h>
+#include <romble.h>
 
 BaseView_vtable BaseView_table = { 
 	BaseView_ctor, 
@@ -120,7 +121,6 @@ void BaseView_placeTile( BaseView* this, s16 x, s16 y, u8 pal, u16 tileIndex, bo
 }
 
 void BaseView_placeTileSeries( BaseView* this, s16 x, s16 y, s16 w, s16 h, u8 pal, u16 tileIndex, bool autoInc ) {
-	u8 tilePos = tileIndex;
 	u8 i = 0, j = 0;
 	
 	void ( *placeTile )( struct BaseView*, s16, s16, u8, u16, bool, bool ) = FUNCTIONS( BaseView, BaseView, this )->placeTile;
