@@ -26,6 +26,20 @@ typedef struct TestView {
 	
 	BoxView* hiBox;
 	SimpleTextView* hiText;
+	
+	BoxView* byeBox;
+	SimpleTextView* byeText;
+	
+	SimpleTextView* yourMessageLabel;
+	
+	BoxView* messageBox;
+	SimpleTextView* messageText;
+	
+	BoxView* clearBox;
+	SimpleTextView* clearText;
+	
+	BoxView* surpriseBox;
+	SimpleTextView* surpriseText;
 } TestView;
 
 void TestView_ctor( TestView* this, s16 x, s16 y, s16 width, s16 height );

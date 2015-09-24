@@ -21,6 +21,8 @@ typedef struct {
 } BaseView_vtable;
 
 typedef struct BaseView {
+	u16 id;
+	
 	s16 x;
 	s16 y;
 

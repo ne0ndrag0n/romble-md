@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <joy.h>
 #include <romble.h>
+#include <timer.h>
 
 BaseView_vtable BaseView_table = { 
 	BaseView_ctor, 
@@ -29,7 +30,12 @@ BaseView_vtable BaseView_table = {
 };
 
 void BaseView_ctor( BaseView* this, s16 x, s16 y, s16 width, s16 height ) {
+	this->id = Romble_getUniqueId();
+	
 	this->functions = &BaseView_table;
+
+	this->absX = 0;
+	this->absY = 0;
 
 	this->x = x;
 	this->y = y;
@@ -71,13 +77,13 @@ void BaseView_position( BaseView* this ) {
 }
 
 void BaseView_renderChildren( BaseView* this ) {
-	// Place and render children
+	// Place and render children	
 	if( this->children != NULL ) {
 		size_t i;
 
 		for( i = 0; i != this->numChildren; i++ ) {
 			BaseView* view = this->children[ i ];
-
+			
 			FUNCTIONS( BaseView, BaseView, view )->render( view );
 		}
 	}
@@ -86,7 +92,7 @@ void BaseView_renderChildren( BaseView* this ) {
 void BaseView_addChildView( BaseView* this, BaseView* childView ) {
 	// Create the children collection if it does not exist
 	if( this->children == NULL ) {
-		this->children = ( BaseView** ) malloc( sizeof( BaseView* ) );
+		this->children = malloc( sizeof( BaseView* ) );
 		
 		Romble_assert( this->children != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 
@@ -94,7 +100,7 @@ void BaseView_addChildView( BaseView* this, BaseView* childView ) {
 	} else {
 
 		this->numChildren++;
-		BaseView** resizedArray = ( BaseView** ) realloc( this->children, this->numChildren );
+		BaseView** resizedArray = realloc( this->children, this->numChildren * sizeof( BaseView* ) );
 		Romble_assert( resizedArray != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 		
 		this->children = resizedArray;

@@ -26,7 +26,6 @@ int main( void ) {
 	FUNCTIONS( BaseView, BaseView, &root )->addChildView( &root, CLASS( BaseView, &test ) );
 	FUNCTIONS( BaseView, BaseView, &root )->render( &root );
 
-	Debug_print( "Romble "__DATE__" "__TIME__ );
-
+	VDP_drawText( "Boot OK! "__DATE__" "__TIME__, 5, 27 );
 	while(1);
 }

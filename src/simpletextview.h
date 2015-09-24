@@ -18,6 +18,8 @@ typedef struct {
 	void ( *placeTile )( struct BaseView*, s16, s16, u8, u16, bool, bool );
 	void ( *placeTileSeries )( struct BaseView*, s16, s16, s16, s16, u8, u16, bool );
 	bool ( *checkTileBoundary )( struct BaseView*, s16, s16 );
+	
+	void( *setText )( struct SimpleTextView*, char* );
 } SimpleTextView_vtable;
 
 typedef struct SimpleTextView {
@@ -29,5 +31,7 @@ typedef struct SimpleTextView {
 void SimpleTextView_ctor( SimpleTextView* this, char* text, s16 x, s16 y );
 void SimpleTextView_dtor( SimpleTextView* this );
 void SimpleTextView_render( SimpleTextView* this );
+
+void SimpleTextView_setText( SimpleTextView* this, char* text );
 
 #endif
