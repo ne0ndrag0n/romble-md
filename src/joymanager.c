@@ -53,13 +53,14 @@ void JoyManager_dtor( JoyManager* this ) {
 	this->registeredElements = NULL;
 }
 
-void JoyManager_registerElement( JoyManager* this, s16 x, s16 y, s16 w, s16 h, JoyManager_Callback callback ) {
+void JoyManager_registerElement( JoyManager* this, s16 x, s16 y, s16 w, s16 h, void* instance, JoyManager_Callback callback ) {
 	this->registeredElements[ y ][ x ] = malloc( sizeof( SelectableElement ) );
 
 	this->registeredElements[ y ][ x ]->x = x;
 	this->registeredElements[ y ][ x ]->y = y;
 	this->registeredElements[ y ][ x ]->w = w;
 	this->registeredElements[ y ][ x ]->h = h;
+	this->registeredElements[ y ][ x ]->instance = instance;
 	this->registeredElements[ y ][ x ]->callback = callback;
 }
 
@@ -269,6 +270,13 @@ void JoyManager_handleInput( JoyManager* this, u16 joy, u16 changed, u16 state )
 				SelectableElementList usableElements = JoyManager_retrieveSelectableElements( this, ElementRetrieval_GREATER_THAN_X );
 				JoyManager_moveToNearest( this, &usableElements );
 				break;
+			}
+
+			// buttons
+			if( state & ( BUTTON_A | BUTTON_B | BUTTON_C ) ) {
+				if( this->currentElement->callback != NULL ) {
+					this->currentElement->callback( this->currentElement->instance, state );
+				}
 			}
 			break;
 		default:

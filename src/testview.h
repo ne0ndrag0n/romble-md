@@ -5,6 +5,7 @@
 #include <baseview.h>
 #include <boxview.h>
 #include <simpletextview.h>
+#include <joymanager.h>
 
 struct TestView;
 
@@ -21,6 +22,8 @@ typedef struct {
 	bool ( *checkTileBoundary )( struct BaseView*, s16, s16 );
 
 	void ( *setupChildren )( struct TestView* );
+	void ( *onSayHi )( struct TestView*, u16 );
+	void ( *onSayBye )( struct TestView*, u16 );
 } TestView_vtable;
 
 typedef struct TestView {
@@ -49,5 +52,8 @@ void TestView_dtor( TestView* this );
 
 void TestView_setupChildren( TestView* this );
 void TestView_render( TestView* this );
+
+void TestView_onSayHi( TestView* this, u16 button );
+void TestView_onSayBye( TestView* this, u16 button );
 
 #endif

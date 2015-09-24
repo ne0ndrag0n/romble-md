@@ -17,8 +17,7 @@
 #define	SPRITE_LIST_END			0
 
 extern const u32 HaloTiles[ 24 ];
-typedef u16 JoyManager_ButtonState;
-typedef void ( *JoyManager_Callback )( void*, JoyManager_ButtonState );
+typedef void ( *JoyManager_Callback )( void*, u16 );
 
 struct JoyManager;
 
@@ -27,6 +26,7 @@ typedef struct SelectableElement {
 	s16 y;
 	s16 w;
 	s16 h;
+	void* instance;
 	JoyManager_Callback callback;
 } SelectableElement;
 
@@ -56,7 +56,7 @@ extern JoyManager* joyManager;
 void JoyManager_ctor( JoyManager* this, u8 registerableX, u8 registerableY );
 void JoyManager_dtor( JoyManager* this );
 
-void JoyManager_registerElement( JoyManager* this, s16 x, s16 y, s16 w, s16 h, JoyManager_Callback callback );
+void JoyManager_registerElement( JoyManager* this, s16 x, s16 y, s16 w, s16 h, void* instance, JoyManager_Callback callback );
 void JoyManager_unregisterElement( JoyManager* this, s16 x, s16 y );
 
 void JoyManager_displayCursor( JoyManager* this, bool show );

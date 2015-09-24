@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <vdp.h>
 #include <joymanager.h>
+#include <joy.h>
 
 TestView_vtable TestView_table = {
 	TestView_ctor,
@@ -22,7 +23,9 @@ TestView_vtable TestView_table = {
 	BaseView_placeTileSeries,
 	BaseView_checkTileBoundary,
 
-	TestView_setupChildren
+	TestView_setupChildren,
+	TestView_onSayHi,
+	TestView_onSayBye
 };
 
 void TestView_ctor( TestView* this, s16 x, s16 y, s16 width, s16 height ) {
@@ -37,6 +40,32 @@ void TestView_dtor( TestView* this ) {
 	FREE_AND_NULL( this->hiText )
 }
 
+void TestView_onSayHi( TestView* this, u16 button ) {
+	if( button == BUTTON_A ) {
+		FUNCTIONS( SimpleTextView, BaseView, this->messageText )->setText(
+			CLASS( SimpleTextView, this->messageText ),
+			"Hi         "
+		);
+
+		FUNCTIONS( SimpleTextView, BaseView, this->messageText )->render(
+			CLASS( SimpleTextView, this->messageText )
+		);
+	}
+}
+
+void TestView_onSayBye( TestView* this, u16 button ) {
+	if( button == BUTTON_A ) {
+		FUNCTIONS( SimpleTextView, BaseView, this->messageText )->setText(
+			CLASS( SimpleTextView, this->messageText ),
+			"Bye        "
+		);
+
+		FUNCTIONS( SimpleTextView, BaseView, this->messageText )->render(
+			CLASS( SimpleTextView, this->messageText )
+		);
+	}
+}
+
 void TestView_render( TestView* this ) {
 	BaseView_render( CLASS( BaseView, this ) );
 
@@ -46,7 +75,8 @@ void TestView_render( TestView* this ) {
 		CLASS( BaseView, this->hiBox )->absY,
 		CLASS( BaseView, this->hiBox )->width,
 		CLASS( BaseView, this->hiBox )->height,
-		NULL
+		this,
+		FUNCTIONS( TestView, BaseView, this )->onSayHi
 	);
 	JoyManager_registerElement(
 		joyManager,
@@ -54,7 +84,8 @@ void TestView_render( TestView* this ) {
 		CLASS( BaseView, this->byeBox )->absY,
 		CLASS( BaseView, this->byeBox )->width,
 		CLASS( BaseView, this->byeBox )->height,
-		NULL
+		this,
+		FUNCTIONS( TestView, BaseView, this )->onSayBye
 	);
 	JoyManager_registerElement(
 		joyManager,
@@ -62,6 +93,7 @@ void TestView_render( TestView* this ) {
 		CLASS( BaseView, this->clearBox )->absY,
 		CLASS( BaseView, this->clearBox )->width,
 		CLASS( BaseView, this->clearBox )->height,
+		NULL,
 		NULL
 	);
 	JoyManager_registerElement(
@@ -70,6 +102,7 @@ void TestView_render( TestView* this ) {
 		CLASS( BaseView, this->surpriseBox )->absY,
 		CLASS( BaseView, this->surpriseBox )->width,
 		CLASS( BaseView, this->surpriseBox )->height,
+		NULL,
 		NULL
 	);
 
@@ -127,7 +160,7 @@ void TestView_setupChildren( TestView* this ) {
 
 	this->messageText = calloc( 1, sizeof( SimpleTextView ) );
 	Romble_assert( this->messageText != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
-	SimpleTextView_ctor( this->messageText, "Select One", 1, 1 );
+	SimpleTextView_ctor( this->messageText, "", 1, 1 );
 	FUNCTIONS( BoxView, BaseView, this->messageBox )->addChildView(
 		CLASS( BaseView, this->messageBox ),
 		CLASS( BaseView, this->messageText )
