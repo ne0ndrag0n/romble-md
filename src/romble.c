@@ -23,9 +23,9 @@ void Romble_init() {
 	// Placed directly at the beginning
 	BOX_DRAWING_INDEX = Romble_loadTiles( BoxDrawingCharacters, 3 );
 
-	//joyManager = calloc( 1, sizeof( JoyManager ) );
-	//Romble_assert( joyManager != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
-	//JoyManager_ctor( joyManager, 40, 28 );
+	joyManager = calloc( 1, sizeof( JoyManager ) );
+	Romble_assert( joyManager != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
+	JoyManager_ctor( joyManager, 40, 28 );
 }
 
 u16 Romble_loadTiles( const u32* tiles, u16 run ) {

@@ -15,6 +15,7 @@
 #include <joy.h>
 #include <romble.h>
 #include <timer.h>
+#include <joymanager.h>
 
 BaseView_vtable BaseView_table = { 
 	BaseView_ctor, 

@@ -22,9 +22,11 @@ int main( void ) {
 
 	TestView test;
 	TestView_ctor( &test, 2, 2, 35, 25 );
-	
+
 	FUNCTIONS( BaseView, BaseView, &root )->addChildView( &root, CLASS( BaseView, &test ) );
 	FUNCTIONS( BaseView, BaseView, &root )->render( &root );
+
+	JoyManager_displayCursor( joyManager, TRUE );
 
 	VDP_drawText( "Boot OK! "__DATE__" "__TIME__, 5, 27 );
 	while(1);

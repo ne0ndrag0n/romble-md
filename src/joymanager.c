@@ -39,14 +39,14 @@ void JoyManager_ctor( JoyManager* this, u8 registerableX, u8 registerableY ) {
 
 	JOY_init();
 	JOY_setEventHandler( &JoyManager_handlerBridge );
-	
+
 	VDP_resetSprites();
 }
 
 void JoyManager_dtor( JoyManager* this ) {
 	free( this->currentElement );
 	this->currentElement = NULL;
-	
+
 	// todo: clear the subelements in this->registeredElements!
 
 	free( this->registeredElements );
@@ -77,7 +77,7 @@ void JoyManager_displayCursor( JoyManager* this, bool show ) {
 
 void JoyManager_renderSprites( JoyManager* this ) {
 	// Render a square of sprites around this->currentElement
-	JoyManager_positionSprites( this, this->currentElement );	
+	JoyManager_positionSprites( this, this->currentElement );
 	VDP_setSpritesDirect( 0, this->corners, 4 );
 }
 
@@ -119,21 +119,21 @@ void JoyManager_moveToNearest( JoyManager* this, SelectableElementList* neighbou
 
 	if( neighbourhood->length > 0 ) {
 		for( i = 0; i != neighbourhood->length; i++ ) {
-			currentDistance = DISTANCE( 
-				this->currentElement->x, neighbourhood->list[ i ]->x, 
-				this->currentElement->y, neighbourhood->list[ i ]->y 
+			currentDistance = DISTANCE(
+				this->currentElement->x, neighbourhood->list[ i ]->x,
+				this->currentElement->y, neighbourhood->list[ i ]->y
 			);
 			if( currentDistance < lastKnownDistance ) {
 				nearest = neighbourhood->list[ i ];
 				lastKnownDistance = currentDistance;
 			}
 		}
-		
+
 		// There should be at least one element found here, if not, assertion failed
 		Romble_assert( nearest != NULL, FILE_LINE( EXCEPTION_NULL_POINTER ) );
 
 		JoyManager_animateCursorMovement( this, nearest );
-		
+
 		free( neighbourhood->list );
 		neighbourhood->list = NULL;
 	} else {
@@ -146,23 +146,23 @@ void JoyManager_animateCursorMovement( JoyManager* this, SelectableElement* newL
 
 	s16 startX = this->currentElement->x * 8;
 	s16 endX   = newLocation->x * 8;
-	
+
 	s16 startY = this->currentElement->y * 8;
 	s16 endY   = newLocation->y * 8;
-	
+
 	s16 startW = this->currentElement->w * 8;
 	s16 endW   = newLocation->w * 8;
-	
+
 	s16 startH = this->currentElement->h * 8;
 	s16 endH   = newLocation->h * 8;
-	
+
 	size_t i;
 	for( i = 0; i <= 100; i+=2 ) {
 		currentPosition.x = Utility_lerp( endX, startX, i );
 		currentPosition.y = Utility_lerp( endY, startY, i );
 		currentPosition.w = Utility_lerp( endW, startW, i );
 		currentPosition.h = Utility_lerp( endH, startH, i );
-		
+
 		this->corners[ SELECTOR_UPPER_LEFT ].posx = currentPosition.x - 4;
 		this->corners[ SELECTOR_UPPER_LEFT ].posy = currentPosition.y - 4;
 
@@ -178,7 +178,7 @@ void JoyManager_animateCursorMovement( JoyManager* this, SelectableElement* newL
 		VDP_waitVSync();
 		VDP_setSpritesDirect( 0, this->corners, 4 );
 	}
-	
+
 	this->currentElement = newLocation;
 }
 
@@ -187,52 +187,54 @@ SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, E
 	s16 y = 0, x = 0, stopY = 0, stopX = 0, xIndex = 0;
 	SelectableElementList result = { NULL, 0 };
 
-	switch( method ) {
+	if( this->currentElement != NULL ) {
+		switch( method ) {
 
-		case ElementRetrieval_GREATER_THAN_X:
-			// For each y, return non-null pointers for this->currentElement->x + 1 to this->registerableX - 1
-			y = 0; 
-			stopY = this->registerableY;
+			case ElementRetrieval_GREATER_THAN_X:
+				// For each y, return non-null pointers for this->currentElement->x + 1 to this->registerableX - 1
+				y = 0;
+				stopY = this->registerableY;
 
-			x = this->currentElement->x + 1; 
-			stopX = this->registerableX;
-			break;
-		case ElementRetrieval_LESS_THAN_X:
-			// For each y, return non-null pointers for 0 to this->currentElement->x
-			y = 0;
-			stopY = this->registerableY;
+				x = this->currentElement->x + 1;
+				stopX = this->registerableX;
+				break;
+			case ElementRetrieval_LESS_THAN_X:
+				// For each y, return non-null pointers for 0 to this->currentElement->x
+				y = 0;
+				stopY = this->registerableY;
 
-			x = 0;
-			stopX = this->currentElement->x;
-			break;
-		case ElementRetrieval_GREATER_THAN_Y:
-			// For each x, return non-null pointers for this->currentElement->y + 1 to this->registerableY - 1
-			y = this->currentElement->y + 1;
-			stopY = this->registerableY;
+				x = 0;
+				stopX = this->currentElement->x;
+				break;
+			case ElementRetrieval_GREATER_THAN_Y:
+				// For each x, return non-null pointers for this->currentElement->y + 1 to this->registerableY - 1
+				y = this->currentElement->y + 1;
+				stopY = this->registerableY;
 
-			x = 0;
-			stopX = this->registerableX;
-			break;
-		case ElementRetrieval_LESS_THAN_Y:
-			// For each x, return non-null pointers for 0 to this->currentElement->y - 1
-			y = 0;
-			stopY = this->currentElement->y;
+				x = 0;
+				stopX = this->registerableX;
+				break;
+			case ElementRetrieval_LESS_THAN_Y:
+				// For each x, return non-null pointers for 0 to this->currentElement->y - 1
+				y = 0;
+				stopY = this->currentElement->y;
 
-			x = 0;
-			stopX = this->registerableX;
-			break;
-	}
-	
+				x = 0;
+				stopX = this->registerableX;
+				break;
+		}
 
-	for( ; y != stopY; y++ ) {		
-		for( xIndex = x; xIndex != stopX; xIndex++ ) {		
-			if( this->registeredElements[ y ][ xIndex ] != NULL ) {
-				SelectableElement** resized = realloc( result.list, sizeof( SelectableElement* ) * ++result.length );
-				Romble_assert( resized != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 
-				result.list = resized;
+		for( ; y != stopY; y++ ) {
+			for( xIndex = x; xIndex != stopX; xIndex++ ) {
+				if( this->registeredElements[ y ][ xIndex ] != NULL ) {
+					SelectableElement** resized = realloc( result.list, sizeof( SelectableElement* ) * ++result.length );
+					Romble_assert( resized != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 
-				result.list[ result.length - 1 ] = this->registeredElements[ y ][ xIndex ];
+					result.list = resized;
+
+					result.list[ result.length - 1 ] = this->registeredElements[ y ][ xIndex ];
+				}
 			}
 		}
 	}
@@ -240,17 +242,17 @@ SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, E
 	return result;
 }
 
-void JoyManager_handleInput( JoyManager* this, u16 joy, u16 changed, u16 state ) {	
+void JoyManager_handleInput( JoyManager* this, u16 joy, u16 changed, u16 state ) {
 	switch( joy ) {
 		case JOY_1:
 			// we can probably do better with a sparse array of function pointers
-			
-			if( state & BUTTON_UP ) {				
+
+			if( state & BUTTON_UP ) {
 				SelectableElementList usableElements = JoyManager_retrieveSelectableElements( this, ElementRetrieval_LESS_THAN_Y );
 				JoyManager_moveToNearest( this, &usableElements );
 				break;
 			}
-			
+
 			if( state & BUTTON_DOWN ) {
 				SelectableElementList usableElements = JoyManager_retrieveSelectableElements( this, ElementRetrieval_GREATER_THAN_Y );
 				JoyManager_moveToNearest( this, &usableElements );
@@ -268,6 +270,8 @@ void JoyManager_handleInput( JoyManager* this, u16 joy, u16 changed, u16 state )
 				JoyManager_moveToNearest( this, &usableElements );
 				break;
 			}
+			break;
+		default:
 			break;
 	}
 }
