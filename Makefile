@@ -17,15 +17,15 @@ SCD_LOADER = scd/LukeProjectCD
 
 OPTION =
 INCS = -I. -I$(GENDEV)/m68k-elf/include -I$(GENDEV)/m68k-elf/m68k-elf/include -Isrc -Ires
-CCFLAGS = $(OPTION) -Wall -m68000 -O2 -c -fomit-frame-pointer
+CCFLAGS = $(OPTION) --std=c99 -Wall -m68000 -O2 -c -fomit-frame-pointer
 HWCCFLAGS = $(OPTION) -m68000 -O1 -c -fomit-frame-pointer
 Z80FLAGS = -vb2
 ASFLAGS = -m68000 --register-prefix-optional
-LIBS =  -L$(GENDEV)/m68k-elf/lib -L$(GENDEV)/m68k-elf/lib/gcc/m68k-elf/4.8.2 -L$(GENDEV)/m68k-elf/m68k-elf/lib -lmd -lc -lgcc -lnosys -lm 
-#LIBS =  -L$(GENDEV)/m68k-elf/lib -L$(GENDEV)/m68k-elf/lib/gcc/m68k-elf/* -L$(GENDEV)/m68k-elf/m68k-elf/lib -lmd -lnosys 
-LINKFLAGS = -T $(GENDEV)/ldscripts/sgdk.ld -nostdlib  
-SCDLINKFLAGS = -T scd/mdcd.ld -nostdlib 
-ARCHIVES = $(GENDEV)/m68k-elf/lib/libmd.a $(GENDEV)/m68k-elf/lib/gcc/m68k-elf/*/libgcc.a 
+LIBS =  -L$(GENDEV)/m68k-elf/lib -L$(GENDEV)/m68k-elf/lib/gcc/m68k-elf/4.8.2 -L$(GENDEV)/m68k-elf/m68k-elf/lib -lmd -lc -lgcc -lnosys -lm
+#LIBS =  -L$(GENDEV)/m68k-elf/lib -L$(GENDEV)/m68k-elf/lib/gcc/m68k-elf/* -L$(GENDEV)/m68k-elf/m68k-elf/lib -lmd -lnosys
+LINKFLAGS = -T $(GENDEV)/ldscripts/sgdk.ld -nostdlib
+SCDLINKFLAGS = -T scd/mdcd.ld -nostdlib
+ARCHIVES = $(GENDEV)/m68k-elf/lib/libmd.a $(GENDEV)/m68k-elf/lib/gcc/m68k-elf/*/libgcc.a
 
 RESOURCES=
 BOOT_RESOURCES=
@@ -82,12 +82,12 @@ RESOURCES+=$(S80S:.s80=.o)
 
 OBJS = $(RESOURCES)
 
-all: out.bin 
+all: out.bin
 
 boot/sega.o: boot/rom_head.bin
 	$(AS) $(ASFLAGS) boot/sega.s -o $@
 
-scd/segacd.o: 
+scd/segacd.o:
 	$(AS) $(ASFLAGS) scd/segacd.s -o $@
 
 
@@ -97,9 +97,9 @@ out.iso: out.elf_scd
 	#
 	$(NM) -n -S -t x out.elf_scd > out.nm
 	$(OBJC) -O binary out.elf_scd out.bin
-	$(SIZEBND) out.bin -sizealign 131072   
+	$(SIZEBND) out.bin -sizealign 131072
 	$(OBJC) -O binary out.elf_scd $(SCD_LOADER)/_filesystem/M_INIT.PRG
-	$(SIZEBND) $(SCD_LOADER)/_filesystem/M_INIT.PRG -sizealign 131072    
+	$(SIZEBND) $(SCD_LOADER)/_filesystem/M_INIT.PRG -sizealign 131072
 	$(MKISOFS) -iso-level 1 -o $(SCD_LOADER)/filesystem.img -pad $(SCD_LOADER)/_filesystem
 	tail -c +32769 $(SCD_LOADER)/filesystem.img > $(SCD_LOADER)/filesystem.bin
 	$(RM) -f $(SCD_LOADER)/filesystem.img
@@ -126,7 +126,7 @@ out.iso: out.elf_scd
 %.o: %.c
 	$(CC) $(CCFLAGS) $(INCS) -c $< -o $@
 
-%.o: %.s 
+%.o: %.s
 	$(AS) $(ASFLAGS) $< -o $@
 
 %.s: %.bmp
@@ -159,7 +159,7 @@ out.iso: out.elf_scd
 %.s: %.eif
 	$(BINTOS) -align 256 $<
 
-%.s: %.vgm 
+%.s: %.vgm
 	$(BINTOS) -align 256 $<
 
 %.s: %.raw
@@ -176,7 +176,7 @@ out.iso: out.elf_scd
 
 boot/rom_head.bin: boot/rom_head.o
 	$(LD) $(LINKFLAGS) --oformat binary -o $@ $<
-	
+
 
 clean:
 	$(RM) $(RESOURCES)

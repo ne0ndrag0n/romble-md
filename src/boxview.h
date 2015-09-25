@@ -8,9 +8,8 @@
 struct BoxView;
 
 typedef struct {
-	void ( *BoxView )( struct BoxView*, u16, u16, s16, s16, s16, s16 );
 	void ( *destroy )( struct BaseView* );
-	void ( *render )( struct BoxView* );	
+	void ( *render )( struct BoxView* );
 	void ( *position )( struct BaseView* );
 	void ( *renderChildren )( struct BaseView* );
 	void ( *addChildView )( struct BaseView*, struct BaseView* );

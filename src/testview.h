@@ -6,11 +6,11 @@
 #include <boxview.h>
 #include <simpletextview.h>
 #include <joymanager.h>
+#include <buttonview.h>
 
 struct TestView;
 
 typedef struct {
-	void ( *TestView )( struct TestView*, s16, s16, s16, s16 );
 	void ( *destroy )( struct TestView* );
 	void ( *render )( struct TestView* );
 	void ( *position )( struct BaseView* );
@@ -22,38 +22,19 @@ typedef struct {
 	bool ( *checkTileBoundary )( struct BaseView*, s16, s16 );
 
 	void ( *setupChildren )( struct TestView* );
-	void ( *onSayHi )( struct TestView*, u16 );
-	void ( *onSayBye )( struct TestView*, u16 );
 } TestView_vtable;
 
 typedef struct TestView {
 	BaseView super;
 
-	BoxView* hiBox;
-	SimpleTextView* hiText;
-
-	BoxView* byeBox;
-	SimpleTextView* byeText;
-
-	SimpleTextView* yourMessageLabel;
-
-	BoxView* messageBox;
-	SimpleTextView* messageText;
-
-	BoxView* clearBox;
-	SimpleTextView* clearText;
-
-	BoxView* surpriseBox;
-	SimpleTextView* surpriseText;
+	ButtonView* button1;
 } TestView;
 
 void TestView_ctor( TestView* this, s16 x, s16 y, s16 width, s16 height );
 void TestView_dtor( TestView* this );
 
-void TestView_setupChildren( TestView* this );
 void TestView_render( TestView* this );
 
-void TestView_onSayHi( TestView* this, u16 button );
-void TestView_onSayBye( TestView* this, u16 button );
+void TestView_setupChildren( TestView* this );
 
 #endif

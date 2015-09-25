@@ -8,7 +8,6 @@
 struct BaseView;
 
 typedef struct {
-	void ( *BaseView )( struct BaseView*, s16, s16, s16, s16 );
 	void ( *destroy )( struct BaseView* );
 	void ( *render )( struct BaseView* );
 	void ( *position )( struct BaseView* );
@@ -22,7 +21,7 @@ typedef struct {
 
 typedef struct BaseView {
 	u16 id;
-	
+
 	s16 x;
 	s16 y;
 

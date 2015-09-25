@@ -64,6 +64,7 @@ void JoyManager_positionSprites( JoyManager* this, SelectableElement* targetElem
 void JoyManager_renderSprites( JoyManager* this );
 void JoyManager_moveToNearest( JoyManager* this, SelectableElementList* neighbourhood );
 void JoyManager_animateCursorMovement( JoyManager* this, SelectableElement* newLocation );
+void JoyManager_setDefaultCurrentElement( JoyManager* this );
 
 SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, ElementRetrieval method );
 

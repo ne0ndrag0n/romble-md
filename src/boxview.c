@@ -3,9 +3,8 @@
 #include <res/globals.h>
 #include <stddef.h>
 
-BoxView_vtable BoxView_table = { 
-	BoxView_ctor, 
-	BaseView_dtor, 
+BoxView_vtable BoxView_table = {
+	BaseView_dtor,
 	BoxView_render,
 	BaseView_position,
 	BaseView_renderChildren,
@@ -18,7 +17,7 @@ BoxView_vtable BoxView_table = {
 
 void BoxView_ctor( BoxView* this, u16 boxDrawingIndex, u16 fillTileIndex, s16 x, s16 y, s16 width, s16 height ) {
 	BaseView_ctor( ( BaseView* ) this, x, y, width, height );
-	
+
 	this->fillTileIndex = fillTileIndex;
 	this->boxDrawingIndex = boxDrawingIndex;
 

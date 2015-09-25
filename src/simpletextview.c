@@ -10,7 +10,6 @@
 #include <romble.h>
 
 SimpleTextView_vtable SimpleTextView_table = {
-	SimpleTextView_ctor,
 	SimpleTextView_dtor,
 	SimpleTextView_render,
 	BaseView_position,

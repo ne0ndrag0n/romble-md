@@ -12,8 +12,11 @@
 
 #define FILE_LINE( x )  x"("__FILE__","S__LINE__")"
 #define CLASS( definition, instance ) ( ( definition* ) instance )
-#define FREE_AND_NULL( pointer ) free( pointer ); pointer = NULL;
+#define FREE_AND_NULL( pointer ) free( pointer ); pointer = NULL
 #define FUNCTIONS( definition, base, instance ) ( ( definition##_vtable* )( ( ( base* ) instance )->functions ) )
+#define NEW_OBJECT( Class, ptr, ... ) ptr = calloc( 1, sizeof( Class ) ); \
+		Romble_assert( ptr != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) ); \
+		Class##_ctor( ptr, ##__VA_ARGS__ )
 
 #include <types.h>
 

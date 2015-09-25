@@ -183,6 +183,23 @@ void JoyManager_animateCursorMovement( JoyManager* this, SelectableElement* newL
 	this->currentElement = newLocation;
 }
 
+void JoyManager_setDefaultCurrentElement( JoyManager* this ) {
+	size_t y, x;
+	SelectableElement* newDefault = NULL;
+
+	for( y = 0; y != this->registerableY; y++ ) {
+		for( x = 0; x != this->registerableX; x++ ) {
+			if( this->registeredElements[ y ][ x ] != NULL ) {
+				newDefault = this->registeredElements[ y ][ x ];
+				goto exitLoop;
+			}
+		}
+	}
+
+exitLoop:
+	this->currentElement = newDefault;
+}
+
 SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, ElementRetrieval method ) {
 	// Use ElementRetrieval method to determine what pointers to return
 	s16 y = 0, x = 0, stopY = 0, stopX = 0, xIndex = 0;

@@ -17,9 +17,8 @@
 #include <timer.h>
 #include <joymanager.h>
 
-BaseView_vtable BaseView_table = { 
-	BaseView_ctor, 
-	BaseView_dtor, 
+BaseView_vtable BaseView_table = {
+	BaseView_dtor,
 	BaseView_render,
 	BaseView_position,
 	BaseView_renderChildren,
@@ -32,7 +31,7 @@ BaseView_vtable BaseView_table = {
 
 void BaseView_ctor( BaseView* this, s16 x, s16 y, s16 width, s16 height ) {
 	this->id = Romble_getUniqueId();
-	
+
 	this->functions = &BaseView_table;
 
 	this->absX = 0;
@@ -78,13 +77,13 @@ void BaseView_position( BaseView* this ) {
 }
 
 void BaseView_renderChildren( BaseView* this ) {
-	// Place and render children	
+	// Place and render children
 	if( this->children != NULL ) {
 		size_t i;
 
 		for( i = 0; i != this->numChildren; i++ ) {
 			BaseView* view = this->children[ i ];
-			
+
 			FUNCTIONS( BaseView, BaseView, view )->render( view );
 		}
 	}
@@ -94,7 +93,7 @@ void BaseView_addChildView( BaseView* this, BaseView* childView ) {
 	// Create the children collection if it does not exist
 	if( this->children == NULL ) {
 		this->children = malloc( sizeof( BaseView* ) );
-		
+
 		Romble_assert( this->children != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 
 		this->numChildren++;
@@ -103,10 +102,10 @@ void BaseView_addChildView( BaseView* this, BaseView* childView ) {
 		this->numChildren++;
 		BaseView** resizedArray = realloc( this->children, this->numChildren * sizeof( BaseView* ) );
 		Romble_assert( resizedArray != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
-		
+
 		this->children = resizedArray;
 	}
-	
+
 	// After resized, set the last elemnt in the array to childView
 	childView->parent = this;
 	this->children[ this->numChildren - 1 ] = childView;
@@ -129,7 +128,7 @@ void BaseView_placeTile( BaseView* this, s16 x, s16 y, u8 pal, u16 tileIndex, bo
 
 void BaseView_placeTileSeries( BaseView* this, s16 x, s16 y, s16 w, s16 h, u8 pal, u16 tileIndex, bool autoInc ) {
 	u8 i = 0, j = 0;
-	
+
 	void ( *placeTile )( struct BaseView*, s16, s16, u8, u16, bool, bool ) = FUNCTIONS( BaseView, BaseView, this )->placeTile;
 
 	for( j = 0; j != h; j++ ) {
@@ -144,11 +143,11 @@ void BaseView_placeTileSeries( BaseView* this, s16 x, s16 y, s16 w, s16 h, u8 pa
 }
 
 bool BaseView_checkTileBoundary( BaseView* this, s16 x, s16 y ) {
-	
+
 	// Check self
 	s16 boundaryX = this->absX + this->width - 1;
 	s16 boundaryY = this->absY + this->height - 1;
-	
+
 	bool result = ( x >= this->absX && y >= this->absY && x <= boundaryX && y <= boundaryY ) ? TRUE : FALSE;
 
 	if( result == FALSE || this->parent == NULL ) {
