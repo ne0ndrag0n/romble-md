@@ -15,7 +15,7 @@ static u16 UNIQUE_ID = 0;
 void Romble_init() {
 	VDP_resetScreen();
 	VDP_resetSprites();
-	
+
 	TILES_USED = 0;
 
 	VDP_setPalette( PAL0, StandardColours );
@@ -46,4 +46,10 @@ void Romble_assert( bool condition, char* failMessage ) {
 
 u16 Romble_getUniqueId() {
 	return ++UNIQUE_ID;
+}
+
+void Romble_secureFree( void** pointer ) {
+	free( *pointer );
+
+	*pointer = NULL;
 }

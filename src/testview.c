@@ -45,14 +45,12 @@ void TestView_render( TestView* this ) {
 }
 
 void TestView_setupChildren( TestView* this ) {
-	this->button1 = calloc( 1, sizeof( ButtonView ) );
-	Romble_assert( this->button1 != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
-	ButtonView_ctor( this->button1, TILE_USERINDEX, BOX_DRAWING_INDEX, 0, 0, 10 );
+	NEW_OBJECT( ButtonView, this->button1, TILE_USERINDEX, BOX_DRAWING_INDEX, 0, 0, 10 );
 
 	FUNCTIONS( TestView, BaseView, this )->addChildView(
 		CLASS( BaseView, this ),
 		CLASS( BaseView, this->button1 )
 	);
 
-	FUNCTIONS( ButtonView, BaseView, this->button1 )->setText( this->button1, "Ok", FALSE );
+	FUNCTIONS( ButtonView, BaseView, this->button1 )->setText( this->button1, "Image", FALSE );
 }

@@ -5,6 +5,7 @@
 #include <vdp.h>
 #include <res/globals.h>
 
+
 struct BaseView;
 
 typedef struct {
