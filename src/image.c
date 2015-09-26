@@ -4,9 +4,17 @@
 #include <romble.h>
 #include <stdlib.h>
 
+Image_vtable Image_table = {
+	Image_dtor,
+	Image_loadData,
+	Image_getVDPTiles
+};
+
 void Image_ctor( Image* this ) {
 	this->imageData = NULL;
 	this->vdpTiles = NULL;
+
+	this->functions = &Image_table;
 }
 
 void Image_dtor( Image* this ) {

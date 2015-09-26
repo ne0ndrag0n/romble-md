@@ -16,6 +16,8 @@ typedef struct {
 typedef struct Image {
 	SizedArray* imageData;
 	SizedArray* vdpTiles;
+
+	vtable* functions;
 } Image;
 
 void Image_ctor( Image* this );
