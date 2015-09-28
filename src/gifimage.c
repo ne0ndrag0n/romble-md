@@ -32,6 +32,7 @@ void GifImage_buildPalette( GifImage* this, GifImage_nativePalette nativePalette
 // Turn GIF image into VDP tiles
 SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep ) {
 	SizedArray* vdpTiles = Image_getVDPTiles( CLASS( Image, this ), keep );
+	size_t inputStreamIndex;
 
 	// Return vdpTiles if they were already generated prior
 	if( vdpTiles->length > 0 ) {
@@ -46,4 +47,8 @@ SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep ) {
 
 	// Turn GIF image into VDP tiles
 	return vdpTiles;
+}
+
+static void GifImage_isGifImage( SizedArray* file ) {
+
 }

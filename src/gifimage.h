@@ -31,4 +31,7 @@ void GifImage_dtor( GifImage* this );
 void GifImage_buildPalette( GifImage* this, GifImage_nativePalette nativePalette );
 SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep );
 
+// static methods
+static void GifImage_isGifImage( SizedArray* file );
+
 #endif
