@@ -56,16 +56,5 @@ void Image_buildPalette( Image* this, Image_nativePalette nativePalette ) {
 }
 
 SizedArray* Image_getVDPTiles( Image* this, bool keep ) {
-
-	if( this->vdpTiles != NULL ) {
-		return this->vdpTiles;
-	}
-
-	SizedArray* vdpTiles = calloc( 1, sizeof( SizedArray ) );
-
-	if( keep == TRUE ) {
-		this->vdpTiles = vdpTiles;
-	}
-
-	return vdpTiles;
+	return this->vdpTiles;
 }

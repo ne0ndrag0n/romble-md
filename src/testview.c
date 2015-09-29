@@ -11,6 +11,9 @@
 #include <joymanager.h>
 #include <joy.h>
 #include <buttonview.h>
+#include <image.h>
+#include <gifimage.h>
+#include <sizedarray.h>
 
 TestView_vtable TestView_table = {
 	TestView_dtor,
@@ -42,6 +45,15 @@ void TestView_render( TestView* this ) {
 
 	FUNCTIONS( ButtonView, BaseView, this->button1 )->setClickable( this->button1, TRUE );
 	JoyManager_setDefaultCurrentElement( joyManager );
+
+	// Let's put some image test shit here
+	SizedArray testGif = {
+		ExampleGif,
+		69
+	};
+	GifImage* test;
+	NEW_OBJECT( GifImage, test );
+	FUNCTIONS( Image, Image, test )->loadData( CLASS( Image, test ), &testGif );
 }
 
 void TestView_setupChildren( TestView* this ) {
