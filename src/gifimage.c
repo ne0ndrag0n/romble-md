@@ -8,6 +8,7 @@
 #include <string.h>
 #include <utility.h>
 #include <stdio.h>
+#include <sizedarray.h>
 
 GifImage_vtable GifImage_table = {
 	GifImage_dtor,
@@ -65,7 +66,9 @@ SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep ) {
 	}
 
 	if ( GifImage_isGifImage( &file ) == TRUE ) {
+		SizedArray_takeBytes( &file, &( CLASS( Image, this )->width ), 2 );
 
+		Debug_sprint( "%d", CLASS( Image, this )->width );
 	}
 
 	return vdpTiles;
@@ -73,11 +76,7 @@ SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep ) {
 
 bool GifImage_isGifImage( SizedArray* file ) {
 	char header[7] = { 0 };
-	memcpy( header, file->items, 6 );
-
-	// Increment the file pointer
-	file->items = ( ( char* ) file->items ) + 6;
-	file->length -= 6;
+	SizedArray_takeBytes( file, header, 6 );
 
 	return ( strcmp( header, GifImage_GIF87a ) == 0 || strcmp( header, GifImage_GIF89a ) == 0 );
 }
