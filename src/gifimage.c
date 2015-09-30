@@ -65,7 +65,7 @@ SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep ) {
 	}
 
 	if ( GifImage_isGifImage( &file ) == TRUE ) {
-		Debug_print( "GIF89a" );
+
 	}
 
 	return vdpTiles;
