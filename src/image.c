@@ -8,7 +8,6 @@
 Image_vtable Image_table = {
 	Image_dtor,
 	Image_loadData,
-	Image_buildPalette,
 	Image_getVDPTiles
 };
 
@@ -19,8 +18,10 @@ void Image_ctor( Image* this ) {
 	this->width = 0;
 	this->height = 0;
 
+	this->nativePalette = NULL;
+	this->palette = NULL;
+
 	this->functions = &Image_table;
-	FUNCTIONS( Image, Image, this )->buildPalette( this, NULL );
 }
 
 void Image_dtor( Image* this ) {
@@ -44,15 +45,6 @@ void Image_loadData( Image* this, SizedArray* file ) {
 
 		this->vdpTiles = NULL;
 	}
-}
-
-/**
- * Abstract, extend in your own class to construct the Sega-compatible
- * VDP palette of 16 colours and set both this->palette and this->nativePalette
- */
-void Image_buildPalette( Image* this, Image_nativePalette nativePalette ) {
-	this->nativePalette = nativePalette;
-	this->palette = nativePalette;
 }
 
 SizedArray* Image_getVDPTiles( Image* this, bool keep ) {

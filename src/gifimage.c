@@ -13,7 +13,6 @@
 GifImage_vtable GifImage_table = {
 	GifImage_dtor,
 	Image_loadData,
-	GifImage_buildPalette,
 	GifImage_getVDPTiles
 };
 
@@ -22,18 +21,12 @@ void GifImage_ctor( GifImage* this ) {
 
 	CLASS( Image, this )->functions = &GifImage_table;
 
-	this->gifRevision = NULL;
+	this->backgroundPalIndex = 0;
 };
 
 void GifImage_dtor( GifImage* this ) {
 	Image_dtor( CLASS( Image, this ) );
-
-	Romble_secureFree( ( void* ) &( this->gifRevision ) );
 };
-
-void GifImage_buildPalette( GifImage* this, GifImage_nativePalette nativePalette ) {
-	CLASS( Image, this )->nativePalette = nativePalette;
-}
 
 // Turn GIF image into VDP tiles
 SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep ) {
@@ -67,8 +60,21 @@ SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep ) {
 
 	if ( GifImage_isGifImage( &file ) == TRUE ) {
 		SizedArray_takeBytes( &file, &( CLASS( Image, this )->width ), 2 );
+		CLASS( Image, this )->width = Utility_swapu16( CLASS( Image, this )->width );
 
-		Debug_sprint( "%d", CLASS( Image, this )->width );
+		SizedArray_takeBytes( &file, &( CLASS( Image, this )->height ), 2 );
+		CLASS( Image, this )->height = Utility_swapu16( CLASS( Image, this )->height );
+
+		u8 packedField = 0;
+		SizedArray_takeBytes( &file, &packedField, 1 );
+
+		SizedArray_takeBytes( &file, &( this->backgroundPalIndex ), 1 );
+
+		// Burn the aspect ratio as it's irrelevant
+		file.items = ( ( char* ) file.items ) + 1;
+		file.length--;
+
+		GifImage_buildPalette( this, &file, packedField );
 	}
 
 	return vdpTiles;
@@ -79,4 +85,11 @@ bool GifImage_isGifImage( SizedArray* file ) {
 	SizedArray_takeBytes( file, header, 6 );
 
 	return ( strcmp( header, GifImage_GIF87a ) == 0 || strcmp( header, GifImage_GIF89a ) == 0 );
+}
+
+void GifImage_buildPalette( GifImage* this, SizedArray* file, u8 packedField ) {
+	bool palettePresent = ( packedField & GifImage_PALETTE_PRESENT_MASK ) >> 7;
+	u8 paletteSize = ( packedField & GifImage_PALETTE_SIZE_MASK );
+
+	Debug_sprint( "palette:%02x, size:%02x", palettePresent, paletteSize );
 }

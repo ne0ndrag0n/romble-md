@@ -12,14 +12,13 @@ typedef void* Image_nativePalette;
 typedef struct {
 	void ( *destroy )( struct Image* );
 	void ( *loadData )( struct Image*, SizedArray* items );
-	void ( *buildPalette )( struct Image*, Image_nativePalette );
 	SizedArray* ( *getVDPTiles )( struct Image*, bool );
 } Image_vtable;
 
 typedef struct Image {
 	SizedArray* imageData;
 	SizedArray* vdpTiles;
-	void* nativePalette;
+	SizedArray* nativePalette;
 	u16* palette;
 	u16 width;
 	u16 height;
@@ -30,7 +29,6 @@ typedef struct Image {
 void Image_ctor( Image* this );
 void Image_dtor( Image* this );
 void Image_loadData( Image* this, SizedArray* file );
-void Image_buildPalette( Image* this, Image_nativePalette nativePalette );
 SizedArray* Image_getVDPTiles( Image* this, bool keep );
 
 #endif
