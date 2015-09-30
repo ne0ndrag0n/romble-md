@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <utility.h>
+#include <stdio.h>
 
 GifImage_vtable GifImage_table = {
 	GifImage_dtor,
@@ -38,6 +39,14 @@ SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep ) {
 	SizedArray* vdpTiles = Image_getVDPTiles( CLASS( Image, this ), keep );
 	SizedArray file = { NULL, 0 };
 
+	// Clone pointer to file - This method returns a null pointer if there is no file
+	if( CLASS( Image, this )->imageData != NULL ) {
+		file.items = CLASS( Image, this )->imageData->items;
+		file.length = CLASS( Image, this )->imageData->length;
+	} else {
+		return NULL;
+	}
+
 	// If this->vdpTiles is not null and keep is true, simply return what we got
 	// If keep is false, clear what we got
 	if( vdpTiles != NULL ) {
@@ -48,13 +57,16 @@ SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep ) {
 			vdpTiles->length = 0;
 		}
 	} else {
-		if( keep == FALSE ) {
+		vdpTiles = calloc( 1, sizeof( SizedArray ) );
 
-		} else {
-
+		if( keep == TRUE ) {
+			CLASS( Image, this )->vdpTiles = vdpTiles;
 		}
 	}
 
+	if ( GifImage_isGifImage( &file ) == TRUE ) {
+		Debug_print( "GIF89a" );
+	}
 
 	return vdpTiles;
 }
@@ -67,5 +79,5 @@ bool GifImage_isGifImage( SizedArray* file ) {
 	file->items = ( ( char* ) file->items ) + 6;
 	file->length -= 6;
 
-	return ( strcmp( header, GifImage_GIF87a ) || strcmp( header, GifImage_GIF89a ) );
+	return ( strcmp( header, GifImage_GIF87a ) == 0 || strcmp( header, GifImage_GIF89a ) == 0 );
 }

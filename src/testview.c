@@ -54,6 +54,7 @@ void TestView_render( TestView* this ) {
 	GifImage* test;
 	NEW_OBJECT( GifImage, test );
 	FUNCTIONS( Image, Image, test )->loadData( CLASS( Image, test ), &testGif );
+	FUNCTIONS( GifImage, Image, test )->getVDPTiles( test, TRUE );
 }
 
 void TestView_setupChildren( TestView* this ) {
