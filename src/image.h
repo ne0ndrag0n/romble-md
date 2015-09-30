@@ -21,8 +21,8 @@ typedef struct Image {
 	SizedArray* vdpTiles;
 	void* nativePalette;
 	u16* palette;
-	u8 width;
-	u8 height;
+	u16 width;
+	u16 height;
 
 	vtable functions;
 } Image;
