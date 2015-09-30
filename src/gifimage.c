@@ -38,24 +38,23 @@ SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep ) {
 	SizedArray* vdpTiles = Image_getVDPTiles( CLASS( Image, this ), keep );
 	SizedArray file = { NULL, 0 };
 
-	// If there are no vdp tiles, create a container for VDP tiles
-	if( vdpTiles == NULL ) {
-		CLASS( Image, this )->vdpTiles = calloc( 1, sizeof( SizedArray ) );
-		vdpTiles = CLASS( Image, this )->vdpTiles;
+	// If this->vdpTiles is not null and keep is true, simply return what we got
+	// If keep is false, clear what we got
+	if( vdpTiles != NULL ) {
+		if( keep == TRUE ) {
+			return vdpTiles;
+		} else {
+			Romble_secureFree( ( void * ) &( vdpTiles->items ) );
+			vdpTiles->length = 0;
+		}
+	} else {
+		if( keep == FALSE ) {
+
+		} else {
+
+		}
 	}
 
-	// Copy file information into a local variable
-	if( CLASS( Image, this )->imageData != NULL &&
-	    CLASS( Image, this )->imageData->items != NULL ) {
-
-		file.length = CLASS( Image, this )->imageData->length;
-		file.items = calloc( CLASS( Image, this )->imageData->length, sizeof( u8 ) );
-		memcpy( file.items, CLASS( Image, this )->imageData->items, file.length );
-	}
-
-	if( GifImage_isGifImage( &file ) == TRUE ) {
-		Debug_print( "It's a gif" );
-	}
 
 	return vdpTiles;
 }

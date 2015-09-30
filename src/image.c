@@ -25,12 +25,12 @@ void Image_ctor( Image* this ) {
 
 void Image_dtor( Image* this ) {
 	if( this->imageData != NULL ) {
-		free( this->imageData->items );
+		Romble_secureFree( ( void * ) &( this->imageData->items ) );
 	}
 	Romble_secureFree( ( void* ) &( this->imageData ) );
 
 	if( this->vdpTiles != NULL ) {
-		free( this->vdpTiles->items );
+		Romble_secureFree( ( void* ) &( this->vdpTiles->items ) );
 	}
 	Romble_secureFree( ( void* ) &( this->vdpTiles ) );
 }
