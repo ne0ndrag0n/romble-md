@@ -20,6 +20,7 @@ void Image_ctor( Image* this ) {
 
 	this->nativePalette = NULL;
 	this->palette = NULL;
+	this->paletteMode = Image_PaletteMode_NATIVE_IMAGE;
 
 	this->functions = &Image_table;
 }
