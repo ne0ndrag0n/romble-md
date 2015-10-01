@@ -17,7 +17,8 @@ typedef struct {
 
 typedef enum {
 	Image_PaletteMode_NEAREST_DEFAULT,
-	Image_PaletteMode_NATIVE_IMAGE
+	Image_PaletteMode_NATIVE_IMAGE,
+	Image_PaletteMode_OCTREE
 } Image_PaletteMode;
 
 typedef struct Image {
