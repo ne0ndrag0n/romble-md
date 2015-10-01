@@ -15,6 +15,11 @@ typedef struct {
 	SizedArray* ( *getVDPTiles )( struct Image*, bool );
 } Image_vtable;
 
+typedef enum {
+	Image_PaletteMode_NEAREST_DEFAULT,
+	Image_PaletteMode_NATIVE_IMAGE
+} Image_PaletteMode;
+
 typedef struct Image {
 	SizedArray* imageData;
 	SizedArray* vdpTiles;
