@@ -110,17 +110,23 @@ void GifImage_buildPalette( GifImage* this, SizedArray* file, u8 packedField ) {
 		SizedArray_takeBytes( file, CLASS( Image, this )->nativePalette->items, CLASS( Image, this )->nativePalette->length );
 
 		// Determine what palette to generate based on this Image class's PaletteMode.
+		// Because an PaletteMode may change, set the image's PaletteMode after each call.
 		switch( CLASS( Image, this )->paletteMode ) {
 			case Image_PaletteMode_OCTREE:
 				// Convert a non-indexed image or image > 16 entries.
 				// Drop down to NATIVE_IMAGE if the image already has less than or equal to 16 indexed colours
 				CLASS( Image, this )->paletteMode = Image_PaletteMode_OCTREE;
 				break;
+			default:
 			case Image_PaletteMode_NATIVE_IMAGE:
 				// Simply convert this image's native palette to Sega format if there are 16 or fewer palette entries.
 				// Drop down to NEAREST_DEFAULT if the image is non-indexed or has > 16 palette entries.
+				CLASS( Image, this )->paletteMode = Image_PaletteMode_NATIVE_IMAGE;
 				break;
 			case Image_PaletteMode_NEAREST_DEFAULT:
+				// Translate each tile to match Romble's default palette, PAL0.
+				// This does nothing in this function; buildTiles will take this up.
+				CLASS( Image, this )->paletteMode = Image_PaletteMode_NEAREST_DEFAULT;
 				break;
 		}
 	}

@@ -5,6 +5,11 @@
 #include <types.h>
 #include <sizedarray.h>
 
+#define		Image_U8_UPPER_NIBBLE		0xF0
+#define		Image_U8_LOWER_NIBBLE		0x0F
+#define		Image_MAXIMUM_ROUNDABLE		0x0E
+#define		Image_MAXIMUM_RGB_NIBBLE	0x0F
+
 struct Image;
 
 typedef void* Image_nativePalette;
@@ -95,5 +100,7 @@ void Image_ctor( Image* this );
 void Image_dtor( Image* this );
 void Image_loadData( Image* this, SizedArray* file );
 SizedArray* Image_getVDPTiles( Image* this, bool keep );
+
+u16* Image_RGBtoSega( SizedArray* rgbTriplets );
 
 #endif
