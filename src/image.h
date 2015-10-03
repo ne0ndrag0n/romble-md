@@ -71,6 +71,12 @@ typedef enum {
 	Image_PaletteMode_OCTREE
 } Image_PaletteMode;
 
+typedef struct Image_RGB {
+	u8 red;
+	u8 green;
+	u8 blue;
+} Image_RGB;
+
 typedef struct Image {
 	SizedArray* imageData;
 	SizedArray* vdpTiles;

@@ -90,6 +90,38 @@ bool GifImage_isGifImage( SizedArray* file ) {
 void GifImage_buildPalette( GifImage* this, SizedArray* file, u8 packedField ) {
 	bool palettePresent = ( packedField & GifImage_PALETTE_PRESENT_MASK ) >> 7;
 	u8 paletteSize = ( packedField & GifImage_PALETTE_SIZE_MASK );
+	u16 numPaletteEntries; // Needs to fit the number 256
 
-	Debug_sprint( "palette:%02x, size:%02x", palettePresent, paletteSize );
+	if( palettePresent == TRUE ) {
+		// Conducts the operation 2^n+1
+		numPaletteEntries =  1 << ( paletteSize + 1 );
+
+		// Store the native palette as a u8 SizedArray - first clear out existing SizedArray
+		if( CLASS( Image, this )->nativePalette != NULL ) {
+			Romble_secureFree( ( void* ) &( CLASS( Image, this )->nativePalette->items ) );
+			Romble_secureFree( ( void* ) &( CLASS( Image, this )->nativePalette ) );
+		}
+
+		// Allocate room for SizedArray, memcpy bytes into the SizedArray
+		CLASS( Image, this )->nativePalette = calloc( 1, sizeof( SizedArray ) );
+		// Each palette entry for GIF is three bytes
+		CLASS( Image, this )->nativePalette->length = numPaletteEntries * 3;
+		CLASS( Image, this )->nativePalette->items = calloc( CLASS( Image, this )->nativePalette->length, sizeof( u8 ) );
+		SizedArray_takeBytes( file, CLASS( Image, this )->nativePalette->items, CLASS( Image, this )->nativePalette->length );
+
+		// Determine what palette to generate based on this Image class's PaletteMode.
+		switch( CLASS( Image, this )->paletteMode ) {
+			case Image_PaletteMode_OCTREE:
+				// Convert a non-indexed image or image > 16 entries.
+				// Drop down to NATIVE_IMAGE if the image already has less than or equal to 16 indexed colours
+				CLASS( Image, this )->paletteMode = Image_PaletteMode_OCTREE;
+				break;
+			case Image_PaletteMode_NATIVE_IMAGE:
+				// Simply convert this image's native palette to Sega format if there are 16 or fewer palette entries.
+				// Drop down to NEAREST_DEFAULT if the image is non-indexed or has > 16 palette entries.
+				break;
+			case Image_PaletteMode_NEAREST_DEFAULT:
+				break;
+		}
+	}
 }
