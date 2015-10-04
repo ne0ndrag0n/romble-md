@@ -9,6 +9,9 @@ typedef struct {
 	u32 length;
 } SizedArray;
 
+// Take bytes from SizedArray and change the pointer
 extern void SizedArray_takeBytes( SizedArray* this, void* destination, size_t amount );
+// "Peek" at bytes by copying data without incrementing the pointer
+extern void SizedArray_peekBytes( SizedArray* this, void* destination, size_t amount );
 
 #endif

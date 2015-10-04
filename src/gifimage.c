@@ -77,7 +77,11 @@ SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep ) {
 		file.items = ( ( u8* ) file.items ) + 1;
 		file.length--;
 
+		// Handle the palette (if any)
 		GifImage_buildPalette( this, &file, packedField );
+
+		// Handle optional blocks (at this point in parsing, graphics control extensions)
+
 	}
 
 	return vdpTiles;
