@@ -67,18 +67,16 @@ u16* Image_RGBtoSega( SizedArray* rgbTriplets ) {
 	Romble_assert( segaPalette != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 	size_t triplet, channel;
 	u8 channelCol, upperNibble;
-	u16 segaCol;
 	u16 newComponentCol;
 
 	// TODO: naive solution? try to improve
 	for( triplet = 0; triplet < rgbTriplets->length; triplet+=3 ) {
-		segaCol = segaPalette[ triplet ];
 		for( channel = triplet; channel < triplet + 3; channel++ ) {
 			channelCol = ( ( u8* )rgbTriplets->items )[ channel ];
 			upperNibble = ( channelCol & Image_U8_UPPER_NIBBLE ) >> 4;
 
 			// Determine if a rounding is necessary on the upper RGB nibble
-			if( ( channelCol & Image_U8_LOWER_NIBBLE ) >= 8 ) {
+			if( ( channelCol & Image_U8_LOWER_NIBBLE ) > 8 ) {
 				// Upper nibble requires rounding to retrieve Sega col
 				if( upperNibble < Image_MAXIMUM_ROUNDABLE ) {
 					// Round to nearest even number
@@ -96,7 +94,7 @@ u16* Image_RGBtoSega( SizedArray* rgbTriplets ) {
 			// then bitwise "OR" it onto channelCol
 			// On the first run, this applies R to the Sega R component, G on the second one, B on the third
 			newComponentCol = ( u16 ) upperNibble;
-			segaCol |= newComponentCol << ( ( 4 * ( ( channel % 3 ) + 1 ) ) - 4 );
+			segaPalette[ triplet ] |= newComponentCol << ( ( 4 * ( ( channel % 3 ) + 1 ) ) - 4 );
 		}
 	}
 
