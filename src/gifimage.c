@@ -9,6 +9,8 @@
 #include <utility.h>
 #include <stdio.h>
 #include <sizedarray.h>
+#include <vdp_pal.h>
+#include <vdp.h>
 
 GifImage_vtable GifImage_table = {
 	GifImage_dtor,
@@ -121,6 +123,10 @@ void GifImage_buildPalette( GifImage* this, SizedArray* file, u8 packedField ) {
 			case Image_PaletteMode_NATIVE_IMAGE:
 				// Simply convert this image's native palette to Sega format if there are 16 or fewer palette entries.
 				// Drop down to NEAREST_DEFAULT if the image is non-indexed or has > 16 palette entries.
+				Romble_secureFree( ( void* )( CLASS( Image, this )->palette ) );
+				CLASS( Image, this )->palette = Image_RGBtoSega( CLASS( Image, this )->nativePalette );
+				// just a test
+				VDP_setPalette( PAL1, CLASS( Image, this )->palette );
 				CLASS( Image, this )->paletteMode = Image_PaletteMode_NATIVE_IMAGE;
 				break;
 			case Image_PaletteMode_NEAREST_DEFAULT:

@@ -59,7 +59,7 @@ u16* Image_RGBtoSega( SizedArray* rgbTriplets ) {
 	// 2) if lower nibble is < 8, round higher nibble down to lowest even number.
 	//    if lower nibble is >= 8, round higher nibble up to nearest even number. if higher nibble is already E, leave it.
 	// 3) store higher nibble
-	if( rgbTriplets->length <= 0 ) {
+	if( rgbTriplets == NULL || rgbTriplets->length <= 0 ) {
 		return NULL;
 	}
 
@@ -67,7 +67,7 @@ u16* Image_RGBtoSega( SizedArray* rgbTriplets ) {
 	Romble_assert( segaPalette != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 	size_t triplet, channel;
 	u8 channelCol, upperNibble;
-	u16 newComponentCol;
+	u16 newComponentCol = 0;
 
 	// TODO: naive solution? try to improve
 	for( triplet = 0; triplet < rgbTriplets->length; triplet+=3 ) {
@@ -81,20 +81,21 @@ u16* Image_RGBtoSega( SizedArray* rgbTriplets ) {
 				if( upperNibble < Image_MAXIMUM_ROUNDABLE ) {
 					// Round to nearest even number
 					( upperNibble % 2 == 0 ) ? upperNibble+= 2 : upperNibble++;
-				} else {
-					// If the channel's upper nibble is 0x0F, send it down to 0x0E
-					if ( upperNibble == Image_MAXIMUM_RGB_NIBBLE ) {
-						upperNibble = Image_MAXIMUM_ROUNDABLE;
-					}
 				}
 			}
+
 			// else - No rounding required, use upperNibble with no change
+
+			// Upper nibble shall never be F.
+			if ( upperNibble == Image_MAXIMUM_RGB_NIBBLE ) {
+				upperNibble = Image_MAXIMUM_ROUNDABLE;
+			}
 
 			// Now, shift new Sega value nibble by ( 4 * ( ( channel % 3 ) + 1 ) ) - 4
 			// then bitwise "OR" it onto channelCol
 			// On the first run, this applies R to the Sega R component, G on the second one, B on the third
 			newComponentCol = ( u16 ) upperNibble;
-			segaPalette[ triplet ] |= newComponentCol << ( ( 4 * ( ( channel % 3 ) + 1 ) ) - 4 );
+			segaPalette[ triplet / 3 ] |= newComponentCol << ( ( 4 * ( ( channel % 3 ) + 1 ) ) - 4 );
 		}
 	}
 
