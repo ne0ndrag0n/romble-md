@@ -11,6 +11,7 @@
 #include <sizedarray.h>
 #include <vdp_pal.h>
 #include <vdp.h>
+#include <lang.h>
 
 GifImage_vtable GifImage_table = {
 	GifImage_dtor,
@@ -73,7 +74,7 @@ SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep ) {
 		SizedArray_takeBytes( &file, &( this->backgroundPalIndex ), 1 );
 
 		// Burn the aspect ratio as it's irrelevant
-		file.items = ( ( char* ) file.items ) + 1;
+		file.items = ( ( u8* ) file.items ) + 1;
 		file.length--;
 
 		GifImage_buildPalette( this, &file, packedField );
@@ -109,6 +110,7 @@ void GifImage_buildPalette( GifImage* this, SizedArray* file, u8 packedField ) {
 		// Each palette entry for GIF is three bytes
 		CLASS( Image, this )->nativePalette->length = numPaletteEntries * 3;
 		CLASS( Image, this )->nativePalette->items = calloc( CLASS( Image, this )->nativePalette->length, sizeof( u8 ) );
+		Romble_assert( CLASS( Image, this )->nativePalette->items != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 		SizedArray_takeBytes( file, CLASS( Image, this )->nativePalette->items, CLASS( Image, this )->nativePalette->length );
 
 		// Determine what palette to generate based on this Image class's PaletteMode.
