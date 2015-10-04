@@ -9,6 +9,7 @@
 #define		Image_U8_LOWER_NIBBLE		0x0F
 #define		Image_MAXIMUM_ROUNDABLE		0x0E
 #define		Image_MAXIMUM_RGB_NIBBLE	0x0F
+#define		Image_SEGA_PAL_SIZE			16
 
 struct Image;
 

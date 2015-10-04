@@ -15,13 +15,13 @@ Image_vtable Image_table = {
 void Image_ctor( Image* this ) {
 	this->imageData = NULL;
 	this->vdpTiles = NULL;
+	this->nativePalette = NULL;
+
+	this->palette = NULL;
+	this->paletteMode = Image_PaletteMode_NATIVE_IMAGE;
 
 	this->width = 0;
 	this->height = 0;
-
-	this->nativePalette = NULL;
-	this->palette = NULL;
-	this->paletteMode = Image_PaletteMode_NATIVE_IMAGE;
 
 	this->functions = &Image_table;
 }
@@ -63,7 +63,7 @@ u16* Image_RGBtoSega( SizedArray* rgbTriplets ) {
 		return NULL;
 	}
 
-	u16* segaPalette = calloc( rgbTriplets->length, sizeof( u16 ) );
+	u16* segaPalette = calloc( Image_SEGA_PAL_SIZE, sizeof( u16 ) );
 	Romble_assert( segaPalette != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 	size_t triplet, channel;
 	u8 channelCol, upperNibble;
