@@ -14,3 +14,8 @@ inline void SizedArray_takeBytes( SizedArray* this, void* destination, size_t am
 inline void SizedArray_peekBytes( SizedArray* this, void* destination, size_t amount ) {
 	memcpy( destination, this->items, amount );
 }
+
+inline void SizedArray_burnBytes( SizedArray* this, size_t amount ) {
+	this->items = ( ( char* ) this->items ) + amount;
+	this->length =- amount;
+}

@@ -24,7 +24,9 @@ void GifImage_ctor( GifImage* this ) {
 
 	CLASS( Image, this )->functions = &GifImage_table;
 
+	this->controlParams = ( GifImage_ControlParameters ){ 0, 0, 0 };
 	this->backgroundPalIndex = 0;
+	this->imageDrawn = FALSE;
 };
 
 void GifImage_dtor( GifImage* this ) {
@@ -74,13 +76,35 @@ SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep ) {
 		SizedArray_takeBytes( &file, &( this->backgroundPalIndex ), 1 );
 
 		// Burn the aspect ratio as it's irrelevant
-		file.items = ( ( u8* ) file.items ) + 1;
-		file.length--;
+		SizedArray_burnBytes( &file, 1 );
 
 		// Handle the palette (if any)
 		GifImage_buildPalette( this, &file, packedField );
 
-		// Handle optional blocks (at this point in parsing, graphics control extensions)
+		// Handle looping chunks depending on type
+		u8 chunkType = 0;
+		u8 extensionType = 0;
+		while( chunkType != GifImage_TRAILER ) {
+			// Take block header
+			SizedArray_takeBytes( &file, &chunkType, 1 );
+			switch( chunkType ) {
+				case GifImage_EXTENSION:
+					SizedArray_takeBytes( &file, &extensionType, 1 );
+					switch( extensionType ) {
+						case GifImage_EXTENSION_CONTROL:
+							// Burn the block length (always 04)
+							SizedArray_burnBytes( &file, 1 );
+							GifImage_loadControlParameters( this, &file );
+							break;
+					}
+					break;
+				case GifImage_IMAGE_SEPARATOR:
+					chunkType = GifImage_TRAILER;
+					break;
+				default:
+					break;
+			}
+		}
 
 	}
 
@@ -142,4 +166,14 @@ void GifImage_buildPalette( GifImage* this, SizedArray* file, u8 packedField ) {
 				break;
 		}
 	}
+}
+
+void GifImage_loadControlParameters( GifImage* this, SizedArray* file ) {
+	SizedArray_takeBytes( file, &( this->controlParams  ), 4 );
+
+	// Correct endianness of delayTime
+	this->controlParams.delayTime =  Utility_swapu16( this->controlParams.delayTime );
+
+	// Burn the terminator
+	SizedArray_burnBytes( file, 1 );
 }

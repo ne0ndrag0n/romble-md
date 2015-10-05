@@ -12,6 +12,7 @@
 #include <joymanager.h>
 #include <testview.h>
 #include <res/globals.h>
+#include <sram.h>
 
 int main( void ) {
 
