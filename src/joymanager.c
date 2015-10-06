@@ -37,6 +37,10 @@ void JoyManager_ctor( JoyManager* this, u8 registerableX, u8 registerableY ) {
 	this->haloTilesIndex = Romble_loadTiles( HaloTiles, 3 );
 	this->currentElement = NULL;
 
+	for( i = 0; i != 4; i++ ) {
+		this->corners[ i ] = ( SpriteDef ){ 0, 0, 0, 0, 0 };
+	}
+
 	JOY_init();
 	JOY_setEventHandler( &JoyManager_handlerBridge );
 
