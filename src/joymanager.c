@@ -272,24 +272,28 @@ void JoyManager_handleInput( JoyManager* this, u16 joy, u16 changed, u16 state )
 			if( state & BUTTON_UP ) {
 				SelectableElementList usableElements = JoyManager_retrieveSelectableElements( this, ElementRetrieval_LESS_THAN_Y );
 				JoyManager_moveToNearest( this, &usableElements );
+				Romble_secureFree( ( void* ) &( usableElements.list ) );
 				break;
 			}
 
 			if( state & BUTTON_DOWN ) {
 				SelectableElementList usableElements = JoyManager_retrieveSelectableElements( this, ElementRetrieval_GREATER_THAN_Y );
 				JoyManager_moveToNearest( this, &usableElements );
+				Romble_secureFree( ( void* ) &( usableElements.list ) );
 				break;
 			}
 
 			if( state & BUTTON_LEFT ) {
 				SelectableElementList usableElements = JoyManager_retrieveSelectableElements( this, ElementRetrieval_LESS_THAN_X );
 				JoyManager_moveToNearest( this, &usableElements );
+				Romble_secureFree( ( void* ) &( usableElements.list ) );
 				break;
 			}
 
 			if( state & BUTTON_RIGHT ) {
 				SelectableElementList usableElements = JoyManager_retrieveSelectableElements( this, ElementRetrieval_GREATER_THAN_X );
 				JoyManager_moveToNearest( this, &usableElements );
+				Romble_secureFree( ( void* ) &( usableElements.list ) );
 				break;
 			}
 
