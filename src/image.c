@@ -63,7 +63,7 @@ u16* Image_RGBtoSega( SizedArray* rgbTriplets ) {
 		return NULL;
 	}
 
-	u16* segaPalette = calloc( Image_SEGA_PAL_SIZE, sizeof( u16 ) );
+	u16* segaPalette = Romble_alloc( Image_SEGA_PAL_SIZE * sizeof( u16 ), TRUE );
 	Romble_assert( segaPalette != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 	size_t triplet, channel;
 	u8 channelCol, upperNibble;

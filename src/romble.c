@@ -24,7 +24,7 @@ void Romble_init() {
 	// Placed directly at the beginning
 	BOX_DRAWING_INDEX = Romble_loadTiles( BoxDrawingCharacters, 3 );
 
-	joyManager = calloc( 1, sizeof( JoyManager ) );
+	joyManager = Romble_alloc( 1 * sizeof( JoyManager ), TRUE );
 	Romble_assert( joyManager != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 	JoyManager_ctor( joyManager, 40, 28 );
 }
@@ -81,6 +81,7 @@ void* Romble_realloc( void* pointer, size_t newSize, bool clear ) {
 	// Copy contents
 	if( newPointer != NULL ) {
 		memcpy( pointer, newPointer, newSize );
+		free( pointer );
 	}
 
 	return newPointer;

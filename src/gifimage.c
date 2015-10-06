@@ -56,7 +56,7 @@ SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep ) {
 			vdpTiles->length = 0;
 		}
 	} else {
-		vdpTiles = calloc( 1, sizeof( SizedArray ) );
+		vdpTiles = Romble_alloc( sizeof( SizedArray ), TRUE );
 
 		if( keep == TRUE ) {
 			CLASS( Image, this )->vdpTiles = vdpTiles;
@@ -134,10 +134,10 @@ void GifImage_buildPalette( GifImage* this, SizedArray* file, u8 packedField ) {
 		}
 
 		// Allocate room for SizedArray, memcpy bytes into the SizedArray
-		CLASS( Image, this )->nativePalette = calloc( 1, sizeof( SizedArray ) );
+		CLASS( Image, this )->nativePalette = Romble_alloc( sizeof( SizedArray ), TRUE );
 		// Each palette entry for GIF is three bytes
 		CLASS( Image, this )->nativePalette->length = numPaletteEntries * 3;
-		CLASS( Image, this )->nativePalette->items = calloc( CLASS( Image, this )->nativePalette->length, sizeof( u8 ) );
+		CLASS( Image, this )->nativePalette->items = Romble_alloc( CLASS( Image, this )->nativePalette->length * sizeof( u8 ), TRUE );
 		Romble_assert( CLASS( Image, this )->nativePalette->items != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 		SizedArray_takeBytes( file, CLASS( Image, this )->nativePalette->items, CLASS( Image, this )->nativePalette->length );
 

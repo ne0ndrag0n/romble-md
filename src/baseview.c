@@ -92,7 +92,7 @@ void BaseView_renderChildren( BaseView* this ) {
 void BaseView_addChildView( BaseView* this, BaseView* childView ) {
 	// Create the children collection if it does not exist
 	if( this->children == NULL ) {
-		this->children = malloc( sizeof( BaseView* ) );
+		this->children = Romble_alloc( sizeof( BaseView* ), FALSE );
 
 		Romble_assert( this->children != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 
@@ -100,7 +100,7 @@ void BaseView_addChildView( BaseView* this, BaseView* childView ) {
 	} else {
 
 		this->numChildren++;
-		BaseView** resizedArray = realloc( this->children, this->numChildren * sizeof( BaseView* ) );
+		BaseView** resizedArray = Romble_realloc( this->children, this->numChildren * sizeof( BaseView* ), TRUE );
 		Romble_assert( resizedArray != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 
 		this->children = resizedArray;
