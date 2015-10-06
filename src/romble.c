@@ -8,6 +8,7 @@
 #include <stddef.h>
 #include <sys.h>
 #include <lang.h>
+#include <string.h>
 
 u16 BOX_DRAWING_INDEX;
 static u16 UNIQUE_ID = 0;
@@ -52,4 +53,35 @@ void Romble_secureFree( void** pointer ) {
 	free( *pointer );
 
 	*pointer = NULL;
+}
+
+void* Romble_alloc( size_t size, bool clear ) {
+
+	void* pointer = NULL;
+
+	pointer = malloc( size );
+
+	if( pointer != NULL ) {
+
+		if( clear == TRUE ) {
+			memset( pointer, 0, size );
+		}
+
+	}
+
+	return pointer;
+}
+
+void* Romble_realloc( void* pointer, size_t newSize, bool clear ) {
+
+	void* newPointer = NULL;
+
+	newPointer = Romble_alloc( newSize, clear );
+
+	// Copy contents
+	if( newPointer != NULL ) {
+		memcpy( pointer, newPointer, newSize );
+	}
+
+	return newPointer;
 }

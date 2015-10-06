@@ -4,6 +4,7 @@
 #include <types.h>
 #include <res/globals.h>
 #include <joymanager.h>
+#include <stddef.h>
 
 extern u16 BOX_DRAWING_INDEX;
 
@@ -13,5 +14,9 @@ void Romble_setJoyManager();
 void Romble_assert( bool condition, char* failMessage );
 u16 Romble_getUniqueId();
 void Romble_secureFree( void** pointer );
+
+// These alloc wrappers will allow us to diagnose heap corruption issues
+void* Romble_alloc( size_t size, bool clear );
+void* Romble_realloc( void* pointer, size_t newSize, bool clear );
 
 #endif
