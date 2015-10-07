@@ -88,7 +88,6 @@ SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep ) {
 		while( chunkType != GifImage_TRAILER ) {
 			// Take block header
 			SizedArray_takeBytes( &file, &chunkType, 1 );
-			Debug_sprint( "Chunk type %02x", chunkType );
 			switch( chunkType ) {
 				case GifImage_EXTENSION:
 					SizedArray_takeBytes( &file, &extensionType, 1 );
@@ -101,13 +100,22 @@ SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep ) {
 					}
 					break;
 				case GifImage_IMAGE_SEPARATOR:
+					GifImage_processImage( this, &file );
 					chunkType = GifImage_TRAILER;
 					break;
 				default:
+					// Prevent an infinite loop - if you don't recognize the byte, GET OUT!
+					chunkType = GifImage_TRAILER;
 					break;
 			}
 		}
 
+	}
+
+	// If the status is not an error status, apply "OK" at this point
+	if( CLASS( Image, this )->imageStatus == Image_Status_UNBUILT ||
+		CLASS( Image, this )->imageStatus == Image_Status_OK ) {
+		CLASS( Image, this )->imageStatus = Image_Status_OK;
 	}
 
 	return vdpTiles;
@@ -157,9 +165,9 @@ void GifImage_buildPalette( GifImage* this, SizedArray* file, u8 packedField ) {
 				// Drop down to NEAREST_DEFAULT if the image is non-indexed or has > 16 palette entries.
 				Romble_secureFree( ( void* )( CLASS( Image, this )->palette ) );
 				CLASS( Image, this )->palette = Image_RGBtoSega( CLASS( Image, this )->nativePalette );
-				// just a test
-				VDP_setPalette( PAL1, CLASS( Image, this )->palette );
 				CLASS( Image, this )->paletteMode = Image_PaletteMode_NATIVE_IMAGE;
+				// just a test
+				//VDP_setPalette( PAL1, CLASS( Image, this )->palette );
 				break;
 			case Image_PaletteMode_NEAREST_DEFAULT:
 				// Translate each tile to match Romble's default palette, PAL0.
@@ -179,4 +187,36 @@ void GifImage_loadControlParameters( GifImage* this, SizedArray* file ) {
 	// Burn the terminator
 	SizedArray_burnBytes( file, 1 );
 
+}
+
+void GifImage_processImage( GifImage* this, SizedArray* file ) {
+	GifImage_ImageDescriptor imageDescriptor;
+	u16 segmentWidth = CLASS( Image, this )->width;
+	u16 segmentHeight = CLASS( Image, this )->height;
+
+	// Fill struct with the rest of the image descriptor
+	SizedArray_takeBytes( file, &imageDescriptor, 9 );
+
+	// Fix endianness
+	imageDescriptor.imageLeft = Utility_swapu16( imageDescriptor.imageLeft );
+	imageDescriptor.imageTop = Utility_swapu16( imageDescriptor.imageTop );
+	imageDescriptor.imageWidth = Utility_swapu16( imageDescriptor.imageWidth );
+	imageDescriptor.imageHeight = Utility_swapu16( imageDescriptor.imageHeight );
+
+	// If the first image has a local color table, rebuild + reset the palette and mode
+	// This will be ignored if there's not another color table
+	GifImage_buildPalette( this, file, imageDescriptor.options );
+
+	// If for some reason the image is offset by an amount, subtract the width and height by the difference
+	segmentWidth -= imageDescriptor.imageLeft;
+	segmentHeight -= imageDescriptor.imageTop;
+
+	if( ( ( imageDescriptor.options & GifImage_INTERLACE_MASK ) >> 6 ) == TRUE ) {
+		// FIXME: Version 0.0.3, we do not currently support an interlaced GIF.
+		Debug_print( "Interlaced images are not yet implemented!" );
+		CLASS( Image, this )->imageStatus = Image_Status_FEATURE_UNSUPPORTED;
+		return;
+	}
+
+	// Time for the beef: the LZ77 compression!
 }

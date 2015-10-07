@@ -77,16 +77,39 @@ typedef enum {
 	Image_PaletteMode_OCTREE
 } Image_PaletteMode;
 
-typedef struct Image_RGB {
-	u8 red;
-	u8 green;
-	u8 blue;
-} Image_RGB;
+typedef enum {
+	/**
+	 * The image is OK to be used and this->vdpTiles are ready to be inserted into the Genesis VDP.
+	 */
+	Image_Status_OK,
+
+	/**
+	 * The image's VDP tiles have not yet been built.
+	 */
+	Image_Status_UNBUILT,
+
+	/**
+	 * An unexpected end of file was encountered while reading the Image file.
+	 */
+	Image_Status_UNEXPECTED_EOF,
+
+	/**
+	 * An essential feature of this image format is currently unsupported.
+	 */
+	Image_Status_FEATURE_UNSUPPORTED,
+
+	/**
+	 * The file format was checked and found invalid.
+	 */
+	Image_Status_INVALID_FILE
+} Image_Status;
 
 typedef struct Image {
 	SizedArray* imageData;
 	SizedArray* vdpTiles;
 	SizedArray* nativePalette;
+
+	Image_Status imageStatus;
 
 	u16* palette;
 	Image_PaletteMode paletteMode;

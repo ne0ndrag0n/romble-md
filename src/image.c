@@ -20,6 +20,8 @@ void Image_ctor( Image* this ) {
 	this->palette = NULL;
 	this->paletteMode = Image_PaletteMode_NATIVE_IMAGE;
 
+	this->imageStatus = Image_Status_UNBUILT;
+
 	this->width = 0;
 	this->height = 0;
 

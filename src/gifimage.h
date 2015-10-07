@@ -21,6 +21,7 @@
 
 #define GifImage_PALETTE_PRESENT_MASK     0x80
 #define GifImage_PALETTE_SIZE_MASK        0x07
+#define GifImage_INTERLACE_MASK			  0x40
 
 struct GifImage;
 
@@ -35,6 +36,14 @@ typedef struct GifImage_ControlParameters {
 	u16 delayTime;
 	u8 transparentIndex;
 } GifImage_ControlParameters;
+
+typedef struct GifImage_ImageDescriptor {
+	u16 imageLeft;
+	u16 imageTop;
+	u16 imageWidth;
+	u16 imageHeight;
+	u8 options;
+} GifImage_ImageDescriptor;
 
 typedef struct GifImage {
 	Image super;
