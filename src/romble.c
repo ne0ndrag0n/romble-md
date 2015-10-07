@@ -9,6 +9,8 @@
 #include <sys.h>
 #include <lang.h>
 #include <string.h>
+#include <romble.h>
+#include <utility.h>
 
 u16 BOX_DRAWING_INDEX;
 static u16 UNIQUE_ID = 0;
@@ -27,6 +29,9 @@ void Romble_init() {
 	joyManager = Romble_alloc( 1 * sizeof( JoyManager ), TRUE );
 	Romble_assert( joyManager != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 	JoyManager_ctor( joyManager, 40, 28 );
+
+	Debug_print( "Welcome to the Romble beta!" );
+	Debug_print( "Romble v0.0.3a (c) 2015 oaktree Games and Novelties. All rights reserved." );
 }
 
 u16 Romble_loadTiles( const u32* tiles, u16 run ) {

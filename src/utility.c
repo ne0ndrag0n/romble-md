@@ -2,11 +2,10 @@
 #include <vdp_bg.h>
 #include <stdarg.h>
 #include <stdio.h>
-
-u8 ROLL_COUNTER = 0;
+#include <kdebug.h>
 
 void Debug_print( char* output ) {
-	VDP_drawText( output, 0, ROLL_COUNTER++ );
+	KDebug_Alert( output );
 }
 
 inline void Debug_sprint( char* format, ... ) {

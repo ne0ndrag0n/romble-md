@@ -12,6 +12,7 @@
 #include <vdp_pal.h>
 #include <vdp.h>
 #include <lang.h>
+#include <kdebug.h>
 
 GifImage_vtable GifImage_table = {
 	GifImage_dtor,
@@ -87,6 +88,7 @@ SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep ) {
 		while( chunkType != GifImage_TRAILER ) {
 			// Take block header
 			SizedArray_takeBytes( &file, &chunkType, 1 );
+			Debug_sprint( "Chunk type %02x", chunkType );
 			switch( chunkType ) {
 				case GifImage_EXTENSION:
 					SizedArray_takeBytes( &file, &extensionType, 1 );
@@ -176,4 +178,5 @@ void GifImage_loadControlParameters( GifImage* this, SizedArray* file ) {
 
 	// Burn the terminator
 	SizedArray_burnBytes( file, 1 );
+
 }

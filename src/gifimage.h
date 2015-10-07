@@ -52,5 +52,7 @@ bool GifImage_isGifImage( SizedArray* file );
 void GifImage_buildPalette( GifImage* this, SizedArray* file, u8 packedField );
 
 void GifImage_loadControlParameters( GifImage* this, SizedArray* file );
+// The magic happens here!
+void GifImage_processImage( GifImage* this, SizedArray* file );
 
 #endif
