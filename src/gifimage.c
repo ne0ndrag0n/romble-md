@@ -13,6 +13,7 @@
 #include <vdp.h>
 #include <lang.h>
 #include <kdebug.h>
+#include <lzw.h>
 
 GifImage_vtable GifImage_table = {
 	GifImage_dtor,
@@ -219,4 +220,47 @@ void GifImage_processImage( GifImage* this, SizedArray* file ) {
 	}
 
 	// Time for the beef: the LZ77 compression!
+	SizedArray fullSequence = { NULL, 0 };
+	u8 minCodeSize, sequenceLength;
+
+	// Read minimum code size
+	SizedArray_takeBytes( file, &minCodeSize, 1 );
+
+	do {
+		// Read in the sequence length
+		SizedArray_takeBytes( file, &sequenceLength, 1 );
+
+		// If the sequence length is greater than zero,
+		// construct an uncompressed block from the
+		// byte sequence, and then concatenate this
+		// onto decompressedSequence. decompressedSequence
+		// will be transformed depending on image mode,
+		// then copied to this->vdpTiles and deallocated.
+		if( sequenceLength > 0 ) {
+			SizedArray compressedBlock;
+			compressedBlock.items = file->items;
+			compressedBlock.length = sequenceLength;
+
+			// Burn the length of the coded sequence
+			SizedArray_burnBytes( file, sequenceLength );
+
+			// Beef of the work is done in this function
+			SizedArray decompressedBlock = LZWUtils_decompress( &compressedBlock, minCodeSize );
+
+			// In the returned SizedArray, realloc the items inside the fullSequence SizedArray, and increment
+			// fullSequence's size by the amount in decompressedBlock
+
+			// Preserve oldLength; this is what we increment our pointer by to concatenate
+			u8 oldLength = fullSequence.length;
+
+			fullSequence.length += decompressedBlock.length;
+			u8* newItems = Romble_realloc( fullSequence.items, fullSequence.length, TRUE );
+			Romble_assert( newItems != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
+			fullSequence.items = newItems;
+
+			// Concatenate the new bytes onto the old bytes
+			memcpy( ( ( ( u8* )( fullSequence.items ) ) + oldLength ), decompressedBlock.items, decompressedBlock.length );
+		}
+
+	} while( sequenceLength > 0 );
 }

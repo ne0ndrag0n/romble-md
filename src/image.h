@@ -101,7 +101,12 @@ typedef enum {
 	/**
 	 * The file format was checked and found invalid.
 	 */
-	Image_Status_INVALID_FILE
+	Image_Status_INVALID_FILE,
+
+	/**
+	 * An assertion in a particular file data structure has failed (0 bytes after decompression, etc.)
+	 */
+	Image_Status_FORMAT_ERROR
 } Image_Status;
 
 typedef struct Image {
