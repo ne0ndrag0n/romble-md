@@ -190,6 +190,14 @@ void GifImage_loadControlParameters( GifImage* this, SizedArray* file ) {
 
 }
 
+/**
+ * Process a GIF subimage after the image descriptor. Pass off control to decompress using
+ * GifImage_decompress, and then depending on this->paletteMode,  recompile the image to
+ * a format suitable for the Sega VDP.
+ *
+ * @param		{GifImage*}		this
+ * @param		{SizedArray*}	file		The "file" of the GIF image
+ */
 void GifImage_processImage( GifImage* this, SizedArray* file ) {
 	GifImage_ImageDescriptor imageDescriptor;
 	u16 segmentWidth = CLASS( Image, this )->width;
@@ -219,7 +227,7 @@ void GifImage_processImage( GifImage* this, SizedArray* file ) {
 		return;
 	}
 
-	// Time for the beef: the LZ77 compression!
+	// Time for the beef: the LZW compression!
 	SizedArray fullSequence = { NULL, 0 };
 	u8 minCodeSize, sequenceLength;
 
@@ -260,7 +268,34 @@ void GifImage_processImage( GifImage* this, SizedArray* file ) {
 
 			// Concatenate the new bytes onto the old bytes
 			memcpy( ( ( ( u8* )( fullSequence.items ) ) + oldLength ), decompressedBlock.items, decompressedBlock.length );
+
+			// Don't leak memory!
+			Romble_secureFree( ( void* ) &( decompressedBlock.items ) );
 		}
 
 	} while( sequenceLength > 0 );
+}
+
+/**
+ * Decompresss the code sequence in a GIF image.
+ *
+ * @param	{GifImage*}		this
+ * @param	{SizedArray*}	compressedBlock		A compressed image block, to be un-LZW'd
+ * @param	{u8}			minCodeSize			The minimum code size. 2**minCodeSize
+ * 												determines the position of the clear code
+ * 												and the EOF code. This number is always
+ * 												the bits per pixel of the image.
+ *
+ * @returns	{SizedArray}	A SizedArray of u8 containing the uncompressed image
+ */
+SizedArray GifImage_decompress( GifImage* this, SizedArray* compressedBlock, u8 minCodeSize ) {
+	SizedArray image = { NULL, 0 };
+	// Dictionary is a SizedArray of SizedArrays
+	SizedArray dictionary = { NULL, 0 };
+	u16 codeIndex = 0;
+	u16 currentCodeSize = minCodeSize + 1;
+
+
+
+	return image;
 }
