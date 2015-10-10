@@ -155,11 +155,11 @@ void GifImage_buildPalette( GifImage* this, SizedArray* file, u8 packedField ) {
 		// Determine what palette to generate based on this Image class's PaletteMode.
 		// Because an PaletteMode may change, set the image's PaletteMode after each call.
 		switch( CLASS( Image, this )->paletteMode ) {
-			case Image_PaletteMode_OCTREE:
+			//case Image_PaletteMode_OCTREE:
 				// Convert a non-indexed image or image > 16 entries.
 				// Drop down to NATIVE_IMAGE if the image already has less than or equal to 16 indexed colours
-				CLASS( Image, this )->paletteMode = Image_PaletteMode_OCTREE;
-				break;
+				//CLASS( Image, this )->paletteMode = Image_PaletteMode_OCTREE;
+				//break;
 			default:
 			case Image_PaletteMode_NATIVE_IMAGE:
 				// Simply convert this image's native palette to Sega format if there are 16 or fewer palette entries.
@@ -170,11 +170,11 @@ void GifImage_buildPalette( GifImage* this, SizedArray* file, u8 packedField ) {
 				// just a test
 				//VDP_setPalette( PAL1, CLASS( Image, this )->palette );
 				break;
-			case Image_PaletteMode_NEAREST_DEFAULT:
+			//case Image_PaletteMode_NEAREST_DEFAULT:
 				// Translate each tile to match Romble's default palette, PAL0.
 				// This does nothing in this function; buildTiles will take this up.
-				CLASS( Image, this )->paletteMode = Image_PaletteMode_NEAREST_DEFAULT;
-				break;
+				//CLASS( Image, this )->paletteMode = Image_PaletteMode_NEAREST_DEFAULT;
+				//break;
 		}
 	}
 }
@@ -212,14 +212,6 @@ void GifImage_processImage( GifImage* this, SizedArray* file ) {
 	imageDescriptor.imageWidth = Utility_swapu16( imageDescriptor.imageWidth );
 	imageDescriptor.imageHeight = Utility_swapu16( imageDescriptor.imageHeight );
 
-	// If the first image has a local color table, rebuild + reset the palette and mode
-	// This will be ignored if there's not another color table
-	GifImage_buildPalette( this, file, imageDescriptor.options );
-
-	// If for some reason the image is offset by an amount, subtract the width and height by the difference
-	segmentWidth -= imageDescriptor.imageLeft;
-	segmentHeight -= imageDescriptor.imageTop;
-
 	if( ( ( imageDescriptor.options & GifImage_INTERLACE_MASK ) >> 6 ) == TRUE ) {
 		// FIXME: Version 0.0.3, we do not currently support an interlaced GIF.
 		Debug_print( "Interlaced images are not yet implemented!" );
@@ -227,12 +219,38 @@ void GifImage_processImage( GifImage* this, SizedArray* file ) {
 		return;
 	}
 
+	// If the first image has a local color table, rebuild + reset the palette and mode
+	// This will be ignored if there's not another color table
+	GifImage_buildPalette( this, file, imageDescriptor.options );
+
+	// If for some reason the image is offset by an amount, subtract the width and height by the difference
+	u8 segmentPadding = 0;
+	segmentWidth -= imageDescriptor.imageLeft;
+	segmentPadding = segmentWidth % 8;
+	if( segmentPadding != 0 ) {
+		segmentWidth += 8 - segmentPadding;
+	}
+	segmentHeight -= imageDescriptor.imageTop;
+	segmentPadding = segmentHeight % 8;
+	if( segmentPadding != 0 ) {
+		segmentHeight += 8 - segmentPadding;
+	}
+	CLASS( Image, this )->width = segmentWidth;
+	CLASS( Image, this )->height = segmentHeight;
+
+	// Create the u32s for vdpTiles
+	CLASS( Image, this )->vdpTiles->length = ( segmentWidth * segmentHeight ) / 8;
+	CLASS( Image, this )->vdpTiles->items = Romble_alloc( sizeof( u32 ) * CLASS( Image, this )->vdpTiles->length, TRUE );
+
 	// Time for the beef: the LZW compression!
 	SizedArray fullSequence = { NULL, 0 };
 	u8 minCodeSize, sequenceLength;
 
 	// Read minimum code size
 	SizedArray_takeBytes( file, &minCodeSize, 1 );
+
+	// This is where we left off
+	u32 currentPixel = 0;
 
 	do {
 		// Read in the sequence length
@@ -253,31 +271,18 @@ void GifImage_processImage( GifImage* this, SizedArray* file ) {
 			SizedArray_burnBytes( file, sequenceLength );
 
 			// Beef of the work is done in this function
-			SizedArray decompressedBlock = LZWUtils_decompress( &compressedBlock, minCodeSize );
-
-			// In the returned SizedArray, realloc the items inside the fullSequence SizedArray, and increment
-			// fullSequence's size by the amount in decompressedBlock
-
-			// Preserve oldLength; this is what we increment our pointer by to concatenate
-			u8 oldLength = fullSequence.length;
-
-			fullSequence.length += decompressedBlock.length;
-			u8* newItems = Romble_realloc( fullSequence.items, fullSequence.length, TRUE );
-			Romble_assert( newItems != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
-			fullSequence.items = newItems;
-
-			// Concatenate the new bytes onto the old bytes
-			memcpy( ( ( ( u8* )( fullSequence.items ) ) + oldLength ), decompressedBlock.items, decompressedBlock.length );
-
-			// Don't leak memory!
-			Romble_secureFree( ( void* ) &( decompressedBlock.items ) );
+			// Going back on the plan to decompress and return SizedArray - instead,
+			// dictionary is only kept memory-resident, and the image will be built
+			// on-the-fly.
+			GifImage_decompress( this, &compressedBlock, minCodeSize, &currentPixel );
 		}
 
 	} while( sequenceLength > 0 );
 }
 
 /**
- * Decompresss the code sequence in a GIF image.
+ * Decompresss the code sequence in a GIF image. This function should likewise
+ * build the VDP tiles on-the-fly.
  *
  * @param	{GifImage*}		this
  * @param	{SizedArray*}	compressedBlock		A compressed image block, to be un-LZW'd
@@ -285,17 +290,16 @@ void GifImage_processImage( GifImage* this, SizedArray* file ) {
  * 												determines the position of the clear code
  * 												and the EOF code. This number is always
  * 												the bits per pixel of the image.
- *
- * @returns	{SizedArray}	A SizedArray of u8 containing the uncompressed image
+ * @param	{u32*)			lastPixelDecoded	Byref the last pixel we operated on in the stream
+ * 												of VDP u32s.
  */
-SizedArray GifImage_decompress( GifImage* this, SizedArray* compressedBlock, u8 minCodeSize ) {
+void GifImage_decompress( GifImage* this, SizedArray* compressedBlock, u8 minCodeSize, u32* lastPixelDecoded ) {
 	SizedArray image = { NULL, 0 };
 	// Dictionary is a SizedArray of SizedArrays
 	SizedArray dictionary = { NULL, 0 };
-	u16 codeIndex = 0;
 	u16 currentCodeSize = minCodeSize + 1;
 
+	// Build dictionary as we go, examine one code at a time
+	u16 currentCode = 0;
 
-
-	return image;
 }

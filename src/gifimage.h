@@ -63,6 +63,6 @@ void GifImage_buildPalette( GifImage* this, SizedArray* file, u8 packedField );
 void GifImage_loadControlParameters( GifImage* this, SizedArray* file );
 // The magic happens here!
 void GifImage_processImage( GifImage* this, SizedArray* file );
-SizedArray GifImage_decompress( GifImage* this, SizedArray* compressedBlock, u8 minCodeSize );
+void GifImage_decompress( GifImage* this, SizedArray* compressedBlock, u8 minCodeSize, u32* lastPixelDecoded );
 
 #endif
