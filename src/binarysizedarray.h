@@ -9,7 +9,16 @@ typedef struct BinarySizedArray {
 	SizedArray super;
 
 	/**
+	 * The byte currently in use (gets shifted)
+	 *
+	 * Always initialize to *super->items, cast to u8*
+	 */
+	u8 currentByte;
+
+	/**
 	 * The number of bits used from the current byte
+	 *
+	 * Always initialize to zero
 	 */
 	u8 bitsUsed;
 } BinarySizedArray;
