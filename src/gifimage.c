@@ -243,7 +243,6 @@ void GifImage_processImage( GifImage* this, SizedArray* file ) {
 	CLASS( Image, this )->vdpTiles->items = Romble_alloc( sizeof( u32 ) * CLASS( Image, this )->vdpTiles->length, TRUE );
 
 	// Time for the beef: the LZW compression!
-	SizedArray fullSequence = { NULL, 0 };
 	u8 minCodeSize, sequenceLength;
 
 	// Read minimum code size
