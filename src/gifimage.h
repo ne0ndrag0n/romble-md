@@ -4,6 +4,7 @@
 #include <res/globals.h>
 #include <types.h>
 #include <sizedarray.h>
+#include <binarysizedarray.h>
 #include <image.h>
 
 #define GifImage_GIF87a	"GIF87a"
@@ -63,6 +64,6 @@ void GifImage_buildPalette( GifImage* this, SizedArray* file, u8 packedField );
 void GifImage_loadControlParameters( GifImage* this, SizedArray* file );
 // The magic happens here!
 void GifImage_processImage( GifImage* this, SizedArray* file );
-void GifImage_decompress( GifImage* this, SizedArray* compressedBlock, u8 minCodeSize, u32* lastPixelDecoded );
+void GifImage_decompress( GifImage* this, BinarySizedArray* compressedBlock, u8 minCodeSize, u32* lastPixelDecoded );
 
 #endif

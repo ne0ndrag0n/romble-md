@@ -9,6 +9,7 @@
 #include <utility.h>
 #include <stdio.h>
 #include <sizedarray.h>
+#include <binarysizedarray.h>
 #include <vdp_pal.h>
 #include <vdp.h>
 #include <lang.h>
@@ -262,9 +263,12 @@ void GifImage_processImage( GifImage* this, SizedArray* file ) {
 		// will be transformed depending on image mode,
 		// then copied to this->vdpTiles and deallocated.
 		if( sequenceLength > 0 ) {
-			SizedArray compressedBlock;
-			compressedBlock.items = file->items;
-			compressedBlock.length = sequenceLength;
+			// Properly set up a BinarySizedArray
+			BinarySizedArray compressedBlock;
+			compressedBlock.super.items = file->items;
+			compressedBlock.super.length = sequenceLength;
+			compressedBlock.currentByte = *( ( u8* ) file->items );
+			compressedBlock.bitsUsed = 0;
 
 			// Burn the length of the coded sequence
 			SizedArray_burnBytes( file, sequenceLength );
@@ -283,16 +287,16 @@ void GifImage_processImage( GifImage* this, SizedArray* file ) {
  * Decompresss the code sequence in a GIF image. This function should likewise
  * build the VDP tiles on-the-fly.
  *
- * @param	{GifImage*}		this
- * @param	{SizedArray*}	compressedBlock		A compressed image block, to be un-LZW'd
- * @param	{u8}			minCodeSize			The minimum code size. 2**minCodeSize
- * 												determines the position of the clear code
- * 												and the EOF code. This number is always
- * 												the bits per pixel of the image.
- * @param	{u32*)			lastPixelDecoded	Byref the last pixel we operated on in the stream
- * 												of VDP u32s.
+ * @param	{GifImage*}			this
+ * @param	{BinarySizedArray*}	compressedBlock		A compressed image block, to be un-LZW'd
+ * @param	{u8}				minCodeSize			The minimum code size. 2**minCodeSize
+ * 													determines the position of the clear code
+ * 													and the EOF code. This number is always
+ * 													the bits per pixel of the image.
+ * @param	{u32*)				lastPixelDecoded	Byref the last pixel we operated on in the stream
+ * 													of VDP u32s.
  */
-void GifImage_decompress( GifImage* this, SizedArray* compressedBlock, u8 minCodeSize, u32* lastPixelDecoded ) {
+void GifImage_decompress( GifImage* this, BinarySizedArray* compressedBlock, u8 minCodeSize, u32* lastPixelDecoded ) {
 	SizedArray image = { NULL, 0 };
 	// Dictionary is a SizedArray of SizedArrays
 	SizedArray dictionary = { NULL, 0 };
