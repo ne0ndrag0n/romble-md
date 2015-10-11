@@ -26,9 +26,9 @@ void Romble_init() {
 	// Placed directly at the beginning
 	BOX_DRAWING_INDEX = Romble_loadTiles( BoxDrawingCharacters, 3 );
 
-	joyManager = Romble_alloc( 1 * sizeof( JoyManager ), TRUE );
-	Romble_assert( joyManager != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
-	JoyManager_ctor( joyManager, 40, 28 );
+	//joyManager = Romble_alloc( 1 * sizeof( JoyManager ), TRUE );
+	//Romble_assert( joyManager != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
+	//JoyManager_ctor( joyManager, 40, 28 );
 
 	Debug_print( "Welcome to the Romble beta!" );
 	Debug_print( "Romble v0.0.3a (c) 2015 oaktree Games and Novelties. All rights reserved." );
