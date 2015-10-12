@@ -43,8 +43,8 @@ void TestView_dtor( TestView* this ) {
 void TestView_render( TestView* this ) {
 	BaseView_render( CLASS( BaseView, this ) );
 
-	//FUNCTIONS( ButtonView, BaseView, this->button1 )->setClickable( this->button1, TRUE );
-	//JoyManager_setDefaultCurrentElement( joyManager );
+	FUNCTIONS( ButtonView, BaseView, this->button1 )->setClickable( this->button1, TRUE );
+	JoyManager_setDefaultCurrentElement( joyManager );
 
 	// Let's put some image test shit here
 	SizedArray testGif = {
