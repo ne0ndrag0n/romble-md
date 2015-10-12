@@ -106,6 +106,7 @@ void BaseView_addChildView( BaseView* this, BaseView* childView ) {
 	}
 
 	// After resized, set the last elemnt in the array to childView
+	Debug_sprint( "View %d is adding child %d at position %d.", this->id, childView->id, this->numChildren - 1 );
 	childView->parent = this;
 	this->children[ this->numChildren - 1 ] = childView;
 }

@@ -17,6 +17,7 @@ u16 BOX_DRAWING_INDEX;
 static u16 UNIQUE_ID = 0;
 
 void Romble_init() {
+	MEM_init();
 	VDP_resetScreen();
 	VDP_resetSprites();
 
@@ -56,7 +57,9 @@ u16 Romble_getUniqueId() {
 }
 
 void Romble_secureFree( void** pointer ) {
-	free( *pointer );
+	Debug_sprint( "Freeing memory: pointer is %p, memory freed is %p.", pointer, *pointer );
+
+	MEM_free( *pointer );
 
 	*pointer = NULL;
 }
@@ -89,7 +92,7 @@ void* Romble_realloc( void* pointer, size_t newSize, bool clear ) {
 	// Copy contents
 	if( newPointer != NULL ) {
 		memcpy( pointer, newPointer, newSize );
-		free( pointer );
+		MEM_free( pointer );
 	}
 
 	return newPointer;
