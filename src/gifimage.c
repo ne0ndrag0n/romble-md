@@ -59,7 +59,7 @@ SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep ) {
 			vdpTiles->length = 0;
 		}
 	} else {
-		vdpTiles = Romble_alloc( sizeof( SizedArray ), TRUE );
+		vdpTiles = DEBUG_ALLOC( sizeof( SizedArray ), TRUE );
 
 		if( keep == TRUE ) {
 			CLASS( Image, this )->vdpTiles = vdpTiles;
@@ -146,10 +146,10 @@ void GifImage_buildPalette( GifImage* this, SizedArray* file, u8 packedField ) {
 		}
 
 		// Allocate room for SizedArray, memcpy bytes into the SizedArray
-		CLASS( Image, this )->nativePalette = Romble_alloc( sizeof( SizedArray ), TRUE );
+		CLASS( Image, this )->nativePalette = DEBUG_ALLOC( sizeof( SizedArray ), TRUE );
 		// Each palette entry for GIF is three bytes
 		CLASS( Image, this )->nativePalette->length = numPaletteEntries * 3;
-		CLASS( Image, this )->nativePalette->items = Romble_alloc( CLASS( Image, this )->nativePalette->length * sizeof( u8 ), TRUE );
+		CLASS( Image, this )->nativePalette->items = DEBUG_ALLOC( CLASS( Image, this )->nativePalette->length * sizeof( u8 ), TRUE );
 		Romble_assert( CLASS( Image, this )->nativePalette->items != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 		SizedArray_takeBytes( file, CLASS( Image, this )->nativePalette->items, CLASS( Image, this )->nativePalette->length );
 
@@ -241,7 +241,7 @@ void GifImage_processImage( GifImage* this, SizedArray* file ) {
 
 	// Create the u32s for vdpTiles
 	CLASS( Image, this )->vdpTiles->length = ( segmentWidth * segmentHeight ) / 8;
-	CLASS( Image, this )->vdpTiles->items = Romble_alloc( sizeof( u32 ) * CLASS( Image, this )->vdpTiles->length, TRUE );
+	CLASS( Image, this )->vdpTiles->items = DEBUG_ALLOC( sizeof( u32 ) * CLASS( Image, this )->vdpTiles->length, TRUE );
 
 	// Time for the beef: the LZW compression!
 	u8 minCodeSize, sequenceLength;

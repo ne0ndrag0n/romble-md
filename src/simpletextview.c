@@ -55,7 +55,7 @@ void SimpleTextView_render( SimpleTextView* this ) {
 void SimpleTextView_setText( SimpleTextView* this, char* text ) {
 	u8 width = strlen( text );
 
-	this->text = Romble_alloc( width * sizeof( char ) + 1, TRUE );
+	this->text = DEBUG_ALLOC( width * sizeof( char ) + 1, TRUE );
 	Romble_assert( this->text != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 	strcpy( this->text, text );
 
