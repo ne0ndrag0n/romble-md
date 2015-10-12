@@ -11,6 +11,7 @@
 #include <string.h>
 #include <romble.h>
 #include <utility.h>
+#include <memory.h>
 
 u16 BOX_DRAWING_INDEX;
 static u16 UNIQUE_ID = 0;
@@ -64,7 +65,7 @@ void* Romble_alloc( size_t size, bool clear ) {
 
 	void* pointer = NULL;
 
-	pointer = malloc( size );
+	pointer = MEM_alloc( size );
 
 	if( pointer != NULL ) {
 
@@ -73,6 +74,8 @@ void* Romble_alloc( size_t size, bool clear ) {
 		}
 
 	}
+
+	Debug_sprint( "Allocated %d bytes at %p", size, pointer );
 
 	return pointer;
 }
