@@ -27,7 +27,7 @@ int main( void ) {
 	FUNCTIONS( BaseView, BaseView, &root )->addChildView( &root, CLASS( BaseView, &test ) );
 	FUNCTIONS( BaseView, BaseView, &root )->render( &root );
 
-	JoyManager_displayCursor( joyManager, TRUE );
+	//JoyManager_displayCursor( joyManager, TRUE );
 
 	VDP_drawText( "Boot OK! "__DATE__" "__TIME__, 5, 27 );
 	while(1);
