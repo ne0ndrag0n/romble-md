@@ -267,7 +267,7 @@ void GifImage_processImage( GifImage* this, SizedArray* file ) {
 			BinarySizedArray compressedBlock;
 			compressedBlock.super.items = file->items;
 			compressedBlock.super.length = sequenceLength;
-			compressedBlock.currentByte = *( ( u8* ) file->items );
+			SizedArray_takeBytes( &( compressedBlock.super ), &( compressedBlock.currentByte ), 1 );
 			compressedBlock.bitsUsed = 0;
 
 			// Burn the length of the coded sequence
@@ -305,4 +305,5 @@ void GifImage_decompress( GifImage* this, BinarySizedArray* compressedBlock, u8 
 	// Build dictionary as we go, examine one code at a time
 	u16 currentCode = 0;
 
+	// BinarySizedArray compressedBlock should now be ready for the bit-taking
 }
