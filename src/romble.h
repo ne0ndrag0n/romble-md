@@ -6,8 +6,8 @@
 #include <joymanager.h>
 #include <stddef.h>
 
-#define	DEBUG_ALLOC( size, clear ) Romble_alloc( size, clear ); Debug_sprint( "(%s, %d) requested %d bytes", __FILE__, __LINE__, size );
-#define DEBUG_REALLOC( ptr, size, clear ) Romble_realloc( ptr, size, clear ); Debug_sprint( "(%s, %d) reallocated %d bytes", __FILE__, __LINE__, size );
+#define	DEBUG_ALLOC( size, clear ) Romble_alloc( size, clear ); Debug_sprint( "(%s, %d) requested %d bytes: clear? %d", __FILE__, __LINE__, size, clear );
+#define DEBUG_REALLOC( ptr, size, clear ) Romble_realloc( ptr, size, clear ); Debug_sprint( "(%s, %d) reallocated %d bytes: clear? %d", __FILE__, __LINE__, size, clear );
 
 extern u16 BOX_DRAWING_INDEX;
 
