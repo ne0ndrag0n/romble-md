@@ -165,7 +165,7 @@ void GifImage_buildPalette( GifImage* this, SizedArray* file, u8 packedField ) {
 			case Image_PaletteMode_NATIVE_IMAGE:
 				// Simply convert this image's native palette to Sega format if there are 16 or fewer palette entries.
 				// Drop down to NEAREST_DEFAULT if the image is non-indexed or has > 16 palette entries.
-				Romble_secureFree( ( void* )( CLASS( Image, this )->palette ) );
+				Romble_secureFree( ( void* ) &( CLASS( Image, this )->palette ) );
 				CLASS( Image, this )->palette = Image_RGBtoSega( CLASS( Image, this )->nativePalette );
 				CLASS( Image, this )->paletteMode = Image_PaletteMode_NATIVE_IMAGE;
 				// just a test

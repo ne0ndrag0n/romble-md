@@ -55,8 +55,6 @@ u16 Romble_getUniqueId() {
 }
 
 void Romble_secureFree( void** pointer ) {
-	Debug_sprint( "pointer = %p, *pointer = %p", pointer, *pointer );
-
 	// Cannot dereference a null pointer!
 	if( pointer != NULL ) {
 		free( *pointer );
