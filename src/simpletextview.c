@@ -27,6 +27,7 @@ void SimpleTextView_ctor( SimpleTextView* this, char* text, s16 x, s16 y ) {
 	BaseView_ctor( ( BaseView* ) this, x, y, 0, 1 );
 	this->super.functions = &SimpleTextView_table;
 
+	this->text = NULL;
 	FUNCTIONS( SimpleTextView, BaseView, this )->setText( this, text );
 }
 
@@ -55,6 +56,7 @@ void SimpleTextView_render( SimpleTextView* this ) {
 void SimpleTextView_setText( SimpleTextView* this, char* text ) {
 	u8 width = strlen( text );
 
+	Romble_secureFree( ( void* ) &( this->text ) );
 	this->text = DEBUG_ALLOC( width * sizeof( char ) + 1, TRUE );
 	Romble_assert( this->text != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 	strcpy( this->text, text );
