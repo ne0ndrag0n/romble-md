@@ -48,13 +48,10 @@ void JoyManager_ctor( JoyManager* this, u8 registerableX, u8 registerableY ) {
 }
 
 void JoyManager_dtor( JoyManager* this ) {
-	free( this->currentElement );
-	this->currentElement = NULL;
-
+	Romble_secureFree( ( void* ) &( this->currentElement ) );
 	// todo: clear the subelements in this->registeredElements!
 
-	free( this->registeredElements );
-	this->registeredElements = NULL;
+	Romble_secureFree( ( void* ) &( this->registeredElements ) );
 }
 
 void JoyManager_registerElement( JoyManager* this, s16 x, s16 y, s16 w, s16 h, void* instance, JoyManager_Callback callback ) {
@@ -69,8 +66,7 @@ void JoyManager_registerElement( JoyManager* this, s16 x, s16 y, s16 w, s16 h, v
 }
 
 void JoyManager_unregisterElement( JoyManager* this, s16 x, s16 y ) {
-	free( this->registeredElements[ y ][ x ] );
-	this->registeredElements[ y ][ x ] = NULL;
+	Romble_secureFree( ( void* ) &( this->registeredElements[ y ][ x ] ) );
 }
 
 void JoyManager_displayCursor( JoyManager* this, bool show ) {
@@ -139,8 +135,7 @@ void JoyManager_moveToNearest( JoyManager* this, SelectableElementList* neighbou
 
 		JoyManager_animateCursorMovement( this, nearest );
 
-		free( neighbourhood->list );
-		neighbourhood->list = NULL;
+		Romble_secureFree( ( void* ) &( neighbourhood->list ) );
 	} else {
 		// Can't move anywhere - call on sound subsystem to play a "donk" noise
 	}

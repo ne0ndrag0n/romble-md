@@ -31,7 +31,7 @@ void SimpleTextView_ctor( SimpleTextView* this, char* text, s16 x, s16 y ) {
 }
 
 void SimpleTextView_dtor( SimpleTextView* this ) {
-	free( this->text );
+	Romble_secureFree( ( void* ) &( this->text ) );
 	this->text = NULL;
 
 	BaseView_dtor( ( BaseView* ) this );

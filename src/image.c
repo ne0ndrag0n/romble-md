@@ -44,10 +44,8 @@ void Image_loadData( Image* this, SizedArray* file ) {
 	this->imageData = file;
 
 	if( this->vdpTiles != NULL ) {
-		free( this->vdpTiles->items );
+		Romble_secureFree( ( void* ) &( this->vdpTiles->items ) );
 		Romble_secureFree( ( void* ) &( this->vdpTiles ) );
-
-		this->vdpTiles = NULL;
 	}
 }
 
