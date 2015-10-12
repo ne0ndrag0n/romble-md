@@ -91,7 +91,7 @@ void BaseView_renderChildren( BaseView* this ) {
 void BaseView_addChildView( BaseView* this, BaseView* childView ) {
 	// Create the children collection if it does not exist
 	if( this->children == NULL ) {
-		this->children = Romble_alloc( sizeof( BaseView* ), FALSE );
+		this->children = Romble_alloc( sizeof( BaseView* ), TRUE );
 
 		Romble_assert( this->children != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 
