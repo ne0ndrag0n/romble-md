@@ -236,8 +236,8 @@ void GifImage_processImage( GifImage* this, SizedArray* file ) {
 	if( segmentPadding != 0 ) {
 		segmentHeight += 8 - segmentPadding;
 	}
-	CLASS( Image, this )->width = segmentWidth;
-	CLASS( Image, this )->height = segmentHeight;
+	CLASS( Image, this )->paddedWidth = segmentWidth;
+	CLASS( Image, this )->paddedHeight = segmentHeight;
 
 	// Create the u32s for vdpTiles
 	CLASS( Image, this )->vdpTiles->length = ( segmentWidth * segmentHeight ) / 8;

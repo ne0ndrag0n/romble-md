@@ -122,6 +122,9 @@ typedef struct Image {
 	u16 width;
 	u16 height;
 
+	u16 paddedWidth;
+	u16 paddedHeight;
+
 	vtable functions;
 } Image;
 
@@ -131,5 +134,6 @@ void Image_loadData( Image* this, SizedArray* file );
 SizedArray* Image_getVDPTiles( Image* this, bool keep );
 
 u16* Image_RGBtoSega( SizedArray* rgbTriplets );
+void Image_setVDPTilePixel( Image* this, u16 x, u16 y, u32 palEntry );
 
 #endif
