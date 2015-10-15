@@ -104,10 +104,3 @@ u16* Image_RGBtoSega( SizedArray* rgbTriplets ) {
 
 	return segaPalette;
 }
-
-void Image_setVDPTilePixel( Image* this, u16 x, u16 y, u32 palEntry ) {
-	// Get u32 from this->vdpTiles that falls within x and y
-	// Negate nibble of u32 that falls within x and y to zero
-	// Set that nibble using OR to palEntry
-	// I don't know how to do any of this
-}
