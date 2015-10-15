@@ -305,5 +305,28 @@ void GifImage_decompress( GifImage* this, BinarySizedArray* compressedBlock, u8 
 	// Build dictionary as we go, examine one code at a time
 	u16 currentCode = 0;
 
-	// BinarySizedArray compressedBlock should now be ready for the bit-taking
+	// Get the total number of tiles
+	u16 tiles = ( CLASS( Image, this )->paddedWidth / 8 ) * ( CLASS( Image, this )->paddedHeight / 8 );
+
+	// BinarySizedArray compressedBlock should now be ready for the bit-taking!
+
+	// This iterator should apply the GIF image to the VDP tile order. What it does is, for each tile,
+	// do each one row at a time. An iterator through a 16x16 image should look like this:
+	// 0,8,16,24
+	// 1,9,17,25
+	// .........
+	// 7,15,,23,31
+	// All while applying each pixel to eight nibbles at a time in each u32.
+	for( u8 i = 0; i != 8; i++ ) {
+		for( u8 j = 0; j != tiles; j++ ) {
+			// Take the selected row of VDP nibbles (these are stored as unsigned 32-bit integers)
+			u32 selectedRow = ( ( u32* )CLASS( Image, this )->vdpTiles->items )[ ( j * 8 ) + i ];
+
+			// Start at the left and move to the right by shifting the taken number left from 28 to 0
+			for( s8 k = 28; k >= 0; k-=4 ) {
+				//u32 lzwDecodedValue = ( take lzw value from BinarySizedArray and interpret it ) << k;
+				//selectedRow |= lzwDecodedValue;
+			}
+		}
+	}
 }
