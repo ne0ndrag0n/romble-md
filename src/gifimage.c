@@ -308,8 +308,19 @@ void GifImage_decompress( GifImage* this, BinarySizedArray* compressedBlock, u8 
 	// Get the total number of tiles
 	u16 tiles = ( CLASS( Image, this )->paddedWidth / 8 ) * ( CLASS( Image, this )->paddedHeight / 8 );
 
-	// BinarySizedArray compressedBlock should now be ready for the bit-taking!
+	// Now initialize the code table
+	// maxInitialized - 2^minCodeSize + 2, the extra two are the clear code and end of sequence code
+	u16 maxInitialized = ( 1 << minCodeSize ) + 2;
+	for( u16 i = 0; i != maxInitialized; i++ ) {
+		// Allocate the amount of new SizedArrays; this will create one more SizedArray than currently exists
+		SizedArray* items = Romble_realloc( dictionary.items, sizeof( SizedArray ) * ( i + 1 ), TRUE );
+		Romble_assert( items != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
+		dictionary.items = items;
+		dictionary.length++;
+	}
 
+
+	// BinarySizedArray compressedBlock should now be ready for the bit-taking!
 	// This iterator should apply the GIF image to the VDP tile order. What it does is, for each tile,
 	// do each one row at a time. An iterator through a 16x16 image should look like this:
 	// 0,8,16,24

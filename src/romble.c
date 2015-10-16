@@ -87,7 +87,7 @@ void* Romble_realloc( void* pointer, size_t newSize, bool clear ) {
 	newPointer = Romble_alloc( newSize, clear );
 
 	// Copy contents
-	if( newPointer != NULL ) {
+	if( pointer != NULL && newPointer != NULL ) {
 		memcpy( pointer, newPointer, newSize );
 		free( pointer );
 	}
