@@ -48,10 +48,10 @@ void JoyManager_ctor( JoyManager* this, u8 registerableX, u8 registerableY ) {
 }
 
 void JoyManager_dtor( JoyManager* this ) {
-	Romble_secureFree( ( void* ) &( this->currentElement ) );
+	Romble_secureFree_d( ( void* ) &( this->currentElement ), FILE_LINE() );
 	// todo: clear the subelements in this->registeredElements!
 
-	Romble_secureFree( ( void* ) &( this->registeredElements ) );
+	Romble_secureFree_d( ( void* ) &( this->registeredElements ), FILE_LINE() );
 }
 
 void JoyManager_registerElement( JoyManager* this, s16 x, s16 y, s16 w, s16 h, void* instance, JoyManager_Callback callback ) {
@@ -66,7 +66,7 @@ void JoyManager_registerElement( JoyManager* this, s16 x, s16 y, s16 w, s16 h, v
 }
 
 void JoyManager_unregisterElement( JoyManager* this, s16 x, s16 y ) {
-	Romble_secureFree( ( void* ) &( this->registeredElements[ y ][ x ] ) );
+	Romble_secureFree_d( ( void* ) &( this->registeredElements[ y ][ x ] ), FILE_LINE() );
 }
 
 void JoyManager_displayCursor( JoyManager* this, bool show ) {
@@ -135,7 +135,7 @@ void JoyManager_moveToNearest( JoyManager* this, SelectableElementList* neighbou
 
 		JoyManager_animateCursorMovement( this, nearest );
 
-		Romble_secureFree( ( void* ) &( neighbourhood->list ) );
+		Romble_secureFree_d( ( void* ) &( neighbourhood->list ), FILE_LINE() );
 	} else {
 		// Can't move anywhere - call on sound subsystem to play a "donk" noise
 	}
@@ -267,28 +267,28 @@ void JoyManager_handleInput( JoyManager* this, u16 joy, u16 changed, u16 state )
 			if( state & BUTTON_UP ) {
 				SelectableElementList usableElements = JoyManager_retrieveSelectableElements( this, ElementRetrieval_LESS_THAN_Y );
 				JoyManager_moveToNearest( this, &usableElements );
-				Romble_secureFree( ( void* ) &( usableElements.list ) );
+				Romble_secureFree_d( ( void* ) &( usableElements.list ), FILE_LINE() );
 				break;
 			}
 
 			if( state & BUTTON_DOWN ) {
 				SelectableElementList usableElements = JoyManager_retrieveSelectableElements( this, ElementRetrieval_GREATER_THAN_Y );
 				JoyManager_moveToNearest( this, &usableElements );
-				Romble_secureFree( ( void* ) &( usableElements.list ) );
+				Romble_secureFree_d( ( void* ) &( usableElements.list ), FILE_LINE() );
 				break;
 			}
 
 			if( state & BUTTON_LEFT ) {
 				SelectableElementList usableElements = JoyManager_retrieveSelectableElements( this, ElementRetrieval_LESS_THAN_X );
 				JoyManager_moveToNearest( this, &usableElements );
-				Romble_secureFree( ( void* ) &( usableElements.list ) );
+				Romble_secureFree_d( ( void* ) &( usableElements.list ), FILE_LINE() );
 				break;
 			}
 
 			if( state & BUTTON_RIGHT ) {
 				SelectableElementList usableElements = JoyManager_retrieveSelectableElements( this, ElementRetrieval_GREATER_THAN_X );
 				JoyManager_moveToNearest( this, &usableElements );
-				Romble_secureFree( ( void* ) &( usableElements.list ) );
+				Romble_secureFree_d( ( void* ) &( usableElements.list ), FILE_LINE() );
 				break;
 			}
 

@@ -64,6 +64,15 @@ void Romble_secureFree( void** pointer ) {
 }
 
 /**
+ * Debug wrapper for romble secure free
+ */
+void Romble_secureFree_d( void** pointer, char* fileLine ) {
+	Debug_sprint( "ROMBLEFREE: %s passed pointer-to-pointer %p, dereferenced: %p", fileLine, pointer, *pointer );
+
+	Romble_secureFree( pointer );
+}
+
+/**
  * Debug wrapper for romble alloc
  */
 void* Romble_alloc_d( size_t size, bool clear, char* fileLine ) {
@@ -110,7 +119,7 @@ void* Romble_realloc( void* pointer, size_t newSize, bool clear ) {
 
 	// Copy contents
 	if( pointer != NULL && newPointer != NULL ) {
-		Debug_sprint( "old: %p, new: %p, copying: %d", pointer, newPointer, newSize );
+		Debug_sprint( "FREE: old: %p, new: %p, copying: %d", pointer, newPointer, newSize );
 		memcpy( pointer, newPointer, newSize );
 		free( pointer );
 	}

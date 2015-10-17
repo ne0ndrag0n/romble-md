@@ -15,6 +15,7 @@ void Romble_assert( bool condition, char* failMessage );
 u16 Romble_getUniqueId();
 void Romble_secureFree( void** pointer );
 
+void Romble_secureFree_d( void** pointer, char* fileLine );
 void* Romble_alloc_d( size_t size, bool clear, char* fileLine );
 void* Romble_realloc_d( void* pointer, size_t newSize, bool clear, char* fileLine );
 

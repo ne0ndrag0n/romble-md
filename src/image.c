@@ -33,22 +33,22 @@ void Image_ctor( Image* this ) {
 
 void Image_dtor( Image* this ) {
 	if( this->imageData != NULL ) {
-		Romble_secureFree( ( void * ) &( this->imageData->items ) );
+		Romble_secureFree_d( ( void * ) &( this->imageData->items ), FILE_LINE() );
 	}
-	Romble_secureFree( ( void* ) &( this->imageData ) );
+	Romble_secureFree_d( ( void* ) &( this->imageData ), FILE_LINE() );
 
 	if( this->vdpTiles != NULL ) {
-		Romble_secureFree( ( void* ) &( this->vdpTiles->items ) );
+		Romble_secureFree_d( ( void* ) &( this->vdpTiles->items ), FILE_LINE() );
 	}
-	Romble_secureFree( ( void* ) &( this->vdpTiles ) );
+	Romble_secureFree_d( ( void* ) &( this->vdpTiles ), FILE_LINE() );
 }
 
 void Image_loadData( Image* this, SizedArray* file ) {
 	this->imageData = file;
 
 	if( this->vdpTiles != NULL ) {
-		Romble_secureFree( ( void* ) &( this->vdpTiles->items ) );
-		Romble_secureFree( ( void* ) &( this->vdpTiles ) );
+		Romble_secureFree_d( ( void* ) &( this->vdpTiles->items ), FILE_LINE() );
+		Romble_secureFree_d( ( void* ) &( this->vdpTiles ), FILE_LINE() );
 	}
 }
 

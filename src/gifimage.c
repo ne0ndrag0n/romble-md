@@ -55,7 +55,7 @@ SizedArray* GifImage_getVDPTiles( GifImage* this, bool keep ) {
 		if( keep == TRUE ) {
 			return vdpTiles;
 		} else {
-			Romble_secureFree( ( void * ) &( vdpTiles->items ) );
+			Romble_secureFree_d( ( void * ) &( vdpTiles->items ), FILE_LINE() );
 			vdpTiles->length = 0;
 		}
 	} else {
@@ -141,8 +141,8 @@ void GifImage_buildPalette( GifImage* this, SizedArray* file, u8 packedField ) {
 
 		// Store the native palette as a u8 SizedArray - first clear out existing SizedArray
 		if( CLASS( Image, this )->nativePalette != NULL ) {
-			Romble_secureFree( ( void* ) &( CLASS( Image, this )->nativePalette->items ) );
-			Romble_secureFree( ( void* ) &( CLASS( Image, this )->nativePalette ) );
+			Romble_secureFree_d( ( void* ) &( CLASS( Image, this )->nativePalette->items ), FILE_LINE() );
+			Romble_secureFree_d( ( void* ) &( CLASS( Image, this )->nativePalette ), FILE_LINE() );
 		}
 
 		// Allocate room for SizedArray, memcpy bytes into the SizedArray
@@ -165,7 +165,7 @@ void GifImage_buildPalette( GifImage* this, SizedArray* file, u8 packedField ) {
 			case Image_PaletteMode_NATIVE_IMAGE:
 				// Simply convert this image's native palette to Sega format if there are 16 or fewer palette entries.
 				// Drop down to NEAREST_DEFAULT if the image is non-indexed or has > 16 palette entries.
-				Romble_secureFree( ( void* ) &( CLASS( Image, this )->palette ) );
+				Romble_secureFree_d( ( void* ) &( CLASS( Image, this )->palette ), FILE_LINE() );
 				CLASS( Image, this )->palette = Image_RGBtoSega( CLASS( Image, this )->nativePalette );
 				CLASS( Image, this )->paletteMode = Image_PaletteMode_NATIVE_IMAGE;
 				// just a test
