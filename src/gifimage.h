@@ -66,4 +66,6 @@ void GifImage_loadControlParameters( GifImage* this, SizedArray* file );
 void GifImage_processImage( GifImage* this, SizedArray* file );
 void GifImage_decompress( GifImage* this, BinarySizedArray* compressedBlock, u8 minCodeSize, u32* lastPixelDecoded );
 
+void GifImage_buildCodeTable( SizedArray* dictionary, u8 minCodeSize );
+
 #endif

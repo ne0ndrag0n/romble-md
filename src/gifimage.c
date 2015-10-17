@@ -308,17 +308,10 @@ void GifImage_decompress( GifImage* this, BinarySizedArray* compressedBlock, u8 
 	// Get the total number of tiles
 	u16 tiles = ( CLASS( Image, this )->paddedWidth / 8 ) * ( CLASS( Image, this )->paddedHeight / 8 );
 
-	// Now initialize the code table
-	// maxInitialized - 2^minCodeSize + 2, the extra two are the clear code and end of sequence code
-	u16 maxInitialized = ( 1 << minCodeSize ) + 2;
-	for( u16 i = 0; i != maxInitialized; i++ ) {
-		// Allocate the amount of new SizedArrays; this will create one more SizedArray than currently exists
-		SizedArray* items = Romble_realloc_d( dictionary.items, sizeof( SizedArray ) * ( i + 1 ), FILE_LINE() );
-		Romble_assert( items != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
-		dictionary.items = items;
-		dictionary.length++;
-	}
+	// Now initialize the code table (do this every time we encounter the clear code)
+	GifImage_buildCodeTable( &dictionary, minCodeSize );
 
+	//( ( u16* )( ( ( SizedArray* )( dictionary.items ) )[ 5 ].items ) )[ 0 ];
 
 	// BinarySizedArray compressedBlock should now be ready for the bit-taking!
 	// This iterator should apply the GIF image to the VDP tile order. What it does is, for each tile,
@@ -337,7 +330,33 @@ void GifImage_decompress( GifImage* this, BinarySizedArray* compressedBlock, u8 
 			for( s8 k = 28; k >= 0; k-=4 ) {
 				//u32 lzwDecodedValue = ( take lzw value from BinarySizedArray and interpret it ) << k;
 				//selectedRow |= lzwDecodedValue;
+
 			}
 		}
+	}
+
+	// Deallocate dictionary items AND the items within the dictionary
+}
+
+/**
+ * Rebuild the code table to its default position.
+ */
+void GifImage_buildCodeTable( SizedArray* dictionary, u8 minCodeSize ) {
+
+	// maxInitialized - 2^minCodeSize + 2, the extra two are the clear code and end of sequence code
+	u16 maxInitialized = ( 1 << minCodeSize ) + 2;
+
+	for( u16 i = 0; i != maxInitialized; i++ ) {
+		// Allocate the amount of new SizedArrays; this will create one more SizedArray than currently exists
+		SizedArray* items = Romble_realloc_d( dictionary->items, sizeof( SizedArray ) * ( i + 1 ), FILE_LINE() );
+		Romble_assert( items != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
+		dictionary->items = items;
+		dictionary->length++;
+
+		SizedArray* next = items + i;
+		next->items = Romble_alloc( sizeof( u16 ), TRUE );
+		Romble_assert( next->items != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
+		( ( u16* )( next->items ) )[ 0 ] = i;
+		next->length = 1;
 	}
 }

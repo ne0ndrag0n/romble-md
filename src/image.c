@@ -56,6 +56,9 @@ SizedArray* Image_getVDPTiles( Image* this, bool keep ) {
 	return this->vdpTiles;
 }
 
+/**
+ * Behaviour is undefined for rgbTriplets->length greater than 16!
+ */
 u16* Image_RGBtoSega( SizedArray* rgbTriplets ) {
 	// To convert an RGB component to SEGA:
 	// 1) take component
