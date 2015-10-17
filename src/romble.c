@@ -67,7 +67,9 @@ void Romble_secureFree( void** pointer ) {
  * Debug wrapper for romble secure free
  */
 void Romble_secureFree_d( void** pointer, char* fileLine ) {
-	Debug_sprint( "ROMBLEFREE: %s passed pointer-to-pointer %p, dereferenced: %p", fileLine, pointer, *pointer );
+	#ifdef ALLOC_DEBUG_OUTPUT
+		Debug_sprint( "ROMBLEFREE: %s passed pointer-to-pointer %p, dereferenced: %p", fileLine, pointer, *pointer );
+	#endif
 
 	Romble_secureFree( pointer );
 }
@@ -78,7 +80,9 @@ void Romble_secureFree_d( void** pointer, char* fileLine ) {
 void* Romble_alloc_d( size_t size, bool clear, char* fileLine ) {
 	void* result = Romble_alloc( size, clear );
 
-	Debug_sprint( "%s allocated %d bytes at pointer %p (clear: %d)", fileLine, size, result, clear );
+	#ifdef ALLOC_DEBUG_OUTPUT
+		Debug_sprint( "%s allocated %d bytes at pointer %p (clear: %d)", fileLine, size, result, clear );
+	#endif
 
 	return result;
 }
@@ -89,7 +93,9 @@ void* Romble_alloc_d( size_t size, bool clear, char* fileLine ) {
 void* Romble_realloc_d( void* pointer, size_t newSize, char* fileLine ) {
 	void* result = Romble_realloc( pointer, newSize );
 
-	Debug_sprint( "%s reallocated %d bytes at pointer %p", fileLine, newSize, result );
+	#ifdef ALLOC_DEBUG_OUTPUT
+		Debug_sprint( "%s reallocated %d bytes at pointer %p", fileLine, newSize, result );
+	#endif
 
 	return result;
 }
