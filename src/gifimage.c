@@ -313,7 +313,7 @@ void GifImage_decompress( GifImage* this, BinarySizedArray* compressedBlock, u8 
 	u16 maxInitialized = ( 1 << minCodeSize ) + 2;
 	for( u16 i = 0; i != maxInitialized; i++ ) {
 		// Allocate the amount of new SizedArrays; this will create one more SizedArray than currently exists
-		SizedArray* items = Romble_realloc_d( dictionary.items, sizeof( SizedArray ) * ( i + 1 ), TRUE, FILE_LINE() );
+		SizedArray* items = Romble_realloc_d( dictionary.items, sizeof( SizedArray ) * ( i + 1 ), FILE_LINE() );
 		Romble_assert( items != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 		dictionary.items = items;
 		dictionary.length++;

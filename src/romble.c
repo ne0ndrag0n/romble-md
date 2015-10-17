@@ -86,10 +86,10 @@ void* Romble_alloc_d( size_t size, bool clear, char* fileLine ) {
 /**
  * Debug wrapper for romble realloc
  */
-void* Romble_realloc_d( void* pointer, size_t newSize, bool clear, char* fileLine ) {
-	void* result = Romble_realloc( pointer, newSize, clear );
+void* Romble_realloc_d( void* pointer, size_t newSize, char* fileLine ) {
+	void* result = Romble_realloc( pointer, newSize );
 
-	Debug_sprint( "%s reallocated %d bytes at pointer %p (clear: %d)", fileLine, newSize, result, clear );
+	Debug_sprint( "%s reallocated %d bytes at pointer %p", fileLine, newSize, result );
 
 	return result;
 }
@@ -111,18 +111,6 @@ void* Romble_alloc( size_t size, bool clear ) {
 	return pointer;
 }
 
-void* Romble_realloc( void* pointer, size_t newSize, bool clear ) {
-
-	void* newPointer = NULL;
-
-	newPointer = Romble_alloc( newSize, clear );
-
-	// Copy contents
-	if( pointer != NULL && newPointer != NULL ) {
-		Debug_sprint( "FREE: old: %p, new: %p, copying: %d", pointer, newPointer, newSize );
-		memcpy( pointer, newPointer, newSize );
-		free( pointer );
-	}
-
-	return newPointer;
+void* Romble_realloc( void* pointer, size_t newSize ) {
+	return realloc( pointer, newSize );
 }

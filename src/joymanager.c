@@ -245,7 +245,7 @@ SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, E
 		for( ; y != stopY; y++ ) {
 			for( xIndex = x; xIndex != stopX; xIndex++ ) {
 				if( this->registeredElements[ y ][ xIndex ] != NULL ) {
-					SelectableElement** resized = Romble_realloc_d( result.list, sizeof( SelectableElement* ) * ++result.length, TRUE, FILE_LINE() );
+					SelectableElement** resized = Romble_realloc_d( result.list, sizeof( SelectableElement* ) * ++result.length, FILE_LINE() );
 					Romble_assert( resized != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 
 					result.list = resized;
