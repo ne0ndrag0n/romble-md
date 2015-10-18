@@ -8,6 +8,7 @@ struct RedBlackTreeNode;
 
 typedef struct RedBlackTreeNode {
 	void* data;
+	u8 key;
 
 	RedBlackTreeNode* leftChild;
 	RedBlackTreeNode* rightChild;

@@ -3,6 +3,7 @@
 
 void RedBlackTreeNode_ctor( RedBlackTreeNode* this ) {
 	this->data = NULL;
+	this->key = 0;
 
 	this->leftChild = NULL;
 	this->rightChild = NULL;
