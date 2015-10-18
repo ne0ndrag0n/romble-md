@@ -322,7 +322,6 @@ void GifImage_decompress( GifImage* this, BinarySizedArray* compressedBlock, u8 
 	// 16, 24, 17, 25, ... , 23, 31
 	// j * 8 + i, where i iterates from 0 to 7 and j iterates from 0 to tiles_x
 	// outer loop can compute a difference required in the form of ( 8 * tiles_x * h )
-
 	for( u16 row = 0; row < tilesY; row++ ) {
 		for( u8 subrow = 0; subrow != 8; subrow++ ) {
 			u16 startPoint = 8 * tilesX * row;
@@ -332,7 +331,10 @@ void GifImage_decompress( GifImage* this, BinarySizedArray* compressedBlock, u8 
 
 				// Selected should give us the correct number from the array of u32's
 				// Now, output nibbles from the LZW code stream
-
+				for( s8 nibble = 28; nibble >= 0; nibble-=4 ) {
+					//u32 lzwDecodedValue = ( take lzw value from BinarySizedArray and interpret it ) << k;
+					//selectedRow |= lzwDecodedValue;
+				}
 			}
 		}
 	}
