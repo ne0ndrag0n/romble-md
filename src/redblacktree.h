@@ -14,6 +14,7 @@ typedef struct RedBlackTreeNode {
 } RedBlackTreeNode;
 
 void RedBlackTreeNode_ctor( RedBlackTreeNode* this );
+void RedBlackTreeNode_dtor( RedBlackTreeNode* this );
 void RedBlackTreeNode_insert( RedBlackTreeNode* this, void* data );
 void RedBlackTreeNode_delete( RedBlackTreeNode* this, void* data );
 
