@@ -1,6 +1,9 @@
 #ifndef RED_BLACK_TREE
 #define RED_BLACK_TREE
 
+#define	RedBlackTreeNode_RED		0x00
+#define RedBlackTreeNode_BLACK		0x01
+
 struct RedBlackTreeNode;
 
 typedef struct RedBlackTreeNode {
