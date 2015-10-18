@@ -1,0 +1,17 @@
+#ifndef RED_BLACK_TREE
+#define RED_BLACK_TREE
+
+struct RedBlackTreeNode;
+
+typedef struct RedBlackTreeNode {
+	void* data;
+
+	RedBlackTreeNode* leftChild;
+	RedBlackTreeNode* rightChild;
+} RedBlackTreeNode;
+
+void RedBlackTreeNode_ctor( RedBlackTreeNode* this );
+void RedBlackTreeNode_insert( RedBlackTreeNode* this, void* data );
+void RedBlackTreeNode_delete( RedBlackTreeNode* this, void* data );
+
+#endif
