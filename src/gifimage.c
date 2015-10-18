@@ -305,8 +305,9 @@ void GifImage_decompress( GifImage* this, BinarySizedArray* compressedBlock, u8 
 	// Build dictionary as we go, examine one code at a time
 	u16 currentCode = 0;
 
-	// Get the total number of tiles
-	u16 tiles = ( CLASS( Image, this )->paddedWidth / 8 ) * ( CLASS( Image, this )->paddedHeight / 8 );
+	// Get tile numbers in both directions
+	u16 tilesX = CLASS( Image, this )->paddedWidth / 8;
+	u16 tilesY = CLASS( Image, this )->paddedHeight / 8;
 
 	// Now initialize the code table (do this every time we encounter the clear code)
 	GifImage_buildCodeTable( &dictionary, minCodeSize );
@@ -315,7 +316,26 @@ void GifImage_decompress( GifImage* this, BinarySizedArray* compressedBlock, u8 
 
 	// BinarySizedArray compressedBlock should now be ready for the bit-taking!
 
-	// FIXME: Previous iteration pattern was incorrect
+	// Current iteration pattern for a 2x2 image:
+	// 0, 8, 1, 9, ... , 7, 15
+	// next row:
+	// 16, 24, 17, 25, ... , 23, 31
+	// j * 8 + i, where i iterates from 0 to 7 and j iterates from 0 to tiles_x
+	// outer loop can compute a difference required in the form of ( 8 * tiles_x * h )
+
+	for( u16 row = 0; row < tilesY; row++ ) {
+		for( u8 subrow = 0; subrow != 8; subrow++ ) {
+			u16 startPoint = 8 * tilesX * row;
+
+			for( u16 tile = 0; tile < tilesX; tile++ ) {
+				u32 selected = ( ( u32* )CLASS( Image, this )->vdpTiles->items )[ ( ( tile * 8 ) + subrow ) + startPoint ];
+
+				// Selected should give us the correct number from the array of u32's
+				// Now, output nibbles from the LZW code stream
+
+			}
+		}
+	}
 
 	// Deallocate dictionary items AND the items within the dictionary
 }
