@@ -360,6 +360,8 @@ void GifImage_decompress( GifImage* this, BinarySizedArray* compressedBlock, u8 
 					if( takenCode >= ( ( 1 << currentCodeSize ) - 1 ) ) {
 						currentCodeSize++;
 					}
+
+					previousCode = takenCode;
 				}
 			}
 		}
