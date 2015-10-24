@@ -312,6 +312,18 @@ void GifImage_decompress( GifImage* this, BinarySizedArray* compressedBlock, u8 
 	// Now initialize the code table (do this every time we encounter the clear code)
 	GifImage_buildCodeTable( &dictionary, minCodeSize );
 
+	// Burn the first code (it's going to be the reset code, and we already built the code table)
+	u16 previousCode = BinarySizedArray_takeBits( compressedBlock, currentCodeSize );
+	if( previousCode >= ( ( 1 << currentCodeSize ) - 1 ) ) {
+		currentCodeSize++;
+	}
+
+	// Take a previous code, increase the size of the current code size if needed
+	previousCode = BinarySizedArray_takeBits( compressedBlock, currentCodeSize );
+	if( previousCode >= ( ( 1 << currentCodeSize ) - 1 ) ) {
+		currentCodeSize++;
+	}
+
 	//( ( u16* )( ( ( SizedArray* )( dictionary.items ) )[ 5 ].items ) )[ 0 ];
 
 	// BinarySizedArray compressedBlock should now be ready for the bit-taking!
@@ -322,18 +334,32 @@ void GifImage_decompress( GifImage* this, BinarySizedArray* compressedBlock, u8 
 	// 16, 24, 17, 25, ... , 23, 31
 	// j * 8 + i, where i iterates from 0 to 7 and j iterates from 0 to tiles_x
 	// outer loop can compute a difference required in the form of ( 8 * tiles_x * h )
-	for( u16 row = 0; row < tilesY; row++ ) {
+	u32 pixelIndex = 0;
+	for( u16 tileX = 0; tileX < tilesY; tileX++ ) {
 		for( u8 subrow = 0; subrow != 8; subrow++ ) {
-			u16 startPoint = 8 * tilesX * row;
+			u16 startPoint = 8 * tilesX * tileX;
 
-			for( u16 tile = 0; tile < tilesX; tile++ ) {
-				u32 selected = ( ( u32* )CLASS( Image, this )->vdpTiles->items )[ ( ( tile * 8 ) + subrow ) + startPoint ];
+			for( u16 tileY = 0; tileY < tilesX; tileY++ ) {
+				u32 selected = ( ( u32* )CLASS( Image, this )->vdpTiles->items )[ ( ( tileY * 8 ) + subrow ) + startPoint ];
 
 				// Selected should give us the correct number from the array of u32's
 				// Now, output nibbles from the LZW code stream
 				for( s8 nibble = 28; nibble >= 0; nibble-=4 ) {
 					//u32 lzwDecodedValue = ( take lzw value from BinarySizedArray and interpret it ) << k;
 					//selectedRow |= lzwDecodedValue;
+
+					u16 takenCode = BinarySizedArray_takeBits( compressedBlock, currentCodeSize );
+					// Determine if code is in the dictionary by verifying if the current code falls within 0 to length-1
+					if( takenCode < dictionary.length - 1 ) {
+						// Code is in the table
+					} else {
+						// Code is not in the table
+					}
+
+					// Increase the code size if we get the signal
+					if( takenCode >= ( ( 1 << currentCodeSize ) - 1 ) ) {
+						currentCodeSize++;
+					}
 				}
 			}
 		}
