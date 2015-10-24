@@ -296,6 +296,8 @@ void GifImage_processImage( GifImage* this, SizedArray* file ) {
  * @param	{u32*)				lastPixelDecoded	Byref the last pixel we operated on in the stream
  * 													of VDP u32s.
  */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
 void GifImage_decompress( GifImage* this, BinarySizedArray* compressedBlock, u8 minCodeSize, u32* lastPixelDecoded ) {
 	SizedArray image = { NULL, 0 };
 	// Dictionary is a SizedArray of SizedArrays
@@ -369,6 +371,7 @@ void GifImage_decompress( GifImage* this, BinarySizedArray* compressedBlock, u8 
 
 	// Deallocate dictionary items AND the items within the dictionary
 }
+#pragma GCC diagnostic pop
 
 /**
  * Rebuild the code table to its default position.
