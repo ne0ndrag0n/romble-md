@@ -8,20 +8,27 @@
  */
 
 #include <types.h>
+#include <res/globals.h>
 
 #ifndef		BIT_TRIE
 #define		BIT_TRIE
 
 struct BitwiseTrieNode;
 
-typedef struct BitwiseTrieNode {
+typedef union BitwiseTrieNodeChild {
 	void* data;
+	struct BitwiseTrieNode* node;
+} BitwiseTrieNodeChild;
 
-	struct BitwiseTrieNode* zero;
-	struct BitwiseTrieNode* one;
+typedef struct BitwiseTrieNode {
+	/**
+	 * Left holds 0, right holds 1
+	 */
+	BitwiseTrieNodeChild leftChild;
+	BitwiseTrieNodeChild rightChild;
 } BitwiseTrieNode;
 
-void BitwiseTrieNode_ctor( BitwiseTrieNode* this );
+void BitwiseTrieNode_ctor( BitwiseTrieNode* this, bool isLeafNode );
 void BitwiseTrieNode_dtor( BitwiseTrieNode* this );
 
 void BitwiseTrieNode_insert( BitwiseTrieNode* this, u8 key, void* value );

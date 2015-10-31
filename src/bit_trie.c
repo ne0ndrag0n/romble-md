@@ -8,12 +8,16 @@
 #include <bit_trie.h>
 #include <types.h>
 #include <stddef.h>
+#include <res/globals.h>
 
-void BitwiseTrieNode_ctor( BitwiseTrieNode* this ) {
-	this->data = NULL;
-
-	this->zero = NULL;
-	this->one = NULL;
+void BitwiseTrieNode_ctor( BitwiseTrieNode* this, bool isLeafNode ) {
+	if( isLeafNode == TRUE ) {
+		this->leftChild.data = NULL;
+		this->rightChild.data = NULL;
+	} else {
+		this->leftChild.node = NULL;
+		this->rightChild.node = NULL;
+	}
 }
 
 void BitwiseTrieNode_dtor( BitwiseTrieNode* this ) {
