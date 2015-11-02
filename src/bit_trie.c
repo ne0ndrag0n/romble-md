@@ -29,9 +29,9 @@ void BitwiseTrieNode_insert( BitwiseTrieNode* this, u8 key, void* value ) {
 
 	for( size_t i = 0; i != 8; i++ ) {
 		if( ( ( key >> i ) & 0x01 ) == 1 ) {
-
+			// Use right child
 		} else {
-
+			// Use left child
 		}
 	}
 }
