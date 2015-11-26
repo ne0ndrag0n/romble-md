@@ -22,20 +22,13 @@ void BitwiseTrieNode_dtor( BitwiseTrieNode* this ) {
 
 void BitwiseTrieNode_insert( BitwiseTrieNode* this, u8 key, void* value ) {
 	BitwiseTrieNode* current = this;
-	
+
 	size_t i;
 	for( i = 0; i != 3; i++ ) {
 		u8 index = ( key >> ( i * 2 ) ) & 0x03;
-		
-		if( current->children[ index ] == NULL ) {
-			// Need to create a new BitwiseTrieNode
-			current->children[ index ] = Romble_alloc_d( sizeof( BitwiseTrieNode ), TRUE, FILE_LINE() );
-			// Now initialize the four items inside
-			BitwiseTrieNode_ctor( current->children[ index ] );
-		}
-		
-		current = current->children[ index ];
+
+
 	}
-	
+
 	// Current should now be the last one in the chain
 }
