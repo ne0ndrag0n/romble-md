@@ -15,10 +15,12 @@
 
 typedef union BitwiseTrieNode {
 	void* data;
-	union BitwiseTrieNode* children;
+	union BitwiseTrieNode** children;
 } BitwiseTrieNode;
 
 void BitwiseTrieNode_ctor( BitwiseTrieNode* this );
 void BitwiseTrieNode_dtor( BitwiseTrieNode* this );
+
+void BitwiseTrieNode_insert( BitwiseTrieNode* this, u8 key, void* value );
 
 #endif
