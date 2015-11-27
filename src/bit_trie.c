@@ -8,6 +8,7 @@
 #include <bit_trie.h>
 #include <types.h>
 #include <stddef.h>
+#include <stdlib.h>
 #include <res/globals.h>
 #include <romble.h>
 
@@ -77,4 +78,53 @@ void* BitwiseTrieNode_get( BitwiseTrieNode* this, u8 key ) {
 	}
 
 	return current->data;
+}
+
+/**
+ * Proxies to recursive key helper call
+ */
+void BitwiseTrieNode_delete( BitwiseTrieNode* this, u8 key ) {
+	BitwiseTrieNode_deleteHelper( this, NULL, key, 0 );
+}
+
+void BitwiseTrieNode_deleteHelper( BitwiseTrieNode* current, BitwiseTrieNode* parent, u8 key, u8 step ) {
+	BitwiseTrieNode* nextChild;
+	u8 index = ( key >> ( step * 2 ) ) & 0x03;
+
+	if( step == 3 ) {
+		// We have reached the node nearest to the leaf (next step is the leaf)
+		// Deallocate the RAM that this->children[ index ] points to, then NULL the pointer.
+		nextChild = current->children[ index ];
+		if( nextChild != NULL ) {
+			free( current->children[ index ] );
+			current->children[ index ] = NULL;
+		}
+	} else {
+		nextChild = current->children[ index ];
+		if( nextChild != NULL ) {
+
+			// Recursively call the deleteHelper
+			BitwiseTrieNode_deleteHelper( nextChild, current, key, step++ );
+
+			// If all the current child nodes are gone (zero)
+			// The parent needs the reference to this zeroed out, and this node needs to be freed
+			if( parent != NULL ) {
+				size_t i;
+				bool allNull = TRUE;
+				for( i = 0; i != 4; i++ ) {
+					if( current->children[ i ] != NULL ) {
+						allNull = FALSE;
+						break;
+					}
+				}
+
+				if( allNull == TRUE ) {
+					// This node needs to be freed
+					free( current );
+					parent->children[ ( key >> ( ( step - 1 ) * 2 ) ) & 0x03 ] = NULL;
+				}
+			}
+		}
+	}
+
 }

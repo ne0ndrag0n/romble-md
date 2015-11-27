@@ -23,4 +23,7 @@ void BitwiseTrieNode_dtor( BitwiseTrieNode* this );
 
 void BitwiseTrieNode_insert( BitwiseTrieNode* this, u8 key, void* value );
 void* BitwiseTrieNode_get( BitwiseTrieNode* this, u8 key );
+
+void BitwiseTrieNode_delete( BitwiseTrieNode* this, u8 key );
+void BitwiseTrieNode_deleteHelper( BitwiseTrieNode* current, BitwiseTrieNode* parent, u8 key, u8 step );
 #endif
