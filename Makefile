@@ -127,7 +127,7 @@ out.iso: out.elf_scd
 	$(BINTOS) $<
 
 %.o: %.c
-	$(CC) $(CCFLAGS) $(INCS) -c $< -o $@
+	$(CC) $(USERFLAGS) $(CCFLAGS) $(INCS) -c $< -o $@
 
 %.o: %.s
 	$(AS) $(ASFLAGS) $< -o $@

@@ -14,7 +14,19 @@
 #include <res/globals.h>
 #include <sram.h>
 
+#ifdef UNIT_TEST_MODE
+	#include <test/specrunner.h>
+#endif
+
 int main( void ) {
+
+	#ifdef UNIT_TEST_MODE
+		VDP_drawText( "Romble is compiled in Unit Test mode", 0, 0 );
+		VDP_drawText( "Executing test cases...", 0, 1 );
+		SpecRunner_test();
+		VDP_drawText( "Done. Press RESET to test again.", 0, 3 );
+		while(1);
+	#endif
 
 	Romble_init();
 
