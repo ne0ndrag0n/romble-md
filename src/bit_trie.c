@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <res/globals.h>
 #include <romble.h>
+#include <utility.h>
 
 void BitwiseTrieNode_ctor( BitwiseTrieNode* this, bool leaf ) {
 	if( leaf == TRUE ) {
@@ -94,6 +95,8 @@ void BitwiseTrieNode_deleteHelper( BitwiseTrieNode* current, BitwiseTrieNode* pa
 		// We have reached the node nearest to the leaf (next step is the leaf)
 		// Deallocate the RAM that this->children[ index ] points to, then NULL the pointer.
 		if( current->children[ index ] != NULL ) {
+			// The data pointed to in current->children[ index ]->data will not be freed here!
+			// You must first free it by using BitwiseTrieNode_get on the key!
 			free( current->children[ index ] );
 			current->children[ index ] = NULL;
 		}
@@ -103,7 +106,7 @@ void BitwiseTrieNode_deleteHelper( BitwiseTrieNode* current, BitwiseTrieNode* pa
 		if( nextChild != NULL ) {
 
 			// Recursively call the deleteHelper
-			BitwiseTrieNode_deleteHelper( nextChild, current, key, step++ );
+			BitwiseTrieNode_deleteHelper( nextChild, current, key, ++step );
 		}
 	}
 

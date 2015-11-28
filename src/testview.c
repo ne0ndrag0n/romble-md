@@ -13,6 +13,7 @@
 #include <buttonview.h>
 #include <sizedarray.h>
 #include <bit_trie.h>
+#include <utility.h>
 
 TestView_vtable TestView_table = {
 	TestView_dtor,
@@ -54,6 +55,9 @@ void TestView_render( TestView* this ) {
 	BitwiseTrieNode_insert( testTrie, 128, test2 );
 	Debug_print( ( char* ) BitwiseTrieNode_get( testTrie, 32 ) );
 	Debug_print( ( char* ) BitwiseTrieNode_get( testTrie, 128 ) );
+
+	Debug_sprint( "Key 32 is %p.", BitwiseTrieNode_get( testTrie, 32 ) );
+	Debug_sprint( "Key 128 is %p.", BitwiseTrieNode_get( testTrie, 128 ) );
 }
 
 void TestView_setupChildren( TestView* this ) {
