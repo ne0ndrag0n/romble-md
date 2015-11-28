@@ -45,19 +45,6 @@ void TestView_render( TestView* this ) {
 
 	FUNCTIONS( ButtonView, BaseView, this->button1 )->setClickable( this->button1, TRUE );
 	JoyManager_setDefaultCurrentElement( joyManager );
-
-	// This is only a test
-	BitwiseTrieNode* testTrie = Romble_alloc_d( sizeof( BitwiseTrieNode ), TRUE, FILE_LINE() );
-	BitwiseTrieNode_ctor( testTrie, FALSE );
-	char* test = "Test case 1";
-	char* test2 = "Test case 2";
-	BitwiseTrieNode_insert( testTrie, 32, test );
-	BitwiseTrieNode_insert( testTrie, 128, test2 );
-	Debug_print( ( char* ) BitwiseTrieNode_get( testTrie, 32 ) );
-	Debug_print( ( char* ) BitwiseTrieNode_get( testTrie, 128 ) );
-
-	Debug_sprint( "Key 32 is %p.", BitwiseTrieNode_get( testTrie, 32 ) );
-	Debug_sprint( "Key 128 is %p.", BitwiseTrieNode_get( testTrie, 128 ) );
 }
 
 void TestView_setupChildren( TestView* this ) {
