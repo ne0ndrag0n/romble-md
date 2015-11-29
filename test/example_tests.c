@@ -25,10 +25,5 @@ TestFramework_TestResult ExampleTests_twoPlusTwo() {
 }
 
 TestFramework_TestResult ExampleTests_alwaysFails() {
-	TestFramework_EXPECT( TRUE == FALSE );
-
-	return TestFramework_TestResult_TEST_PASS;
-
-onFail:
 	return TestFramework_TestResult_TEST_FAIL;
 }

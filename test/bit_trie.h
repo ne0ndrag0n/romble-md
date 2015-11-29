@@ -8,5 +8,7 @@ extern const TestFramework_TestCaseDefinition BitTrieTests[];
 TestFramework_TestResult BitTrieTests_verifyBitTrieCreated();
 TestFramework_TestResult BitTrieTests_verifyLeafCreated();
 TestFramework_TestResult BitTrieTests_insertZeroCorrectly();
+TestFramework_TestResult BitTrieTests_insert255Correctly();
+TestFramework_TestResult BitTrieTests_insert27Correctly();
 
 #endif

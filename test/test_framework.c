@@ -1,7 +1,9 @@
 #include <test/test_framework.h>
 #include <types.h>
 #include <string.h>
+#include <stdio.h>
 #include <kdebug.h>
+#include <stdarg.h>
 
 const char TestFramework_ANSI_YELLOW[] = { 0x1B, '[', '3', '3', 'm', 0 };
 const char TestFramework_ANSI_GREEN[] = { 0x1B, '[', '3', '2', 'm', 0 };
@@ -32,6 +34,17 @@ void TestFramework_execute( const char* descriptionText, u8 length, const TestFr
  */
 void TestFramework_print( const char* text ) {
 	KDebug_Alert( text );
+}
+
+void TestFramework_sprint( const char* format, ... ) {
+	va_list args;
+	va_start( args, format );
+
+	char string[ 100 ];
+	vsprintf( string, format, args );
+	TestFramework_print( string );
+
+	va_end( args );
 }
 
 void TestFramework_report( const char* text, TestFramework_TestResult pass ) {

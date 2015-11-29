@@ -7,7 +7,7 @@
 #define		TestFramework_SEPARATOR		" - "
 #define		TestFramework_INDENTATION	"   "
 
-#define		TestFramework_EXPECT( x ) if( ( x ) != TRUE ) { goto onFail; }
+#define		TestFramework_EXPECT( condition, expectation ) if( !( condition ) ) { TestFramework_sprint( "   Expected: %s", expectation ); testResult = TestFramework_TestResult_TEST_FAIL; goto finally; }
 
 #include <res/globals.h>
 #include <types.h>
@@ -33,5 +33,6 @@ void TestFramework_execute( const char* descriptionText, u8 length, const TestFr
 
 void TestFramework_report( const char* text, TestFramework_TestResult pass );
 void TestFramework_print( const char* text );
+void TestFramework_sprint( const char* format, ... );
 
 #endif
