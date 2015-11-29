@@ -15,7 +15,7 @@ void SpecRunner_test() {
 	// TestFramework_execute( <test case group name/description>, <number of test cases>, <test case array> )
 	// TODO: Is there a way to get rid of the second argument? it's annoying
 	TestFramework_execute( "(example test cases)", 2, ExampleTests );
-	TestFramework_execute( "BitwiseTrieNode", 4, BitTrieTests );
+	TestFramework_execute( "BitwiseTrieNode", 5, BitTrieTests );
 
 	u32 ticksElapsed = getTime( FALSE ) - tickStart;
 
