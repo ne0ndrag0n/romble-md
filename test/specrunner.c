@@ -1,5 +1,6 @@
 #include <test/specrunner.h>
 #include <test/example_tests.h>
+#include <test/bit_trie.h>
 #include <timer.h>
 #include <stdio.h>
 
@@ -13,7 +14,8 @@ void SpecRunner_test() {
 	// Format:
 	// TestFramework_execute( <test case group name/description>, <number of test cases>, <test case array> )
 	// TODO: Is there a way to get rid of the second argument? it's annoying
-	TestFramework_execute( "Addition (example test cases)", 2, ExampleTests );
+	TestFramework_execute( "(example test cases)", 2, ExampleTests );
+	TestFramework_execute( "BitwiseTrieNode", 3, BitTrieTests );
 
 	u32 ticksElapsed = getTime( FALSE ) - tickStart;
 

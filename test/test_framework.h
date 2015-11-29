@@ -7,6 +7,8 @@
 #define		TestFramework_SEPARATOR		" - "
 #define		TestFramework_INDENTATION	"   "
 
+#define		TestFramework_EXPECT( x ) if( ( x ) != TRUE ) { goto onFail; }
+
 #include <res/globals.h>
 #include <types.h>
 
