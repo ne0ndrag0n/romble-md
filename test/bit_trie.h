@@ -5,6 +5,7 @@
 
 extern const TestFramework_TestCaseDefinition BitTrieTests[];
 
+// Known problems with memory leaks in the free portions (node->children arrays not being freed)
 TestFramework_TestResult BitTrieTests_verifyBitTrieCreated();
 TestFramework_TestResult BitTrieTests_verifyLeafCreated();
 TestFramework_TestResult BitTrieTests_insertZeroCorrectly();
