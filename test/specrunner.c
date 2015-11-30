@@ -10,7 +10,7 @@
 // TODO: Is there a way to get rid of the second argument? it's annoying
 void SpecRunner_caseList() {
 	TestFramework_execute( "(example test cases)", 2, ExampleTests );
-	TestFramework_execute( "BitwiseTrieNode", 5, BitTrieTests );
+	TestFramework_execute( "BitwiseTrieNode", 6, BitTrieTests );
 }
 
 

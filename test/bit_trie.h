@@ -11,5 +11,6 @@ TestFramework_TestResult BitTrieTests_verifyLeafCreated();
 TestFramework_TestResult BitTrieTests_insertZeroCorrectly();
 TestFramework_TestResult BitTrieTests_insert255Correctly();
 TestFramework_TestResult BitTrieTests_insert27Correctly();
+TestFramework_TestResult BitTrieTests_insertTwoIntegersCorrectly();
 
 #endif
