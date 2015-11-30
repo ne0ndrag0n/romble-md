@@ -201,7 +201,7 @@ TestFramework_TestResult BitTrieTests_insertTwoIntegersCorrectly() {
 	BitwiseTrieNode* test;
 	
 	test = calloc( 1, sizeof( BitwiseTrieNode ) );
-	BitwiseTrieNode_ctor( test, TRUE );
+	BitwiseTrieNode_ctor( test, FALSE );
 	
 	char* test184 = "String for 184";
 	char* test216 = "String for 216";
