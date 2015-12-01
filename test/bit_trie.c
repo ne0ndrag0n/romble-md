@@ -33,6 +33,14 @@ const TestFramework_TestCaseDefinition BitTrieTests[] = {
 	{
 		"Should be able to delete only one item",
 		BitTrieTests_deleteOne
+	},
+	{
+		"Should be able to delete from the trie with existing numbers preserved",
+		BitTrieTests_deleteWithMultiple
+	},
+	{
+		"Should be able to \"delete\" a null item without anything bad happening",
+		BitTrieTests_deleteNull
 	}
 };
 
@@ -203,46 +211,46 @@ finally:
 TestFramework_TestResult BitTrieTests_insertTwoIntegersCorrectly() {
 	TestFramework_TestResult testResult;
 	BitwiseTrieNode* test;
-	
+
 	test = calloc( 1, sizeof( BitwiseTrieNode ) );
 	BitwiseTrieNode_ctor( test, FALSE );
-	
+
 	char* test184 = "String for 184";
 	char* test216 = "String for 216";
-	
+
 	BitwiseTrieNode_insert( test, 184, test184 );
 	BitwiseTrieNode_insert( test, 216, test216 );
-	
+
 	TestFramework_EXPECT( test->children[ 0 ] != NULL, "lv 1 first child to not be null" );
 	TestFramework_EXPECT( test->children[ 1 ] == NULL, "lv 1 second child to be null" );
 	TestFramework_EXPECT( test->children[ 2 ] == NULL, "lv 1 third child to be null" );
 	TestFramework_EXPECT( test->children[ 3 ] == NULL, "lv 1 fourth child to be null" );
-	
+
 	TestFramework_EXPECT( test->children[ 0 ]->children[ 0 ] == NULL, "lv 2 first child to be null" );
 	TestFramework_EXPECT( test->children[ 0 ]->children[ 1 ] == NULL, "lv 2 second child to be null" );
 	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ] != NULL, "lv 2 third child to not be null" );
 	TestFramework_EXPECT( test->children[ 0 ]->children[ 3 ] == NULL, "lv 2 fourth child to be null" );
-	
+
 	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 0 ] == NULL, "lv 3 first child to be null" );
 	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 1 ] != NULL, "lv 3 second child to not be null" );
 	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 2 ] == NULL, "lv 3 third child to be null" );
 	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 3 ] != NULL, "lv 3 fourth child to not be null" );
-	
+
 	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 1 ]->children[ 0 ] == NULL, "lv 4 216 first child to be null" );
 	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 1 ]->children[ 1 ] == NULL, "lv 4 216 second child to be null" );
 	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 1 ]->children[ 2 ] == NULL, "lv 4 216 third child to be null" );
 	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 1 ]->children[ 3 ] != NULL, "lv 4 216 fourth child to not be null" );
-	
+
 	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 3 ]->children[ 0 ] == NULL, "lv 4 184 first child to be null" );
 	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 3 ]->children[ 1 ] == NULL, "lv 4 184 second child to be null" );
 	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 3 ]->children[ 2 ] != NULL, "lv 4 184 third child to not be null" );
 	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 3 ]->children[ 3 ] == NULL, "lv 4 184 fourth child to be null" );
-	
+
 	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 1 ]->children[ 3 ]->data == test216, "data address to match original address of 216" );
 	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 3 ]->children[ 2 ]->data == test184, "data address to match original address of 184" );
-	
+
 	testResult = TestFramework_TestResult_TEST_PASS;
-	
+
 finally:
 	if( testResult == TestFramework_TestResult_TEST_PASS ) {
 		free( test->children[ 0 ]->children[ 2 ]->children[ 3 ]->children[ 2 ] );
@@ -250,13 +258,13 @@ finally:
 
 		free( test->children[ 0 ]->children[ 2 ]->children[ 3 ] );
 		free( test->children[ 0 ]->children[ 2 ]->children[ 1 ] );
-		
+
 		free( test->children[ 0 ]->children[ 2 ] );
-		
+
 		free( test->children[ 0 ] );
-		
+
 		free( test );
-		
+
 	}
 	return testResult;
 }
@@ -264,29 +272,122 @@ finally:
 TestFramework_TestResult BitTrieTests_deleteOne() {
 	TestFramework_TestResult testResult;
 	BitwiseTrieNode* test;
-	
+
 	test = calloc( 1, sizeof( BitwiseTrieNode ) );
 	BitwiseTrieNode_ctor( test, FALSE );
-	
+
 	char* test184 = "String for 184";
 	BitwiseTrieNode_insert( test, 184, test184 );
-	
+
 	// Actual delete
 	BitwiseTrieNode_delete( test, 184 );
-	
+
 	TestFramework_EXPECT( test->children[ 0 ] == NULL, "first child to be null" );
 	TestFramework_EXPECT( test->children[ 1 ] == NULL, "second child to be null" );
 	TestFramework_EXPECT( test->children[ 2 ] == NULL, "third child to be null" );
-	TestFramework_EXPECT( test->children[ 3 ] == NULL, "fourth child to be null" );	
-	
+	TestFramework_EXPECT( test->children[ 3 ] == NULL, "fourth child to be null" );
+
 	testResult = TestFramework_TestResult_TEST_PASS;
-	
+
 finally:
 	if( testResult == TestFramework_TestResult_TEST_PASS ) {
-		free( test->children[ 3 ]->children[ 2 ]->children[ 1 ]->children[ 0 ] );
-		free( test->children[ 3 ]->children[ 2 ]->children[ 1 ] );
-		free( test->children[ 3 ]->children[ 2 ] );
-		free( test->children[ 3 ] );
+		free( test );
+	}
+	return testResult;
+}
+
+TestFramework_TestResult BitTrieTests_deleteWithMultiple() {
+	TestFramework_TestResult testResult;
+	BitwiseTrieNode* test;
+
+	test = calloc( 1, sizeof( BitwiseTrieNode ) );
+	BitwiseTrieNode_ctor( test, FALSE );
+
+	char* test184 = "String for 184";
+	char* test216 = "String for 216";
+	BitwiseTrieNode_insert( test, 184, test184 );
+	BitwiseTrieNode_insert( test, 216, test216 );
+
+	// Actual delete
+	BitwiseTrieNode_delete( test, 184 );
+
+	TestFramework_EXPECT( test->children[ 0 ] != NULL, "lv 1 first child to not be null" );
+	TestFramework_EXPECT( test->children[ 1 ] == NULL, "lv 1 second child to be null" );
+	TestFramework_EXPECT( test->children[ 2 ] == NULL, "lv 1 third child to be null" );
+	TestFramework_EXPECT( test->children[ 3 ] == NULL, "lv 1 fourth child to be null" );
+
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 0 ] == NULL, "lv 2 first child to be null" );
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 1 ] == NULL, "lv 2 second child to be null" );
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ] != NULL, "lv 2 third child to not be null" );
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 3 ] == NULL, "lv 2 fourth child to be null" );
+
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 0 ] == NULL, "lv 3 first child to be null" );
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 1 ] != NULL, "lv 3 second child to not be null" );
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 2 ] == NULL, "lv 3 third child to be null" );
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 3 ] == NULL, "lv 3 fourth child to be null" );
+
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 1 ]->children[ 0 ] == NULL, "lv 4 first child to be null" );
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 1 ]->children[ 1 ] == NULL, "lv 4 second child to be null" );
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 1 ]->children[ 2 ] == NULL, "lv 4 third child to be null" );
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 1 ]->children[ 3 ] != NULL, "lv 4 fourth child to not be null" );
+
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 1 ]->children[ 3 ]->data == test216, "data address to match original address of 216" );
+
+	testResult = TestFramework_TestResult_TEST_PASS;
+
+finally:
+	if( testResult == TestFramework_TestResult_TEST_PASS ) {
+		free( test->children[ 0 ]->children[ 2 ]->children[ 1 ]->children[ 3 ] );
+		free( test->children[ 0 ]->children[ 2 ]->children[ 1 ] );
+		free( test->children[ 0 ]->children[ 2 ] );
+		free( test->children[ 0 ] );
+		free( test );
+	}
+	return testResult;
+}
+
+TestFramework_TestResult BitTrieTests_deleteNull() {
+	TestFramework_TestResult testResult;
+	BitwiseTrieNode* test;
+
+	test = calloc( 1, sizeof( BitwiseTrieNode ) );
+	BitwiseTrieNode_ctor( test, FALSE );
+
+	char* test216 = "abbababab";
+	BitwiseTrieNode_insert( test, 216, test216 );
+
+	BitwiseTrieNode_delete( test, 184 );
+
+	TestFramework_EXPECT( test->children[ 0 ] != NULL, "lv 1 first child to not be null" );
+	TestFramework_EXPECT( test->children[ 1 ] == NULL, "lv 1 second child to be null" );
+	TestFramework_EXPECT( test->children[ 2 ] == NULL, "lv 1 third child to be null" );
+	TestFramework_EXPECT( test->children[ 3 ] == NULL, "lv 1 fourth child to be null" );
+
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 0 ] == NULL, "lv 2 first child to be null" );
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 1 ] == NULL, "lv 2 second child to be null" );
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ] != NULL, "lv 2 third child to not be null" );
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 3 ] == NULL, "lv 2 fourth child to be null" );
+
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 0 ] == NULL, "lv 3 first child to be null" );
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 1 ] != NULL, "lv 3 second child to not be null" );
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 2 ] == NULL, "lv 3 third child to be null" );
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 3 ] == NULL, "lv 3 fourth child to be null" );
+
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 1 ]->children[ 0 ] == NULL, "lv 4 first child to be null" );
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 1 ]->children[ 1 ] == NULL, "lv 4 second child to be null" );
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 1 ]->children[ 2 ] == NULL, "lv 4 third child to be null" );
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 1 ]->children[ 3 ] != NULL, "lv 4 fourth child to not be null" );
+
+	TestFramework_EXPECT( test->children[ 0 ]->children[ 2 ]->children[ 1 ]->children[ 3 ]->data == test216, "data address to match original address of 216" );
+
+	testResult = TestFramework_TestResult_TEST_PASS;
+
+finally:
+	if( testResult == TestFramework_TestResult_TEST_PASS ) {
+		free( test->children[ 0 ]->children[ 2 ]->children[ 1 ]->children[ 3 ] );
+		free( test->children[ 0 ]->children[ 2 ]->children[ 1 ] );
+		free( test->children[ 0 ]->children[ 2 ] );
+		free( test->children[ 0 ] );
 		free( test );
 	}
 	return testResult;

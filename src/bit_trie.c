@@ -92,13 +92,11 @@ void BitwiseTrieNode_deleteHelper( BitwiseTrieNode* current, BitwiseTrieNode* pa
 
 	// Stop everything if we are null!
 	if( current == NULL ) {
-		Debug_sprint( "Woah, current's null, bailing out...parent is %p", parent );
 		return;
 	}
 
 	if( step == 4 ) {
 
-		Debug_sprint( "step: %d, current leaf node: %p, freeing leaf node...", step, current );
 		free( current );
 		// Null out the parent reference
 		parent->children[ BitwiseTrieNode_getCell( key, step - 1 ) ] = NULL;
@@ -107,8 +105,6 @@ void BitwiseTrieNode_deleteHelper( BitwiseTrieNode* current, BitwiseTrieNode* pa
 
 		u8 indexOfNext = BitwiseTrieNode_getCell( key, step );
 		BitwiseTrieNode* nextChild = current->children[ indexOfNext ];
-
-		Debug_sprint( "step: %d, current: %p, nextChild: %p (cell ID %d)", step, current, nextChild, indexOfNext );
 
 		BitwiseTrieNode_deleteHelper( nextChild, current, key, step + 1 );
 

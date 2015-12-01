@@ -9,7 +9,7 @@
 // TestFramework_execute( <test case group name/description>, <number of test cases>, <test case array> )
 // TODO: Is there a way to get rid of the second argument? it's annoying
 void SpecRunner_caseList() {
-	TestFramework_execute( "BitwiseTrieNode", 7, BitTrieTests );
+	TestFramework_execute( "BitwiseTrieNode", 9, BitTrieTests );
 }
 
 
