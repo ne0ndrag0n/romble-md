@@ -29,6 +29,10 @@ const TestFramework_TestCaseDefinition BitTrieTests[] = {
 	{
 		"Should add two numbers (184 and 216) correctly",
 		BitTrieTests_insertTwoIntegersCorrectly
+	},
+	{
+		"Should be able to delete only one item",
+		BitTrieTests_deleteOne
 	}
 };
 
@@ -253,6 +257,37 @@ finally:
 		
 		free( test );
 		
+	}
+	return testResult;
+}
+
+TestFramework_TestResult BitTrieTests_deleteOne() {
+	TestFramework_TestResult testResult;
+	BitwiseTrieNode* test;
+	
+	test = calloc( 1, sizeof( BitwiseTrieNode ) );
+	BitwiseTrieNode_ctor( test, FALSE );
+	
+	char* test184 = "String for 184";
+	BitwiseTrieNode_insert( test, 184, test184 );
+	
+	// Actual delete
+	BitwiseTrieNode_delete( test, 184 );
+	
+	TestFramework_EXPECT( test->children[ 0 ] == NULL, "first child to be null" );
+	TestFramework_EXPECT( test->children[ 1 ] == NULL, "second child to be null" );
+	TestFramework_EXPECT( test->children[ 2 ] == NULL, "third child to be null" );
+	TestFramework_EXPECT( test->children[ 3 ] == NULL, "fourth child to be null" );	
+	
+	testResult = TestFramework_TestResult_TEST_PASS;
+	
+finally:
+	if( testResult == TestFramework_TestResult_TEST_PASS ) {
+		free( test->children[ 3 ]->children[ 2 ]->children[ 1 ]->children[ 0 ] );
+		free( test->children[ 3 ]->children[ 2 ]->children[ 1 ] );
+		free( test->children[ 3 ]->children[ 2 ] );
+		free( test->children[ 3 ] );
+		free( test );
 	}
 	return testResult;
 }

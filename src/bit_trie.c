@@ -89,43 +89,50 @@ void BitwiseTrieNode_delete( BitwiseTrieNode* this, u8 key ) {
 }
 
 void BitwiseTrieNode_deleteHelper( BitwiseTrieNode* current, BitwiseTrieNode* parent, u8 key, u8 step ) {
-	u8 index = ( key >> ( step * 2 ) ) & 0x03;
 
-	if( step == 3 ) {
-		// We have reached the node nearest to the leaf (next step is the leaf)
-		// Deallocate the RAM that this->children[ index ] points to, then NULL the pointer.
-		if( current->children[ index ] != NULL ) {
-			// The data pointed to in current->children[ index ]->data will not be freed here!
-			// You must first free it by using BitwiseTrieNode_get on the key!
-			free( current->children[ index ] );
-			current->children[ index ] = NULL;
-		}
+	// Stop everything if we are null!
+	if( current == NULL ) {
+		Debug_sprint( "Woah, current's null, bailing out...parent is %p", parent );
+		return;
+	}
+
+	if( step == 4 ) {
+
+		Debug_sprint( "step: %d, current leaf node: %p, freeing leaf node...", step, current );
+		free( current );
+		// Null out the parent reference
+		parent->children[ BitwiseTrieNode_getCell( key, step - 1 ) ] = NULL;
+
 	} else {
-		BitwiseTrieNode* nextChild = current->children[ index ];
 
-		if( nextChild != NULL ) {
+		u8 indexOfNext = BitwiseTrieNode_getCell( key, step );
+		BitwiseTrieNode* nextChild = current->children[ indexOfNext ];
 
-			// Recursively call the deleteHelper
-			BitwiseTrieNode_deleteHelper( nextChild, current, key, ++step );
-		}
-	}
+		Debug_sprint( "step: %d, current: %p, nextChild: %p (cell ID %d)", step, current, nextChild, indexOfNext );
 
-	// If all the current child nodes are gone (zero)
-	// The parent needs the reference to current zeroed out, and this node needs to be freed
-	if( parent != NULL ) {
-		size_t i;
-		bool allNull = TRUE;
-		for( i = 0; i != 4; i++ ) {
-			if( current->children[ i ] != NULL ) {
-				allNull = FALSE;
-				break;
+		BitwiseTrieNode_deleteHelper( nextChild, current, key, step + 1 );
+
+		// Afterward, free this node and change parent reference to NULL if all are zero
+		// Check if all of current's children is null on the way back up
+		if( parent != NULL ) {
+			u8 index;
+
+			// Bail out early if there's any non-null child
+			for( index = 0; index != 4; index++ ) {
+				if( current->children[ index ] != NULL ) {
+					return;
+				}
 			}
+
+			// Free current
+			free( current );
+			// Null out parent's reference to current
+			parent->children[ BitwiseTrieNode_getCell( key, step - 1 ) ] = NULL;
 		}
 
-		if( allNull == TRUE ) {
-			// This node needs to be freed
-			free( current );
-			parent->children[ ( key >> ( ( step - 1 ) * 2 ) ) & 0x03 ] = NULL;
-		}
 	}
+}
+
+inline u8 BitwiseTrieNode_getCell( u8 key, u8 step ) {
+	return ( key >> ( step * 2 ) ) & BitwiseTrieNode_CELL_MASK;
 }

@@ -6,12 +6,14 @@
  * @author		Ash
  * @version		0.0.1
  */
-
-#include <types.h>
-#include <res/globals.h>
-
 #ifndef		BIT_TRIE
 #define		BIT_TRIE
+
+#include <types.h>
+#include <stddef.h>
+#include <res/globals.h>
+
+#define	 BitwiseTrieNode_CELL_MASK	0x03
 
 typedef union BitwiseTrieNode {
 	void* data;
@@ -25,5 +27,7 @@ void BitwiseTrieNode_insert( BitwiseTrieNode* this, u8 key, void* value );
 void* BitwiseTrieNode_get( BitwiseTrieNode* this, u8 key );
 
 void BitwiseTrieNode_delete( BitwiseTrieNode* this, u8 key );
+
 void BitwiseTrieNode_deleteHelper( BitwiseTrieNode* current, BitwiseTrieNode* parent, u8 key, u8 step );
+extern u8 BitwiseTrieNode_getCell( u8 key, u8 step );
 #endif

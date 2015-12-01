@@ -12,5 +12,7 @@ TestFramework_TestResult BitTrieTests_insertZeroCorrectly();
 TestFramework_TestResult BitTrieTests_insert255Correctly();
 TestFramework_TestResult BitTrieTests_insert27Correctly();
 TestFramework_TestResult BitTrieTests_insertTwoIntegersCorrectly();
+TestFramework_TestResult BitTrieTests_deleteOne();
+TestFramework_TestResult BitTrieTests_deleteWithMultiple();
 
 #endif
