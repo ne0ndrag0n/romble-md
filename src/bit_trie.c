@@ -132,3 +132,21 @@ void BitwiseTrieNode_deleteHelper( BitwiseTrieNode* current, BitwiseTrieNode* pa
 inline u8 BitwiseTrieNode_getCell( u8 key, u8 step ) {
 	return ( key >> ( step * 2 ) ) & BitwiseTrieNode_CELL_MASK;
 }
+
+
+// ------- BitwiseTrie container (wraps a BitwiseTrieNode) -------
+
+/**
+ * Set up a BitwiseTrie wrapper. Initialize a root BitwiseTrieNode,
+ * and set the SizedArray of u8 keys to null.
+ */
+void BitwiseTrie_ctor( BitwiseTrie* this ) {
+
+	// BitwiseTrieNode setup
+	this->root = Romble_alloc_d( sizeof( BitwiseTrieNode ), TRUE, FILE_LINE() );
+	BitwiseTrieNode_ctor( this->root, FALSE );
+
+	// Set up the SizedArray
+	this->keys.items = NULL;
+	this->keys.length = 0;
+}
