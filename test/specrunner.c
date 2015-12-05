@@ -24,7 +24,7 @@ void SpecRunner_test() {
 	u32 ticksElapsed = getTime( FALSE ) - tickStart;
 
 	char resultTime[ 100 ] = { 0 };
-	sprintf( resultTime, "Tests finished. Time elapsed (ms): %d", ticksElapsed );
+	sprintf( resultTime, "Tests finished. Time elapsed (ms): %lu", ticksElapsed );
 	TestFramework_print( resultTime );
 	TestFramework_print( "Press [RESET] to re-execute tests." );
 	TestFramework_print( "." );
