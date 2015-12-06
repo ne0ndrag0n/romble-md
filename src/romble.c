@@ -57,10 +57,14 @@ u16 Romble_getUniqueId() {
 void Romble_secureFree( void** pointer ) {
 	// Cannot dereference a null pointer!
 	if( pointer != NULL ) {
-		free( *pointer );
+		Romble_free( *pointer );
 
 		*pointer = NULL;
 	}
+}
+
+void Romble_free( void* pointer ) {
+	free( pointer );
 }
 
 /**
@@ -72,6 +76,17 @@ void Romble_secureFree_d( void** pointer, char* fileLine ) {
 	#endif
 
 	Romble_secureFree( pointer );
+}
+
+/**
+ * Debug wrapper for romble free
+ */
+void Romble_free_d( void* pointer, char* fileLine ) {
+	#ifdef ALLOC_DEBUG_OUTPUT
+		Debug_sprint( "ROMBLEFREE: %s passed pointer %p", fileLine, pointer );
+	#endif
+
+	Romble_free( pointer );
 }
 
 /**
