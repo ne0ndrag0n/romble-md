@@ -1,6 +1,7 @@
 #include <test/specrunner.h>
 #include <test/example_tests.h>
 #include <test/bit_trie.h>
+#include <test/linkedlist.h>
 #include <timer.h>
 #include <stdio.h>
 
@@ -10,6 +11,7 @@
 // TODO: Is there a way to get rid of the second argument? it's annoying
 void SpecRunner_caseList() {
 	TestFramework_execute( "BitwiseTrieNode", 9, BitTrieTests );
+	TestFramework_execute( "Linked List", 3, LinkedListTests );
 }
 
 
