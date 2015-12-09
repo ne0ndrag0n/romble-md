@@ -11,7 +11,7 @@
 // TODO: Is there a way to get rid of the second argument? it's annoying
 void SpecRunner_caseList() {
 	TestFramework_execute( "BitwiseTrieNode", 9, BitTrieTests );
-	TestFramework_execute( "Linked List", 3, LinkedListTests );
+	TestFramework_execute( "Linked List", 6, LinkedListTests );
 }
 
 

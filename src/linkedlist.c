@@ -13,7 +13,7 @@ void LinkedListNode_dtor( LinkedListNode* this ) {
 		LinkedListNode_dtor( this->next );
 	}
 
-	free( this );
+	Romble_free_d( this, FILE_LINE() );
 }
 
 void LinkedListNode_insertEnd( LinkedListNode* this, void* data ) {
@@ -42,4 +42,44 @@ void* LinkedListNode_findData( LinkedListNode* this, LinkedListNode_SearchPredic
 
 	// Nothing was found
 	return NULL;
+}
+
+void LinkedListNode_remove( LinkedListNode** this, LinkedListNode_SearchPredicate predicateFunction, bool removeAll ) {
+	LinkedListNode* prev = NULL;
+	LinkedListNode* current = *this;
+	bool firstNodeFreed = FALSE;
+
+	while( current != NULL ) {
+		if( predicateFunction( current->data ) == TRUE ) {
+			if( prev != NULL ) {
+				prev->next = current->next;
+				Romble_free_d( current, FILE_LINE() );
+				current = prev->next;
+			} else {
+				firstNodeFreed = TRUE;
+				LinkedListNode* relink = current->next;
+				Romble_free_d( current, FILE_LINE() );
+				current = relink;
+
+				// We need to redefine where this actually points to, since it no longer exists
+				*this = current;
+			}
+
+			if( removeAll != TRUE ) {
+				if( firstNodeFreed == TRUE && prev == NULL ) {
+					*this = NULL;
+				}
+				return;
+			}
+		} else {
+			prev = current;
+			current = current->next;
+		}
+	}
+
+	// If we never encountered a second node (prev remains NULL) yet a free operation took place,
+	// we NEED to set *this to NULL to prevent the porential access of freed RAM.
+	if( firstNodeFreed == TRUE && prev == NULL ) {
+		*this = NULL;
+	}
 }

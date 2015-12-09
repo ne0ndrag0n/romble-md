@@ -39,9 +39,11 @@ void* LinkedListNode_findData( LinkedListNode* this, LinkedListNode_SearchPredic
  * will be removed from the list. If removeAll is TRUE, the remove function will continue iterating through
  * the linked list until the final node is reached.
  *
+ * NB: FIRST ARGUMENT IS THE ADDRESS OF A POINTER!
+ *
  * @param		{LinkedListNode_SearchPredicate}		predicateFunction		This function shall return TRUE to signify the data has been found.
  * @param		{bool}									removeAll				If TRUE, continue to remove after the first removal.
  */
-void LinkedListNode_remove( LinkedListNode* this, LinkedListNode_SearchPredicate predicateFunction, bool removeAll );
+void LinkedListNode_remove( LinkedListNode** this, LinkedListNode_SearchPredicate predicateFunction, bool removeAll );
 
 #endif

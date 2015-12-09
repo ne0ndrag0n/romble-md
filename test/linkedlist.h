@@ -9,8 +9,12 @@ extern const TestFramework_TestCaseDefinition LinkedListTests[];
 TestFramework_TestResult LinkedListTests_verifyLinkedListCreated();
 TestFramework_TestResult LinkedListTests_verifyInsertEnd();
 TestFramework_TestResult LinkedListTests_findData();
+TestFramework_TestResult LinkedListTests_removeItemsTest1();
+TestFramework_TestResult LinkedListTests_removeItemsTest2();
+TestFramework_TestResult LinkedListTests_removeSingleNode();
 
 bool LinkedListTests_searchPredicateStringDivisibleBy2( void* data );
 bool LinkedListTests_alwaysFalse( void* data );
+bool LinkedListTests_searchFor2s( void* data );
 
 #endif

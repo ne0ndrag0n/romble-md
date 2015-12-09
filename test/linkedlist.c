@@ -17,6 +17,18 @@ const TestFramework_TestCaseDefinition LinkedListTests[] = {
 	{
 		"Should properly find a piece of data based on a predicate function",
 		LinkedListTests_findData
+	},
+	{
+		"Should properly remove several items (first item not removed)",
+		LinkedListTests_removeItemsTest1
+	},
+	{
+		"Should properly remove several items (first item removed)",
+		LinkedListTests_removeItemsTest2
+	},
+	{
+		"Should free and null a single node that ended up removed",
+		LinkedListTests_removeSingleNode
 	}
 };
 
@@ -108,6 +120,102 @@ finally:
 	return testResult;
 }
 
+TestFramework_TestResult LinkedListTests_removeItemsTest1() {
+	TestFramework_TestResult testResult;
+	LinkedListNode* node;
+
+	node = calloc( 1, sizeof( LinkedListNode ) );
+	LinkedListNode_ctor( node );
+
+	int int1 = 3;
+	int int2 = 2;
+	int int3 = 3;
+	int int4 = 2;
+	int int5 = 3;
+
+	node->data = &int1;
+
+	LinkedListNode_insertEnd( node, &int2 );
+	LinkedListNode_insertEnd( node, &int3 );
+	LinkedListNode_insertEnd( node, &int4 );
+	LinkedListNode_insertEnd( node, &int5 );
+
+	LinkedListNode_remove( &node, LinkedListTests_searchFor2s, TRUE );
+
+	TestFramework_EXPECT( node->data == &int1, "first node to be retained" );
+	TestFramework_EXPECT( node->next->data == &int3, "second node to now be 3" );
+	TestFramework_EXPECT( node->next->next->data == &int5, "third node to now be 3" );
+	TestFramework_EXPECT( node->next->next->next == NULL, "last node to be properly terminated." );
+
+	testResult = TestFramework_TestResult_TEST_PASS;
+
+finally:
+	if( testResult == TestFramework_TestResult_TEST_PASS ) {
+		// This method is simple enough to just use directly untested
+		LinkedListNode_dtor( node );
+	}
+
+	return testResult;
+}
+
+TestFramework_TestResult LinkedListTests_removeItemsTest2() {
+	TestFramework_TestResult testResult;
+	LinkedListNode* node;
+
+	node = calloc( 1, sizeof( LinkedListNode ) );
+	LinkedListNode_ctor( node );
+
+	int int1 = 2;
+	int int2 = 3;
+	int int3 = 2;
+	int int4 = 3;
+	int int5 = 2;
+
+	node->data = &int1;
+
+	LinkedListNode_insertEnd( node, &int2 );
+	LinkedListNode_insertEnd( node, &int3 );
+	LinkedListNode_insertEnd( node, &int4 );
+	LinkedListNode_insertEnd( node, &int5 );
+
+	LinkedListNode_remove( &node, LinkedListTests_searchFor2s, TRUE );
+
+	TestFramework_EXPECT( node->data == &int2, "first node to be retained" );
+	TestFramework_EXPECT( node->next->data == &int4, "second node to now be 3" );
+	TestFramework_EXPECT( node->next->next == NULL, "last node to be properly terminated." );
+
+	testResult = TestFramework_TestResult_TEST_PASS;
+
+finally:
+	if( testResult == TestFramework_TestResult_TEST_PASS ) {
+		// This method is simple enough to just use directly untested
+		LinkedListNode_dtor( node );
+	}
+
+	return testResult;
+}
+
+TestFramework_TestResult LinkedListTests_removeSingleNode() {
+	TestFramework_TestResult testResult;
+	LinkedListNode* node;
+
+	node = calloc( 1, sizeof( LinkedListNode ) );
+	LinkedListNode_ctor( node );
+
+	int int1 = 2;
+
+	node->data = &int1;
+
+	LinkedListNode_remove( &node, LinkedListTests_searchFor2s, TRUE );
+
+	TestFramework_EXPECT( node == NULL, "single node removed to be zeroed out" );
+
+	testResult = TestFramework_TestResult_TEST_PASS;
+
+finally:
+	return testResult;
+}
+
 bool LinkedListTests_searchPredicateStringDivisibleBy2( void* data ) {
 	int number = *( ( int* ) data );
 
@@ -116,4 +224,10 @@ bool LinkedListTests_searchPredicateStringDivisibleBy2( void* data ) {
 
 bool LinkedListTests_alwaysFalse( void* data ) {
 	return FALSE;
+}
+
+bool LinkedListTests_searchFor2s( void* data ) {
+	int number = *( ( int* ) data );
+
+	return number == 2;
 }
