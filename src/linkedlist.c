@@ -1,6 +1,7 @@
 #include <linkedlist.h>
 #include <romble.h>
 #include <stdlib.h>
+#include <lang.h>
 
 void LinkedListNode_ctor( LinkedListNode* this ) {
 	this->data = NULL;
@@ -24,6 +25,7 @@ void LinkedListNode_insertEnd( LinkedListNode* this, void* data ) {
 	}
 
 	current->next = Romble_alloc_d( sizeof( LinkedListNode ), TRUE, FILE_LINE() );
+	Romble_assert( current->next != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 	LinkedListNode_ctor( current->next );
 	current = current->next;
 	current->data = data;

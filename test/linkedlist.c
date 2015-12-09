@@ -37,6 +37,7 @@ TestFramework_TestResult LinkedListTests_verifyLinkedListCreated() {
 	LinkedListNode* node;
 
 	node = calloc( 1, sizeof( LinkedListNode ) );
+	TestFramework_EXPECT( node != NULL, "no heap corruption" );
 	LinkedListNode_ctor( node );
 
 	TestFramework_EXPECT( node->data == NULL, "node data after construction to be null" );
@@ -58,6 +59,7 @@ TestFramework_TestResult LinkedListTests_verifyInsertEnd() {
 	LinkedListNode* node;
 
 	node = calloc( 1, sizeof( LinkedListNode ) );
+	TestFramework_EXPECT( node != NULL, "no heap corruption" );
 	LinkedListNode_ctor( node );
 
 	char* string1 = "This is string 1";
@@ -90,6 +92,7 @@ TestFramework_TestResult LinkedListTests_findData() {
 	LinkedListNode* node;
 
 	node = calloc( 1, sizeof( LinkedListNode ) );
+	TestFramework_EXPECT( node != NULL, "no heap corruption" );
 	LinkedListNode_ctor( node );
 
 	int int1 = 1;
@@ -125,6 +128,7 @@ TestFramework_TestResult LinkedListTests_removeItemsTest1() {
 	LinkedListNode* node;
 
 	node = calloc( 1, sizeof( LinkedListNode ) );
+	TestFramework_EXPECT( node != NULL, "no heap corruption" );
 	LinkedListNode_ctor( node );
 
 	int int1 = 3;
@@ -163,6 +167,7 @@ TestFramework_TestResult LinkedListTests_removeItemsTest2() {
 	LinkedListNode* node;
 
 	node = calloc( 1, sizeof( LinkedListNode ) );
+	TestFramework_EXPECT( node != NULL, "no heap corruption" );
 	LinkedListNode_ctor( node );
 
 	int int1 = 2;
@@ -200,6 +205,7 @@ TestFramework_TestResult LinkedListTests_removeSingleNode() {
 	LinkedListNode* node;
 
 	node = calloc( 1, sizeof( LinkedListNode ) );
+	TestFramework_EXPECT( node != NULL, "no heap corruption" );
 	LinkedListNode_ctor( node );
 
 	int int1 = 2;
