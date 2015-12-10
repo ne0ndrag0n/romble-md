@@ -30,14 +30,18 @@ int main( void ) {
 
 	Romble_init();
 
-	BaseView root;
-	BaseView_ctor( &root, 0, 0, 40, 28 );
+	BaseView* root;
+	root = Romble_alloc_d( sizeof( BaseView ), TRUE, FILE_LINE() );
+	Romble_assert( root != NULL, "Base assertion failed" );
+	BaseView_ctor( root, 0, 0, 40, 28 );
 
-	TestView test;
-	TestView_ctor( &test, 2, 2, 35, 25 );
+	TestView* test;
+	test = Romble_alloc_d( sizeof( TestView ), TRUE, FILE_LINE() );
+	Romble_assert( test != NULL, "Base assertion failed" );
+	TestView_ctor( test, 2, 2, 35, 25 );
 
-	FUNCTIONS( BaseView, BaseView, &root )->addChildView( &root, CLASS( BaseView, &test ) );
-	FUNCTIONS( BaseView, BaseView, &root )->render( &root );
+	FUNCTIONS( BaseView, BaseView, root )->addChildView( root, CLASS( BaseView, test ) );
+	FUNCTIONS( BaseView, BaseView, root )->render( root );
 
 	JoyManager_displayCursor( joyManager, TRUE );
 
