@@ -16,6 +16,7 @@
 #include <romble.h>
 #include <timer.h>
 #include <joymanager.h>
+#include <linkedlist.h>
 
 BaseView_vtable BaseView_table = {
 	BaseView_dtor,
@@ -54,8 +55,7 @@ void BaseView_ctor( BaseView* this, s16 x, s16 y, s16 width, s16 height ) {
 }
 
 void BaseView_dtor( BaseView* this ) {
-	// todo: free all children
-	Romble_secureFree_d( ( void* ) &( this->children ), FILE_LINE() );
+	LinkedListNode_dtor( this->children );
 }
 
 void BaseView_render( BaseView* this ) {
@@ -77,37 +77,31 @@ void BaseView_position( BaseView* this ) {
 
 void BaseView_renderChildren( BaseView* this ) {
 	// Place and render children
-	if( this->children != NULL ) {
-		size_t i;
+	LinkedListNode* current = this->children;
+	while( current != NULL ) {
+		BaseView* view = current->data;
 
-		for( i = 0; i != this->numChildren; i++ ) {
-			BaseView* view = this->children[ i ];
+		FUNCTIONS( BaseView, BaseView, view )->render( view );
 
-			FUNCTIONS( BaseView, BaseView, view )->render( view );
-		}
+		current = current->next;
 	}
 }
 
 void BaseView_addChildView( BaseView* this, BaseView* childView ) {
 	// Create the children collection if it does not exist
+	// Populate the first node
 	if( this->children == NULL ) {
-		this->children = Romble_alloc_d( sizeof( BaseView* ), TRUE, FILE_LINE() );
-
+		this->children = Romble_alloc_d( sizeof( LinkedListNode ), TRUE, FILE_LINE() );
 		Romble_assert( this->children != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
-
-		this->numChildren++;
+		LinkedListNode_ctor( this->children );
+		this->children->data = childView;
 	} else {
-
-		this->numChildren++;
-		BaseView** resizedArray = Romble_realloc_d( this->children, this->numChildren * sizeof( BaseView* ), FILE_LINE() );
-		Romble_assert( resizedArray != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
-
-		this->children = resizedArray;
+		// Toss this at the end of the list if there's already a node
+		LinkedListNode_insertEnd( this->children, childView );
 	}
 
-	// After resized, set the last elemnt in the array to childView
 	childView->parent = this;
-	this->children[ this->numChildren - 1 ] = childView;
+	this->numChildren++;
 }
 
 void BaseView_setPlane( BaseView* this, u16 plane ) {

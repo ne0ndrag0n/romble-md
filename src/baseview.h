@@ -4,7 +4,7 @@
 #include <types.h>
 #include <vdp.h>
 #include <res/globals.h>
-
+#include <linkedlist.h>
 
 struct BaseView;
 
@@ -39,7 +39,7 @@ typedef struct BaseView {
 	u16 plane;
 
 	struct BaseView* parent;
-	struct BaseView** children;
+	LinkedListNode* children;
 
 	vtable functions;
 } BaseView;

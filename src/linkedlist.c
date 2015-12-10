@@ -10,6 +10,10 @@ void LinkedListNode_ctor( LinkedListNode* this ) {
 
 void LinkedListNode_dtor( LinkedListNode* this ) {
 
+	if( this == NULL ) {
+		return;
+	}
+
 	if( this->next != NULL ) {
 		LinkedListNode_dtor( this->next );
 	}
