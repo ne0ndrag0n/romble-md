@@ -99,6 +99,14 @@ void* Romble_alloc_d( size_t size, bool clear, char* fileLine ) {
 		Debug_sprint( "%s allocated %d bytes at pointer %p (clear: %d)", fileLine, size, result, clear );
 	#endif
 
+	if( result == NULL ) {
+		char failure[ 100 ];
+		strcat( failure, fileLine );
+		strcat( failure, " " );
+		strcat( failure, EXCEPTION_OUT_OF_MEMORY );
+		SYS_die( failure );
+	}
+
 	return result;
 }
 

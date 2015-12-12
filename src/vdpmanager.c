@@ -1,6 +1,8 @@
 #include <vdpmanager.h>
 #include <types.h>
 #include <stddef.h>
+#include <res/globals.h>
+#include <romble.h>
 
 void VDPManager_ctor( VDPManager* this ) {
 
