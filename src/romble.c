@@ -100,7 +100,7 @@ void* Romble_alloc_d( size_t size, bool clear, char* fileLine ) {
 	#endif
 
 	if( result == NULL ) {
-		char failure[ 100 ];
+		char failure[ 50 ];
 		strcat( failure, fileLine );
 		strcat( failure, " " );
 		strcat( failure, EXCEPTION_OUT_OF_MEMORY );
@@ -119,6 +119,14 @@ void* Romble_realloc_d( void* pointer, size_t newSize, char* fileLine ) {
 	#ifdef ALLOC_DEBUG_OUTPUT
 		Debug_sprint( "%s reallocated %d bytes at pointer %p", fileLine, newSize, result );
 	#endif
+
+	if( result == NULL ) {
+		char failure[ 50 ];
+		strcat( failure, fileLine );
+		strcat( failure, " " );
+		strcat( failure, EXCEPTION_OUT_OF_MEMORY );
+		SYS_die( failure );
+	}
 
 	return result;
 }
