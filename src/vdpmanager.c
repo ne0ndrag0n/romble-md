@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <res/globals.h>
 #include <romble.h>
+#include <vdp_bg.h>
 
 void VDPManager_ctor( VDPManager* this ) {
 
@@ -29,6 +30,8 @@ VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles ti
 		this->freeVDPSegments[ 0 ].tileData = tiles;
 		this->freeVDPSegments[ 0 ].index = VDPManager_TILE_USERINDEX;
 		this->freeVDPSegments[ 0 ].length = count;
+
+		VDP_loadTileData( tiles, VDPManager_TILE_USERINDEX, count, TRUE );
 
 		return this->freeVDPSegments[ 0 ].index;
 	} else {
@@ -59,6 +62,8 @@ VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles ti
 				this->freeVDPSegments[ this->usedSegmentCount - 1 ].index = tileIndex;
 				this->freeVDPSegments[ this->usedSegmentCount - 1 ].length = count;
 
+				VDP_loadTileData( tiles, tileIndex, count, TRUE );
+
 				// Keep sorted
 				qsort( this->freeVDPSegments, this->usedSegmentCount, sizeof( VDPManager_VDPRamSegment ), VDPManager_qsortComparator );
 
@@ -76,6 +81,8 @@ VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles ti
 		this->freeVDPSegments[ this->usedSegmentCount - 1 ].tileData = tiles;
 		this->freeVDPSegments[ this->usedSegmentCount - 1 ].index = tileIndex;
 		this->freeVDPSegments[ this->usedSegmentCount - 1 ].length = count;
+
+		VDP_loadTileData( tiles, tileIndex, count, TRUE );
 
 		// This shouldn't require a resort as the index position is consistent
 
