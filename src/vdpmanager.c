@@ -24,14 +24,8 @@ VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles ti
 	if( this->usedVDPSegments == NULL ) {
 		// If usedVDPSegments is null, nothing has yet been added to the VDP RAM starting at
 		// VDPManager_TILE_USERINDEX
-		this->usedVDPSegments = Romble_alloc_d( sizeof( VDPManager_VDPRamSegment ), TRUE, FILE_LINE() );
-		this->usedSegmentCount = 1;
 
-		this->usedVDPSegments[ 0 ].tileData = tiles;
-		this->usedVDPSegments[ 0 ].index = VDPManager_TILE_USERINDEX;
-		this->usedVDPSegments[ 0 ].length = count;
-		this->usedVDPSegments[ 0 ].tag = tag;
-
+		VDPManager_pushSegment( this, tiles, VDPManager_TILE_USERINDEX, count, tag );
 		VDP_loadTileData( tiles, VDPManager_TILE_USERINDEX, count, TRUE );
 
 		return this->usedVDPSegments[ 0 ].index;
@@ -57,13 +51,7 @@ VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles ti
 				// It fits in this gap - Add it to the array
 				VDPManager_TileIndex tileIndex = first.index + first.length;
 
-				this->usedSegmentCount++;
-				this->usedVDPSegments = Romble_realloc_d( this->usedVDPSegments, sizeof( VDPManager_VDPRamSegment ) * this->usedSegmentCount, FILE_LINE() );
-				this->usedVDPSegments[ this->usedSegmentCount - 1 ].tileData = tiles;
-				this->usedVDPSegments[ this->usedSegmentCount - 1 ].index = tileIndex;
-				this->usedVDPSegments[ this->usedSegmentCount - 1 ].length = count;
-				this->usedVDPSegments[ this->usedSegmentCount - 1 ].tag = tag;
-
+				VDPManager_pushSegment( this, tiles, tileIndex, count, tag );
 				VDP_loadTileData( tiles, tileIndex, count, TRUE );
 
 				// Keep sorted
@@ -78,19 +66,23 @@ VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles ti
 		VDPManager_VDPRamSegment lastSegment = this->usedVDPSegments[ this->usedSegmentCount - 1 ];
 		VDPManager_TileIndex tileIndex = lastSegment.index + lastSegment.length;
 
-		this->usedSegmentCount++;
-		this->usedVDPSegments = Romble_realloc_d( this->usedVDPSegments, sizeof( VDPManager_VDPRamSegment ) * this->usedSegmentCount, FILE_LINE() );
-		this->usedVDPSegments[ this->usedSegmentCount - 1 ].tileData = tiles;
-		this->usedVDPSegments[ this->usedSegmentCount - 1 ].index = tileIndex;
-		this->usedVDPSegments[ this->usedSegmentCount - 1 ].length = count;
-		this->usedVDPSegments[ this->usedSegmentCount - 1 ].tag = tag;
-
+		VDPManager_pushSegment( this, tiles, tileIndex, count, tag );
 		VDP_loadTileData( tiles, tileIndex, count, TRUE );
 
 		// This shouldn't require a resort as the index position is consistent
-
 		return tileIndex;
 	}
+}
+
+void VDPManager_pushSegment( VDPManager* this, VDPManager_Tiles tiles, VDPManager_TileIndex index, u16 length, VDPManager_VDPRamSegmentTag tag ) {
+	this->usedSegmentCount++;
+
+	this->usedVDPSegments = Romble_realloc_d( this->usedVDPSegments, sizeof( VDPManager_VDPRamSegment ) * this->usedSegmentCount, FILE_LINE() );
+
+	this->usedVDPSegments[ this->usedSegmentCount - 1 ].tileData = tiles;
+	this->usedVDPSegments[ this->usedSegmentCount - 1 ].index = index;
+	this->usedVDPSegments[ this->usedSegmentCount - 1 ].length = length;
+	this->usedVDPSegments[ this->usedSegmentCount - 1 ].tag = tag;
 }
 
 int VDPManager_qsortComparator( const void* firstItem, const void* secondItem ) {

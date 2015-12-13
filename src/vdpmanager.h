@@ -75,4 +75,11 @@ void VDPManager_unloadPalette( VDPManager* this, VDPManager_PaletteIndex palette
  */
 int VDPManager_qsortComparator( const void* firstItem, const void* secondItem );
 
+/**
+ * @private
+ *
+ * Push an additional item onto this->usedVDPSegments. Increments usedSegmentCount.
+ */
+void VDPManager_pushSegment( VDPManager* this, VDPManager_Tiles tiles, VDPManager_TileIndex index, u16 length, VDPManager_VDPRamSegmentTag tag );
+
 #endif
