@@ -21,14 +21,15 @@ typedef enum {
 } VDPManager_PaletteIndex;
 
 typedef struct VDPManager_VDPRamSegment {
-	u32* tileData;
-	u16 index;
+	VDPManager_Tiles tileData;
+	VDPManager_TileIndex index;
 	u16 length;
 } VDPManager_VDPRamSegment;
 
 typedef struct VDPManager {
 	u16* palettes[ 3 ];
 	VDPManager_VDPRamSegment* freeVDPSegments;
+	u16 usedSegmentCount;
 } VDPManager;
 
 void VDPManager_ctor( VDPManager* this );
@@ -56,4 +57,9 @@ VDPManager_PaletteIndex VDPManager_loadPalette( VDPManager* this, VDPManager_Pal
  * Marks a selected palette as free for use.
  */
 void VDPManager_unloadPalette( VDPManager* this, VDPManager_PaletteIndex palette );
+
+/**
+ * Comparator for the qsort() function, used to sort VDPManager_VDPRamSegments
+ */
+int VDPManager_qsortComparator( const void* firstItem, const void* secondItem );
 #endif
