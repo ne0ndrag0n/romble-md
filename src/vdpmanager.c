@@ -17,6 +17,6 @@ void VDPManager_dtor( VDPManager* this ) {
 	// I don't think we'll ever need to do this?
 }
 
-VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, u32* tiles, u16 count ) {
+VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles tiles, u16 count ) {
 	return 0;
 }
