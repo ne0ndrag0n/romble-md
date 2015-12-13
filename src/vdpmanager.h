@@ -13,7 +13,7 @@
 typedef u16  VDPManager_TileIndex;
 typedef u32* VDPManager_Tiles;
 typedef u16* VDPManager_Palette;
-typedef u8   VDPManager_Tag;
+typedef s16  VDPManager_Tag;
 
 typedef enum {
 	VDPManager_Palette_INVALID = -1,
@@ -51,7 +51,12 @@ VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles ti
 /**
  * Search for the region of tiles and remove it, marking this region of VDP RAM free to use.
  */
-void VDPManager_unloadTiles( VDPManager* this, VDPManager_TileIndex index );
+void VDPManager_unloadTilesByIndex( VDPManager* this, VDPManager_TileIndex index );
+
+/**
+ * Same as VDPManager_unloadTilesByIndex but searches by tag instead of index
+ */
+void VDPManager_unloadTilesByTag( VDPManager* this, VDPManager_Tag tag );
 
 /**
  * Retrieve a tileset by tag. Helps avoid god-awful globals.
@@ -63,12 +68,22 @@ VDPManager_TileIndex VDPManager_getTilesByTag( VDPManager* this, VDPManager_Tag 
  * to use, and return the index used (from 0-3). If all palettes are in use, the palette
  * is unable to be stored, and this will return VDPManager_Palette_INVALID.
  */
-VDPManager_PaletteIndex VDPManager_loadPalette( VDPManager* this, VDPManager_Palette palette );
+VDPManager_PaletteIndex VDPManager_loadPalette( VDPManager* this, VDPManager_Palette palette, VDPManager_Tag tag );
 
 /**
  * Marks a selected palette as free for use.
  */
-void VDPManager_unloadPalette( VDPManager* this, VDPManager_PaletteIndex palette );
+void VDPManager_unloadPaletteByIndex( VDPManager* this, VDPManager_PaletteIndex palette );
+
+/**
+ * Same as VDPManager_unloadTilesByIndex but searchs by tag instead of index
+ */
+void VDPManager_unloadPaletteByTag( VDPManager* this, VDPManager_Tag tag );
+
+/**
+ * Retrieves a palette entry by tag; returns VDPManager_PaletteIndex_INVALID if the tag was not found.
+ */
+VDPManager_PaletteIndex VDPManager_getPaletteByTag( VDPManager* this, VDPManager_Tag tag );
 
 /**
  * Comparator for the qsort() function, used to sort VDPManager_VDPRamSegments
