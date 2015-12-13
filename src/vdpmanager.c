@@ -12,7 +12,7 @@ void VDPManager_ctor( VDPManager* this ) {
 		this->palettes[ i ] = NULL;
 	}
 
-	this->freeVDPSegments = NULL;
+	this->usedVDPSegments = NULL;
 	this->usedSegmentCount = 0;
 }
 
@@ -20,20 +20,21 @@ void VDPManager_dtor( VDPManager* this ) {
 	// I don't think we'll ever need to do this?
 }
 
-VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles tiles, u16 count ) {
-	if( this->freeVDPSegments == NULL ) {
-		// If freeVDPSegments is null, nothing has yet been added to the VDP RAM starting at
+VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles tiles, u16 count, VDPManager_VDPRamSegmentTag tag ) {
+	if( this->usedVDPSegments == NULL ) {
+		// If usedVDPSegments is null, nothing has yet been added to the VDP RAM starting at
 		// VDPManager_TILE_USERINDEX
-		this->freeVDPSegments = Romble_alloc_d( sizeof( VDPManager_VDPRamSegment ), TRUE, FILE_LINE() );
+		this->usedVDPSegments = Romble_alloc_d( sizeof( VDPManager_VDPRamSegment ), TRUE, FILE_LINE() );
 		this->usedSegmentCount = 1;
 
-		this->freeVDPSegments[ 0 ].tileData = tiles;
-		this->freeVDPSegments[ 0 ].index = VDPManager_TILE_USERINDEX;
-		this->freeVDPSegments[ 0 ].length = count;
+		this->usedVDPSegments[ 0 ].tileData = tiles;
+		this->usedVDPSegments[ 0 ].index = VDPManager_TILE_USERINDEX;
+		this->usedVDPSegments[ 0 ].length = count;
+		this->usedVDPSegments[ 0 ].tag = tag;
 
 		VDP_loadTileData( tiles, VDPManager_TILE_USERINDEX, count, TRUE );
 
-		return this->freeVDPSegments[ 0 ].index;
+		return this->usedVDPSegments[ 0 ].index;
 	} else {
 		// We need to apply a first-fit algorithm that looks for the first continuous region of VDP RAM
 		// that will fit the incoming data ("count" number of tiles). Take tilesets two at a time, and use
@@ -42,13 +43,13 @@ VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles ti
 		// this is the first-fit gap we are looking for; if not, take another two tilesets and apply the
 		// same test.
 		//
-		// Once a gap has been found, we need to add a VDPRamSegment to this->freeVDPSegments, sort
-		// this->freeVDPSegments to ensure this algorithm works, and then actually load the info.
+		// Once a gap has been found, we need to add a VDPRamSegment to this->usedVDPSegments, sort
+		// this->usedVDPSegments to ensure this algorithm works, and then actually load the info.
 		size_t i;
 		size_t cap = this->usedSegmentCount % 2 ? this->usedSegmentCount - 1 : this->usedSegmentCount - 2;
 		for( i = 0; i != cap; i++ ) {
-			VDPManager_VDPRamSegment first = this->freeVDPSegments[ i ];
-			VDPManager_VDPRamSegment second = this->freeVDPSegments[ i + 1 ];
+			VDPManager_VDPRamSegment first = this->usedVDPSegments[ i ];
+			VDPManager_VDPRamSegment second = this->usedVDPSegments[ i + 1 ];
 
 			// Calculate the gap between the two elements
 			u16 gapSize = ( second.index - first.index ) - first.length;
@@ -57,15 +58,16 @@ VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles ti
 				VDPManager_TileIndex tileIndex = first.index + first.length;
 
 				this->usedSegmentCount++;
-				this->freeVDPSegments = Romble_realloc_d( this->freeVDPSegments, sizeof( VDPManager_VDPRamSegment ) * this->usedSegmentCount, FILE_LINE() );
-				this->freeVDPSegments[ this->usedSegmentCount - 1 ].tileData = tiles;
-				this->freeVDPSegments[ this->usedSegmentCount - 1 ].index = tileIndex;
-				this->freeVDPSegments[ this->usedSegmentCount - 1 ].length = count;
+				this->usedVDPSegments = Romble_realloc_d( this->usedVDPSegments, sizeof( VDPManager_VDPRamSegment ) * this->usedSegmentCount, FILE_LINE() );
+				this->usedVDPSegments[ this->usedSegmentCount - 1 ].tileData = tiles;
+				this->usedVDPSegments[ this->usedSegmentCount - 1 ].index = tileIndex;
+				this->usedVDPSegments[ this->usedSegmentCount - 1 ].length = count;
+				this->usedVDPSegments[ this->usedSegmentCount - 1 ].tag = tag;
 
 				VDP_loadTileData( tiles, tileIndex, count, TRUE );
 
 				// Keep sorted
-				qsort( this->freeVDPSegments, this->usedSegmentCount, sizeof( VDPManager_VDPRamSegment ), VDPManager_qsortComparator );
+				qsort( this->usedVDPSegments, this->usedSegmentCount, sizeof( VDPManager_VDPRamSegment ), VDPManager_qsortComparator );
 
 				return tileIndex;
 			}
@@ -73,14 +75,15 @@ VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles ti
 
 		// If we get here, there's been no existing gap large enough to fit in VDP RAM
 		// Just toss it right after the last item
-		VDPManager_VDPRamSegment lastSegment = this->freeVDPSegments[ this->usedSegmentCount - 1 ];
+		VDPManager_VDPRamSegment lastSegment = this->usedVDPSegments[ this->usedSegmentCount - 1 ];
 		VDPManager_TileIndex tileIndex = lastSegment.index + lastSegment.length;
 
 		this->usedSegmentCount++;
-		this->freeVDPSegments = Romble_realloc_d( this->freeVDPSegments, sizeof( VDPManager_VDPRamSegment ) * this->usedSegmentCount, FILE_LINE() );
-		this->freeVDPSegments[ this->usedSegmentCount - 1 ].tileData = tiles;
-		this->freeVDPSegments[ this->usedSegmentCount - 1 ].index = tileIndex;
-		this->freeVDPSegments[ this->usedSegmentCount - 1 ].length = count;
+		this->usedVDPSegments = Romble_realloc_d( this->usedVDPSegments, sizeof( VDPManager_VDPRamSegment ) * this->usedSegmentCount, FILE_LINE() );
+		this->usedVDPSegments[ this->usedSegmentCount - 1 ].tileData = tiles;
+		this->usedVDPSegments[ this->usedSegmentCount - 1 ].index = tileIndex;
+		this->usedVDPSegments[ this->usedSegmentCount - 1 ].length = count;
+		this->usedVDPSegments[ this->usedSegmentCount - 1 ].tag = tag;
 
 		VDP_loadTileData( tiles, tileIndex, count, TRUE );
 
@@ -101,4 +104,18 @@ int VDPManager_qsortComparator( const void* firstItem, const void* secondItem ) 
 	} else {
 		return 1;
 	}
+}
+
+VDPManager_TileIndex VDPManager_getTilesByTag( VDPManager* this, VDPManager_VDPRamSegmentTag tag ) {
+	// The invalid value will be VDPManager_INDEX_NULL
+
+	for( size_t i = 0; i != this->usedSegmentCount; i++ ) {
+		VDPManager_VDPRamSegment current = this->usedVDPSegments[ i ];
+
+		if( current.tag == tag ) {
+			return current.index;
+		}
+	}
+
+	return VDPManager_INDEX_NULL;
 }

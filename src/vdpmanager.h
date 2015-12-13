@@ -7,10 +7,13 @@
 
 #define		VDPManager_TILE_USERINDEX	TILE_USERINDEX
 #define		VDPManager_TILE_MAX			0x01FF
+#define		VDPManager_TAG_NULL			0
+#define		VDPManager_INDEX_NULL		0
 
 typedef u16  VDPManager_TileIndex;
 typedef u32* VDPManager_Tiles;
 typedef u16* VDPManager_Palette;
+typedef u8   VDPManager_VDPRamSegmentTag;
 
 typedef enum {
 	VDPManager_Palette_INVALID = -1,
@@ -24,11 +27,12 @@ typedef struct VDPManager_VDPRamSegment {
 	VDPManager_Tiles tileData;
 	VDPManager_TileIndex index;
 	u16 length;
+	VDPManager_VDPRamSegmentTag tag;
 } VDPManager_VDPRamSegment;
 
 typedef struct VDPManager {
 	u16* palettes[ 3 ];
-	VDPManager_VDPRamSegment* freeVDPSegments;
+	VDPManager_VDPRamSegment* usedVDPSegments;
 	u16 usedSegmentCount;
 } VDPManager;
 
@@ -38,13 +42,21 @@ void VDPManager_dtor( VDPManager* this );
 /**
  * Load tiles into VDP RAM. The VDP manager will select a contiguous region and return
  * the numeric index of the item stored in VDP RAM.
+ *
+ * All tags must be uniquely identifiable! The only tag permitted twice is VDPManager_TAG_NULL,
+ * which will be skipped when retrieving a tile index by tag.
  */
-VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles tiles, u16 count );
+VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles tiles, u16 count, VDPManager_VDPRamSegmentTag tag );
 
 /**
  * Search for the region of tiles and remove it, marking this region of VDP RAM free to use.
  */
 void VDPManager_unloadTiles( VDPManager* this, VDPManager_TileIndex index );
+
+/**
+ * Retrieve a tileset by tag. Helps avoid god-awful globals.
+ */
+VDPManager_TileIndex VDPManager_getTilesByTag( VDPManager* this, VDPManager_VDPRamSegmentTag tag );
 
 /**
  * Load a palette into VDP. The VDP manager will select one of the four palettes
@@ -62,4 +74,5 @@ void VDPManager_unloadPalette( VDPManager* this, VDPManager_PaletteIndex palette
  * Comparator for the qsort() function, used to sort VDPManager_VDPRamSegments
  */
 int VDPManager_qsortComparator( const void* firstItem, const void* secondItem );
+
 #endif
