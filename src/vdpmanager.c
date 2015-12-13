@@ -20,7 +20,7 @@ void VDPManager_dtor( VDPManager* this ) {
 	// I don't think we'll ever need to do this?
 }
 
-VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles tiles, u16 count, VDPManager_VDPRamSegmentTag tag ) {
+VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles tiles, u16 count, VDPManager_Tag tag ) {
 	if( this->usedVDPSegments == NULL ) {
 		// If usedVDPSegments is null, nothing has yet been added to the VDP RAM starting at
 		// VDPManager_TILE_USERINDEX
@@ -74,7 +74,7 @@ VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles ti
 	}
 }
 
-void VDPManager_pushSegment( VDPManager* this, VDPManager_Tiles tiles, VDPManager_TileIndex index, u16 length, VDPManager_VDPRamSegmentTag tag ) {
+void VDPManager_pushSegment( VDPManager* this, VDPManager_Tiles tiles, VDPManager_TileIndex index, u16 length, VDPManager_Tag tag ) {
 	this->usedSegmentCount++;
 
 	this->usedVDPSegments = Romble_realloc_d( this->usedVDPSegments, sizeof( VDPManager_VDPRamSegment ) * this->usedSegmentCount, FILE_LINE() );
@@ -98,7 +98,7 @@ int VDPManager_qsortComparator( const void* firstItem, const void* secondItem ) 
 	}
 }
 
-VDPManager_TileIndex VDPManager_getTilesByTag( VDPManager* this, VDPManager_VDPRamSegmentTag tag ) {
+VDPManager_TileIndex VDPManager_getTilesByTag( VDPManager* this, VDPManager_Tag tag ) {
 	// The invalid value will be VDPManager_INDEX_NULL
 
 	for( size_t i = 0; i != this->usedSegmentCount; i++ ) {

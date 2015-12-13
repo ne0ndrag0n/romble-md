@@ -13,7 +13,7 @@
 typedef u16  VDPManager_TileIndex;
 typedef u32* VDPManager_Tiles;
 typedef u16* VDPManager_Palette;
-typedef u8   VDPManager_VDPRamSegmentTag;
+typedef u8   VDPManager_Tag;
 
 typedef enum {
 	VDPManager_Palette_INVALID = -1,
@@ -27,7 +27,7 @@ typedef struct VDPManager_VDPRamSegment {
 	VDPManager_Tiles tileData;
 	VDPManager_TileIndex index;
 	u16 length;
-	VDPManager_VDPRamSegmentTag tag;
+	VDPManager_Tag tag;
 } VDPManager_VDPRamSegment;
 
 typedef struct VDPManager {
@@ -46,7 +46,7 @@ void VDPManager_dtor( VDPManager* this );
  * All tags must be uniquely identifiable! The only tag permitted twice is VDPManager_TAG_NULL,
  * which will be skipped when retrieving a tile index by tag.
  */
-VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles tiles, u16 count, VDPManager_VDPRamSegmentTag tag );
+VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles tiles, u16 count, VDPManager_Tag tag );
 
 /**
  * Search for the region of tiles and remove it, marking this region of VDP RAM free to use.
@@ -56,7 +56,7 @@ void VDPManager_unloadTiles( VDPManager* this, VDPManager_TileIndex index );
 /**
  * Retrieve a tileset by tag. Helps avoid god-awful globals.
  */
-VDPManager_TileIndex VDPManager_getTilesByTag( VDPManager* this, VDPManager_VDPRamSegmentTag tag );
+VDPManager_TileIndex VDPManager_getTilesByTag( VDPManager* this, VDPManager_Tag tag );
 
 /**
  * Load a palette into VDP. The VDP manager will select one of the four palettes
@@ -80,6 +80,6 @@ int VDPManager_qsortComparator( const void* firstItem, const void* secondItem );
  *
  * Push an additional item onto this->usedVDPSegments. Increments usedSegmentCount.
  */
-void VDPManager_pushSegment( VDPManager* this, VDPManager_Tiles tiles, VDPManager_TileIndex index, u16 length, VDPManager_VDPRamSegmentTag tag );
+void VDPManager_pushSegment( VDPManager* this, VDPManager_Tiles tiles, VDPManager_TileIndex index, u16 length, VDPManager_Tag tag );
 
 #endif
