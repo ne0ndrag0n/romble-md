@@ -111,3 +111,37 @@ VDPManager_TileIndex VDPManager_getTilesByTag( VDPManager* this, VDPManager_Tag 
 
 	return VDPManager_INDEX_NULL;
 }
+
+void VDPManager_unloadTilesByIndex( VDPManager* this, VDPManager_TileIndex index ) {
+
+	u16 i;
+	bool found = FALSE;
+	for( i = 0; i != this->usedSegmentCount; i++ ) {
+		VDPManager_VDPRamSegment current = this->usedVDPSegments[ i ];
+
+		if( current.index == index ){
+			found = TRUE;
+			break;
+		}
+	}
+
+	if( found == TRUE ) {
+		// Items all need to be shifted left if the item was not found at this->usedVDPSegments - 1
+		if( i != this->usedSegmentCount - 1 ) {
+			for( ; i != this->usedSegmentCount - 1; i++ ) {
+				this->usedVDPSegments[ i ] = this->usedVDPSegments[ i + 1 ];
+			}
+		}
+
+		// Shrink the usedSegmentCount by 1
+		this->usedSegmentCount--;
+
+		// Realloc to the new count (if the last one wasn't removed)
+		if( this->usedSegmentCount == 0 ) {
+			Romble_free( this->usedVDPSegments );
+			this->usedVDPSegments = NULL;
+		} else {
+			this->usedVDPSegments = Romble_realloc_d( this->usedVDPSegments, sizeof( VDPManager_VDPRamSegment ) * this->usedSegmentCount, FILE_LINE() );
+		}
+	}
+}

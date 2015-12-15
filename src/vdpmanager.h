@@ -86,6 +86,8 @@ void VDPManager_unloadPaletteByTag( VDPManager* this, VDPManager_Tag tag );
 VDPManager_PaletteIndex VDPManager_getPaletteByTag( VDPManager* this, VDPManager_Tag tag );
 
 /**
+ * @private
+ *
  * Comparator for the qsort() function, used to sort VDPManager_VDPRamSegments
  */
 int VDPManager_qsortComparator( const void* firstItem, const void* secondItem );
