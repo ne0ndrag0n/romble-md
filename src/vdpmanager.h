@@ -99,4 +99,11 @@ int VDPManager_qsortComparator( const void* firstItem, const void* secondItem );
  */
 void VDPManager_pushSegment( VDPManager* this, VDPManager_Tiles tiles, VDPManager_TileIndex index, u16 length, VDPManager_Tag tag );
 
+/**
+ * @private
+ *
+ * Removes an item from this->usedVDPSegments by shifting items left and reallocating the array
+ */
+void VDPManager_shiftShrink( VDPManager* this, u16 i );
+
 #endif

@@ -14,6 +14,7 @@ void Romble_setJoyManager();
 void Romble_assert( bool condition, char* failMessage );
 u16 Romble_getUniqueId();
 void Romble_free( void* pointer );
+void Romble_free_d( void* pointer, char* fileLine );
 void Romble_secureFree( void** pointer );
 
 void Romble_secureFree_d( void** pointer, char* fileLine );

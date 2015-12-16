@@ -115,31 +115,42 @@ VDPManager_TileIndex VDPManager_getTilesByTag( VDPManager* this, VDPManager_Tag 
 void VDPManager_unloadTilesByIndex( VDPManager* this, VDPManager_TileIndex index ) {
 
 	u16 i;
-	bool found = FALSE;
 	for( i = 0; i != this->usedSegmentCount; i++ ) {
 		VDPManager_VDPRamSegment current = this->usedVDPSegments[ i ];
 
 		if( current.index == index ){
-			found = TRUE;
+			VDPManager_shiftShrink( this, i );
 			break;
 		}
 	}
+}
 
-	if( found == TRUE ) {
-		// Items all need to be shifted left if the item was not found at this->usedVDPSegments - 1
-		for( ; i != this->usedSegmentCount - 1; i++ ) {
-			this->usedVDPSegments[ i ] = this->usedVDPSegments[ i + 1 ];
+void VDPManager_unloadTilesByTag( VDPManager* this, VDPManager_Tag tag ) {
+	u16 i;
+	for( i = 0; i != this->usedSegmentCount; i++ ) {
+		VDPManager_VDPRamSegment current = this->usedVDPSegments[ i ];
+
+		if( current.tag == tag ){
+			VDPManager_shiftShrink( this, i );
+			break;
 		}
+	}
+}
 
-		// Shrink the usedSegmentCount by 1
-		this->usedSegmentCount--;
+void VDPManager_shiftShrink( VDPManager* this, u16 i ) {
+	// Items all need to be shifted left if the item was not found at this->usedVDPSegments - 1
+	for( ; i != this->usedSegmentCount - 1; i++ ) {
+		this->usedVDPSegments[ i ] = this->usedVDPSegments[ i + 1 ];
+	}
 
-		// Realloc to the new count (if the last one wasn't removed)
-		if( this->usedSegmentCount == 0 ) {
-			Romble_free( this->usedVDPSegments );
-			this->usedVDPSegments = NULL;
-		} else {
-			this->usedVDPSegments = Romble_realloc_d( this->usedVDPSegments, sizeof( VDPManager_VDPRamSegment ) * this->usedSegmentCount, FILE_LINE() );
-		}
+	// Shrink the usedSegmentCount by 1
+	this->usedSegmentCount--;
+
+	// Realloc to the new count (if the last one wasn't removed)
+	if( this->usedSegmentCount == 0 ) {
+		Romble_free_d( this->usedVDPSegments, FILE_LINE() );
+		this->usedVDPSegments = NULL;
+	} else {
+		this->usedVDPSegments = Romble_realloc_d( this->usedVDPSegments, sizeof( VDPManager_VDPRamSegment ) * this->usedSegmentCount, FILE_LINE() );
 	}
 }
