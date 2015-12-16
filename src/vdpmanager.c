@@ -127,10 +127,8 @@ void VDPManager_unloadTilesByIndex( VDPManager* this, VDPManager_TileIndex index
 
 	if( found == TRUE ) {
 		// Items all need to be shifted left if the item was not found at this->usedVDPSegments - 1
-		if( i != this->usedSegmentCount - 1 ) {
-			for( ; i != this->usedSegmentCount - 1; i++ ) {
-				this->usedVDPSegments[ i ] = this->usedVDPSegments[ i + 1 ];
-			}
+		for( ; i != this->usedSegmentCount - 1; i++ ) {
+			this->usedVDPSegments[ i ] = this->usedVDPSegments[ i + 1 ];
 		}
 
 		// Shrink the usedSegmentCount by 1
