@@ -115,4 +115,19 @@ void VDPManager_pushSegment( VDPManager* this, VDPManager_Tiles tiles, VDPManage
  */
 void VDPManager_shiftShrink( VDPManager* this, u16 i );
 
+/**
+ * @private
+ *
+ * Verify that a tile tag does not already exist (these must be unique). Application will throw
+ * an exception if the ID is already in use, this issue is not recoverable.
+ */
+void VDPManager_assertUniqueTileTag( VDPManager* this, VDPManager_Tag tag );
+
+/**
+ * @private
+ *
+ * Verify that a palette tag does not already exist (these must be unique). Application will throw
+ * an exception if the ID is already in use, this issue is not recoverable.
+ */
+void VDPManager_assertUniquePaletteTag( VDPManager* this, VDPManager_Tag tag );
 #endif

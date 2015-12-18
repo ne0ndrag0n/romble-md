@@ -2,10 +2,13 @@
 #include <types.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <res/globals.h>
 #include <romble.h>
 #include <vdp_bg.h>
 #include <vdp_pal.h>
+#include <lang.h>
+#include <sys.h>
 
 void VDPManager_ctor( VDPManager* this ) {
 
@@ -101,7 +104,11 @@ int VDPManager_qsortComparator( const void* firstItem, const void* secondItem ) 
 }
 
 VDPManager_TileIndex VDPManager_getTilesByTag( VDPManager* this, VDPManager_Tag tag ) {
+
 	// The invalid value will be VDPManager_INDEX_NULL
+	if( tag == VDPManager_TAG_NULL ) {
+		return VDPManager_INDEX_NULL;
+	}
 
 	for( size_t i = 0; i != this->usedSegmentCount; i++ ) {
 		VDPManager_VDPRamSegment current = this->usedVDPSegments[ i ];
@@ -128,6 +135,11 @@ void VDPManager_unloadTilesByIndex( VDPManager* this, VDPManager_TileIndex index
 }
 
 void VDPManager_unloadTilesByTag( VDPManager* this, VDPManager_Tag tag ) {
+
+	if( tag == VDPManager_TAG_NULL ) {
+		return;
+	}
+
 	u16 i;
 	for( i = 0; i != this->usedSegmentCount; i++ ) {
 		VDPManager_VDPRamSegment current = this->usedVDPSegments[ i ];
@@ -169,12 +181,31 @@ void VDPManager_unloadPaletteByIndex( VDPManager* this, VDPManager_PaletteIndex 
 
 void VDPManager_unloadPaletteByTag( VDPManager* this, VDPManager_Tag tag ) {
 
+	if( tag == VDPManager_TAG_NULL ) {
+		return;
+	}
+
 	for( size_t i = 0; i != 4; i++ ) {
 		if( this->palettes[ i ].tag == tag ) {
 			VDPManager_unloadPaletteByIndex( this, i );
 			return;
 		}
 	}
+}
+
+VDPManager_PaletteIndex VDPManager_getPaletteByTag( VDPManager* this, VDPManager_Tag tag ) {
+
+	if( tag == VDPManager_TAG_NULL ) {
+		return VDPManager_Palette_INVALID;
+	}
+
+	for( size_t i = 0; i != 4; i++ ) {
+		if( this->palettes[ i ].tag == tag ) {
+			return i;
+		}
+	}
+
+	return VDPManager_Palette_INVALID;
 }
 
 void VDPManager_shiftShrink( VDPManager* this, u16 i ) {
@@ -192,5 +223,41 @@ void VDPManager_shiftShrink( VDPManager* this, u16 i ) {
 		this->usedVDPSegments = NULL;
 	} else {
 		this->usedVDPSegments = Romble_realloc_d( this->usedVDPSegments, sizeof( VDPManager_VDPRamSegment ) * this->usedSegmentCount, FILE_LINE() );
+	}
+}
+
+void VDPManager_assertUniqueTileTag( VDPManager* this, VDPManager_Tag tag ) {
+
+	// VDPManager_TAG_NULL is the reserved value, any items without a tag will get this one
+	// and this one is supposed to be ignored.
+	if( tag == VDPManager_TAG_NULL ) {
+		// Return safely
+		return;
+	}
+
+	for( size_t i = 0; i != this->usedSegmentCount; i++ ) {
+		if( this->usedVDPSegments[ i ].tag == tag  ) {
+			char error[ 100 ];
+			sprintf( error, EXCEPTION_DUPLICATE_TILE_TAG, tag );
+			SYS_die( error );
+		}
+	}
+}
+
+void VDPManager_assertUniquePaletteTag( VDPManager* this, VDPManager_Tag tag ) {
+
+	// VDPManager_TAG_NULL is the reserved value, any items without a tag will get this one
+	// and this one is supposed to be ignored.
+	if( tag == VDPManager_TAG_NULL ) {
+		// Return safely
+		return;
+	}
+
+	for( size_t i = 0; i != 4; i++ ) {
+		if( this->palettes[ i ].tag == tag ) {
+			char error[ 100 ];
+			sprintf( error, EXCEPTION_DUPLICATE_PAL_TAG, tag );
+			SYS_die( error );
+		}
 	}
 }
