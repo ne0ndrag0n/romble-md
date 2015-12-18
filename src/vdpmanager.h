@@ -10,17 +10,21 @@
 #define		VDPManager_TAG_NULL			0
 #define		VDPManager_INDEX_NULL		0
 
+#define		VDPManager_GRAPHICS_LAYER	VDP_PLAN_A
+#define		VDPManager_TEXT_LAYER		VDP_PLAN_B
+
 typedef u16  VDPManager_TileIndex;
 typedef u32* VDPManager_Tiles;
 typedef u16* VDPManager_Palette;
 typedef s16  VDPManager_Tag;
 
 typedef enum {
-	VDPManager_Palette_INVALID = -1,
 	VDPManager_Palette_PAL0 = PAL0,
 	VDPManager_Palette_PAL1,
 	VDPManager_Palette_PAL2,
-	VDPManager_Palette_PAL3
+	VDPManager_Palette_PAL3,
+	// There is no PAL4!!
+	VDPManager_Palette_INVALID
 } VDPManager_PaletteIndex;
 
 typedef struct VDPManager_VDPRamSegment {
@@ -30,8 +34,13 @@ typedef struct VDPManager_VDPRamSegment {
 	VDPManager_Tag tag;
 } VDPManager_VDPRamSegment;
 
+typedef struct VDPManager_VDPPaletteSegment {
+	VDPManager_Palette palette;
+	VDPManager_Tag tag;
+} VDPManager_VDPPaletteSegment;
+
 typedef struct VDPManager {
-	u16* palettes[ 3 ];
+	VDPManager_VDPPaletteSegment palettes[ 3 ];
 	VDPManager_VDPRamSegment* usedVDPSegments;
 	u16 usedSegmentCount;
 } VDPManager;

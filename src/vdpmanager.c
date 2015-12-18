@@ -5,11 +5,13 @@
 #include <res/globals.h>
 #include <romble.h>
 #include <vdp_bg.h>
+#include <vdp_pal.h>
 
 void VDPManager_ctor( VDPManager* this ) {
 
 	for( size_t i = 0; i != 3; i++ ) {
-		this->palettes[ i ] = NULL;
+		this->palettes[ i ].palette = NULL;
+		this->palettes[ i ].tag = VDPManager_TAG_NULL;
 	}
 
 	this->usedVDPSegments = NULL;
@@ -135,6 +137,33 @@ void VDPManager_unloadTilesByTag( VDPManager* this, VDPManager_Tag tag ) {
 			break;
 		}
 	}
+}
+
+VDPManager_PaletteIndex VDPManager_loadPalette( VDPManager* this, VDPManager_Palette palette, VDPManager_Tag tag ) {
+
+	size_t i;
+	VDPManager_PaletteIndex segment = VDPManager_Palette_INVALID;
+
+	// Find a reference to the first VDPManager_VDPPaletteSegment that is usable
+	for( i = 0; i != 4; i++ ) {
+		if( this->palettes[ i ].palette == NULL ) {
+			segment = i;
+			break;
+		}
+	}
+
+	if( segment != VDPManager_Palette_INVALID ) {
+		this->palettes[ segment ].palette = palette;
+		this->palettes[ segment ].tag = tag;
+
+		VDP_setPalette( segment, palette );
+	}
+
+	return segment;
+}
+
+void VDPManager_unloadPaletteByIndex( VDPManager* this, VDPManager_PaletteIndex palette ) {
+
 }
 
 void VDPManager_shiftShrink( VDPManager* this, u16 i ) {
