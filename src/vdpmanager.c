@@ -34,6 +34,21 @@ VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles ti
 		VDP_loadTileData( tiles, VDPManager_TILE_USERINDEX, count, TRUE );
 
 		return this->usedVDPSegments[ 0 ].index;
+	} else if( this->usedSegmentCount == 1 ) {
+
+		VDPManager_VDPRamSegment firstSegment = this->usedVDPSegments[ 0 ];
+		VDPManager_TileIndex position = firstSegment.index + firstSegment.length;
+		VDPManager_pushSegment(
+			this,
+			tiles,
+			position,
+			count,
+			tag
+		);
+		VDP_loadTileData( tiles, position, count, TRUE );
+
+		return this->usedVDPSegments[ 1 ].index;
+
 	} else {
 		// We need to apply a first-fit algorithm that looks for the first continuous region of VDP RAM
 		// that will fit the incoming data ("count" number of tiles). Take tilesets two at a time, and use
@@ -45,9 +60,8 @@ VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles ti
 		// Once a gap has been found, we need to add a VDPRamSegment to this->usedVDPSegments, sort
 		// this->usedVDPSegments to ensure this algorithm works, and then actually load the info.
 		size_t i;
-		// This needs to be completely redone, fails numerous base cases
-		size_t cap = this->usedSegmentCount % 2 == 0 ? this->usedSegmentCount - 2 : this->usedSegmentCount - 1;
-		for( i = 0; i != cap; i++ ) {
+		size_t cap = this->usedSegmentCount - 2;
+		for( i = 0; i <= cap; i++ ) {
 			VDPManager_VDPRamSegment first = this->usedVDPSegments[ i ];
 			VDPManager_VDPRamSegment second = this->usedVDPSegments[ i + 1 ];
 
