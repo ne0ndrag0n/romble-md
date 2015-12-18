@@ -163,7 +163,18 @@ VDPManager_PaletteIndex VDPManager_loadPalette( VDPManager* this, VDPManager_Pal
 }
 
 void VDPManager_unloadPaletteByIndex( VDPManager* this, VDPManager_PaletteIndex palette ) {
+	this->palettes[ palette ].palette = NULL;
+	this->palettes[ palette ].tag = VDPManager_TAG_NULL;
+}
 
+void VDPManager_unloadPaletteByTag( VDPManager* this, VDPManager_Tag tag ) {
+
+	for( size_t i = 0; i != 4; i++ ) {
+		if( this->palettes[ i ].tag == tag ) {
+			VDPManager_unloadPaletteByIndex( this, i );
+			return;
+		}
+	}
 }
 
 void VDPManager_shiftShrink( VDPManager* this, u16 i ) {
