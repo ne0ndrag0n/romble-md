@@ -22,7 +22,7 @@ void VDPManager_ctor( VDPManager* this ) {
 }
 
 void VDPManager_dtor( VDPManager* this ) {
-	// I don't think we'll ever need to do this?
+	Romble_free_d( this->usedVDPSegments, FILE_LINE() );
 }
 
 VDPManager_TileIndex VDPManager_loadTiles( VDPManager* this, VDPManager_Tiles tiles, u16 count, VDPManager_Tag tag ) {
