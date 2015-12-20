@@ -6,5 +6,6 @@
 extern const TestFramework_TestCaseDefinition VDPManagerTests[];
 
 TestFramework_TestResult VDPManagerTests_verifyCtor();
+TestFramework_TestResult VDPManagerTests_verifyLoadTilesFromNull();
 
 #endif

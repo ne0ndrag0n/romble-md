@@ -14,7 +14,7 @@
 #define		VDPManager_TEXT_LAYER		VDP_PLAN_B
 
 typedef u16  VDPManager_TileIndex;
-typedef u32* VDPManager_Tiles;
+typedef const u32* VDPManager_Tiles;
 typedef u16* VDPManager_Palette;
 typedef s16  VDPManager_Tag;
 
