@@ -40,7 +40,7 @@ typedef struct VDPManager_VDPPaletteSegment {
 } VDPManager_VDPPaletteSegment;
 
 typedef struct VDPManager {
-	VDPManager_VDPPaletteSegment palettes[ 3 ];
+	VDPManager_VDPPaletteSegment palettes[ 4 ];
 	VDPManager_VDPRamSegment* usedVDPSegments;
 	u16 usedSegmentCount;
 } VDPManager;
