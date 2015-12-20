@@ -29,8 +29,20 @@ const TestFramework_TestCaseDefinition VDPManagerTests[] = {
 		VDPManagerTests_verifyThirdTileNoGap
 	},
 	{
-		"Shold properly add an item inside a gap",
+		"Should properly add an item inside a gap",
 		VDPManagerTests_verifyThirdTileGap
+	},
+	{
+		"Should return VDPManager_INDEX_NULL *always* when trying to get tiles by VDPManager_TAG_NULL",
+		VDPManagerTests_verifyTagNullReturn
+	},
+	{
+		"Should be able to return a tile set by tag",
+		VDPManagerTests_verifyAbleToReturnTag
+	},
+	{
+		"Should properly unload and shift elements in the array",
+		VDPManagerTests_verifyUnloadTile
 	}
 };
 
@@ -189,7 +201,92 @@ finally:
 	return testResult;
 }
 
+TestFramework_TestResult VDPManagerTests_verifyTagNullReturn() {
+	TestFramework_TestResult testResult;
+	VDPManager* vdpManager;
+
+	vdpManager = calloc( 1, sizeof( VDPManager ) );
+	VDPManager_ctor( vdpManager );
+
+	// Push segments with null values
+	VDPManagerTests_fillDemoSegments( vdpManager );
+
+	VDPManager_TileIndex expectedTileIndex = VDPManager_getTilesByTag( vdpManager, VDPManager_TAG_NULL );
+	TestFramework_EXPECT( expectedTileIndex == VDPManager_INDEX_NULL, "result for a request of VDPManager_TAG_NULL to be VDPManager_INDEX_NULL" );
+
+	testResult = TestFramework_TestResult_TEST_PASS;
+
+finally:
+	VDPManagerTests_finally( vdpManager );
+
+	return testResult;
+}
+
+TestFramework_TestResult VDPManagerTests_verifyAbleToReturnTag() {
+	TestFramework_TestResult testResult;
+	VDPManager* vdpManager;
+
+	vdpManager = calloc( 1, sizeof( VDPManager ) );
+	VDPManager_ctor( vdpManager );
+
+	// Push segments
+	VDPManagerTests_fillDemoSegments( vdpManager );
+
+	// Use test tag of 42
+	vdpManager->usedVDPSegments[ 1 ].tag = 42;
+	VDPManager_TileIndex expectedTileIndex = VDPManager_getTilesByTag( vdpManager, 42 );
+	TestFramework_EXPECT( expectedTileIndex == vdpManager->usedVDPSegments[ 1 ].index, "expectedTileIndex to match the one from the tag" );
+
+	testResult = TestFramework_TestResult_TEST_PASS;
+
+finally:
+	VDPManagerTests_finally( vdpManager );
+
+	return testResult;
+}
+
+TestFramework_TestResult VDPManagerTests_verifyUnloadTile() {
+	TestFramework_TestResult testResult;
+	VDPManager* vdpManager;
+
+	vdpManager = calloc( 1, sizeof( VDPManager ) );
+	VDPManager_ctor( vdpManager );
+
+	// Push segments
+	VDPManagerTests_fillDemoSegments( vdpManager );
+
+	// Use test tag of 42
+	vdpManager->usedVDPSegments[ 1 ].tag = 42;
+
+	VDPManager_unloadTilesByTag( vdpManager, 42 );
+
+	TestFramework_EXPECT( vdpManager->usedSegmentCount == 3, "usedSegmentCount to be 3 from 4" );
+
+	TestFramework_EXPECT( vdpManager->usedVDPSegments[ 0 ].tileData == BoxDrawingCharacters, "first tile's tileData to match BoxDrawingCharacters" );
+	TestFramework_EXPECT( vdpManager->usedVDPSegments[ 0 ].index == VDPManager_TILE_USERINDEX, "first tile's index to match VDPManager_TILE_USERINDEX" );
+
+	TestFramework_EXPECT( vdpManager->usedVDPSegments[ 1 ].tileData == VDPManagerTests_TestTwoTiles, "second tile's tileData to be VDPManagerTests_TestTwoTiles" );
+	TestFramework_EXPECT( vdpManager->usedVDPSegments[ 1 ].index == VDPManager_TILE_USERINDEX + 6, "second tile's index to be VDPManager_TILE_USERINDEX + 6" );
+
+	TestFramework_EXPECT( vdpManager->usedVDPSegments[ 2 ].tileData == BoxDrawingCharacters, "third tile's tileData to be BoxDrawingCharacters" );
+	TestFramework_EXPECT( vdpManager->usedVDPSegments[ 2 ].index == VDPManager_TILE_USERINDEX + 8, "third tile's index to be VDPManager_TILE_USERINDEX + 8" );
+
+	testResult = TestFramework_TestResult_TEST_PASS;
+
+finally:
+	VDPManagerTests_finally( vdpManager );
+
+	return testResult;
+}
+
 void VDPManagerTests_finally( VDPManager* vdpManager ) {
 	VDPManager_dtor( vdpManager );
 	free( vdpManager );
+}
+
+void VDPManagerTests_fillDemoSegments( VDPManager* vdpManager ) {
+	VDPManager_pushSegment( vdpManager, BoxDrawingCharacters, VDPManager_TILE_USERINDEX, 3, 0 );
+	VDPManager_pushSegment( vdpManager, BoxDrawingCharacters, VDPManager_TILE_USERINDEX + 3, 3, 0 );
+	VDPManager_pushSegment( vdpManager, VDPManagerTests_TestTwoTiles, VDPManager_TILE_USERINDEX + 6, 2, 0 );
+	VDPManager_pushSegment( vdpManager, BoxDrawingCharacters, VDPManager_TILE_USERINDEX + 8, 3, 0 );
 }
