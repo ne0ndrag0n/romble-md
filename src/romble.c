@@ -11,6 +11,7 @@
 #include <string.h>
 #include <romble.h>
 #include <utility.h>
+#include <vdpmanager.h>
 
 u16 BOX_DRAWING_INDEX;
 static u16 UNIQUE_ID = 0;
@@ -26,9 +27,11 @@ void Romble_init() {
 	// Placed directly at the beginning
 	BOX_DRAWING_INDEX = Romble_loadTiles( BoxDrawingCharacters, 3 );
 
-	joyManager = Romble_alloc_d( 1 * sizeof( JoyManager ), TRUE, FILE_LINE() );
-	Romble_assert( joyManager != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
+	joyManager = Romble_alloc_d( sizeof( JoyManager ), TRUE, FILE_LINE() );
 	JoyManager_ctor( joyManager, 40, 28 );
+
+	vdpManager = Romble_alloc_d( sizeof( VDPManager ), TRUE, FILE_LINE() );
+	VDPManager_ctor( vdpManager );
 
 	Debug_print( "Welcome to the Romble beta!" );
 	Debug_print( "Romble v0.0.3a (c) 2015 oaktree Games and Novelties. All rights reserved." );

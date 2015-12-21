@@ -10,6 +10,8 @@
 #include <lang.h>
 #include <sys.h>
 
+VDPManager* vdpManager;
+
 void VDPManager_ctor( VDPManager* this ) {
 
 	for( size_t i = 0; i != 3; i++ ) {

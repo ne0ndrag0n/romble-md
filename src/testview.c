@@ -48,7 +48,7 @@ void TestView_render( TestView* this ) {
 }
 
 void TestView_setupChildren( TestView* this ) {
-	NEW_OBJECT( ButtonView, this->button1, TILE_USERINDEX, BOX_DRAWING_INDEX, 0, 0, 10 );
+	NEW_OBJECT( ButtonView, this->button1, BOX_DRAWING_INDEX, BOX_DRAWING_INDEX, 0, 0, 10 );
 
 	FUNCTIONS( TestView, BaseView, this )->addChildView(
 		CLASS( BaseView, this ),

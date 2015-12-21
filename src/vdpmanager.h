@@ -45,6 +45,8 @@ typedef struct VDPManager {
 	u16 usedSegmentCount;
 } VDPManager;
 
+extern VDPManager* vdpManager;
+
 void VDPManager_ctor( VDPManager* this );
 void VDPManager_dtor( VDPManager* this );
 
