@@ -11,6 +11,8 @@
 #include <vdp_pal.h>
 #include <utility.h>
 #include <joy.h>
+#include <tags.h>
+#include <vdpmanager.h>
 
 JoyManager* joyManager;
 
@@ -34,7 +36,13 @@ void JoyManager_ctor( JoyManager* this, u8 registerableX, u8 registerableY ) {
 	this->registerableX = registerableX;
 	this->registerableY = registerableY;
 
-	this->haloTilesIndex = Romble_loadTiles( HaloTiles, 3 );
+	this->haloTilesIndex = VDPManager_getTilesByTag( vdpManager, TILES_HALO );
+	if( this->haloTilesIndex == VDPManager_INDEX_NULL ) {
+		// Need to load the tiles
+		this->haloTilesIndex = VDPManager_loadTiles( vdpManager, HaloTiles, 3, TILES_HALO );
+	}
+
+
 	this->currentElement = NULL;
 
 	for( i = 0; i != 4; i++ ) {

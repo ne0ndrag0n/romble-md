@@ -7,6 +7,7 @@
 #include <simpletextview.h>
 #include <joymanager.h>
 #include <buttonview.h>
+#include <vdpmanager.h>
 
 struct TestView;
 
@@ -28,6 +29,7 @@ typedef struct TestView {
 	BaseView super;
 
 	ButtonView* button1;
+	VDPManager_TileIndex buttonStyle;
 } TestView;
 
 void TestView_ctor( TestView* this, s16 x, s16 y, s16 width, s16 height );

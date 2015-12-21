@@ -14,6 +14,8 @@
 #include <sizedarray.h>
 #include <bit_trie.h>
 #include <utility.h>
+#include <vdpmanager.h>
+#include <tags.h>
 
 TestView_vtable TestView_table = {
 	TestView_dtor,
@@ -33,6 +35,15 @@ void TestView_ctor( TestView* this, s16 x, s16 y, s16 width, s16 height ) {
 	BaseView_ctor( ( BaseView* ) this, x, y, width, height );
 	CLASS( BaseView, this )->functions = &TestView_table;
 
+	// Determine this->buttonStyle by searching for tile tag TILES_BOX_DRAWING_BETA
+	// If it's not in the VDPManager, load it into the VDPManager
+	// TILES_BOX_DRAWING_BETA uses the system palette
+	this->buttonStyle = VDPManager_getTilesByTag( vdpManager, TILES_BOX_DRAWING_BETA );
+	if( this->buttonStyle == VDPManager_INDEX_NULL ) {
+		// Need to load the tiles
+		this->buttonStyle = VDPManager_loadTiles( vdpManager, BoxDrawingCharacters, 3, TILES_BOX_DRAWING_BETA );
+	}
+
 	FUNCTIONS( TestView, BaseView, this )->setupChildren( this );
 }
 
@@ -48,7 +59,7 @@ void TestView_render( TestView* this ) {
 }
 
 void TestView_setupChildren( TestView* this ) {
-	NEW_OBJECT( ButtonView, this->button1, BOX_DRAWING_INDEX, BOX_DRAWING_INDEX, 0, 0, 10 );
+	NEW_OBJECT( ButtonView, this->button1, this->buttonStyle, 0, 0, 0, 10 );
 
 	FUNCTIONS( TestView, BaseView, this )->addChildView(
 		CLASS( BaseView, this ),

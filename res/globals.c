@@ -1,8 +1,6 @@
 #include <globals.h>
 #include <types.h>
 
-u16 TILES_USED;
-
 const u32 BoxDrawingCharacters[ 24 ] = {
 	0x00000000, 0x00000000, 0x00000000, 0x000AAAAA, 0x000AAAAA, 0x000AA555, 0x000AA555, 0x000AA555, 	//  Tile: 0
 	0x00000000, 0x00000000, 0x00000000, 0xAAAAAAAA, 0xAAAAAAAA, 0x55555555, 0x55555555, 0x55555555, 	//  Tile: 1

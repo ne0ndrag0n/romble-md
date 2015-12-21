@@ -4,6 +4,7 @@
 // ------------------------ All Tile Tags ------------------------
 #define TILES_BOX_DRAWING_BETA		1
 #define TILES_TWO_TILES_TEST		2
+#define TILES_HALO					3
 
 // ------------------------ All Palette Tags ------------------------
 #define	PAL_SYSTEM				1
