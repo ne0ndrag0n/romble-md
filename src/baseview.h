@@ -60,5 +60,6 @@ void BaseView_placeTile( BaseView* this, s16 x, s16 y, u8 pal, u16 tileIndex, bo
 void BaseView_placeTileSeries( BaseView* this, s16 x, s16 y, s16 w, s16 h, u8 pal, u16 tileIndex, bool autoInc );
 
 bool BaseView_checkTileBoundary( BaseView* this, s16 x, s16 y );
+bool BaseView_isView( void* view );
 
 #endif

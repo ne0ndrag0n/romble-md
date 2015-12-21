@@ -18,6 +18,8 @@
 #include <joymanager.h>
 #include <linkedlist.h>
 
+static u16 BaseView_isView_ID = 0;
+
 BaseView_vtable BaseView_table = {
 	BaseView_dtor,
 	BaseView_render,
@@ -149,4 +151,10 @@ bool BaseView_checkTileBoundary( BaseView* this, s16 x, s16 y ) {
 	} else {
 		return FUNCTIONS( BaseView, BaseView, this->parent )->checkTileBoundary( this->parent, x, y );
 	}
+}
+
+bool BaseView_isView( void* view ) {
+	BaseView* asView = ( BaseView* ) view;
+
+	return asView->id == BaseView_isView_ID;
 }
