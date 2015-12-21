@@ -12,6 +12,7 @@
 #include <romble.h>
 #include <utility.h>
 #include <vdpmanager.h>
+#include <tags.h>
 
 u16 BOX_DRAWING_INDEX;
 static u16 UNIQUE_ID = 0;
@@ -22,8 +23,6 @@ void Romble_init() {
 
 	TILES_USED = 0;
 
-	VDP_setPalette( PAL0, StandardColours );
-
 	// Placed directly at the beginning
 	BOX_DRAWING_INDEX = Romble_loadTiles( BoxDrawingCharacters, 3 );
 
@@ -32,6 +31,8 @@ void Romble_init() {
 
 	vdpManager = Romble_alloc_d( sizeof( VDPManager ), TRUE, FILE_LINE() );
 	VDPManager_ctor( vdpManager );
+
+	VDPManager_loadPalette( vdpManager, StandardColours, PAL_SYSTEM );
 
 	Debug_print( "Welcome to the Romble beta!" );
 	Debug_print( "Romble v0.0.3a (c) 2015 oaktree Games and Novelties. All rights reserved." );
