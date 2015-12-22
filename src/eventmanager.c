@@ -71,6 +71,26 @@ void EventManager_unregisterEvent( EventManager* this, void* hostInstance, Event
 	LinkedListNode_remove( &( this->events ), EventManager_isEvent, FALSE );
 }
 
+void EventManager_trigger( EventManager* this, EventManager_EventKey eventKey, void* payload ) {
+	// Get RegisteredEvent by eventKey
+	EventManager_isEvent_EVENT_KEY = eventKey;
+	EventManager_RegisteredEvent* registeredEvent = LinkedListNode_findData( this->events, EventManager_isEvent );
+
+	if( registeredEvent != NULL ) {
+		// For each EventListener on this RegisteredEvent, synchronously call the callback with the
+		// attached instance and given payload.
+		LinkedListNode* current = registeredEvent->listeners;
+		while( current != NULL ) {
+			EventManager_EventListener* eventListener = ( EventManager_EventListener* ) current->data;
+			if( eventListener->callback != NULL ) {
+				eventListener->callback( eventListener->instance, payload );
+			}
+
+			current = current->next;
+		}
+	}
+}
+
 bool EventManager_isEvent( void* registeredEvent ) {
 	if( registeredEvent == NULL ) {
 		return FALSE;
