@@ -61,6 +61,16 @@ void EventManager_registerEvent( EventManager* this, void* hostInstance, EventMa
 	}
 }
 
+void EventManager_unregisterEvent( EventManager* this, void* hostInstance, EventManager_EventKey eventKey ) {
+
+	if( this->events == NULL ) {
+		return;
+	}
+
+	EventManager_isEvent_EVENT_KEY = eventKey;
+	LinkedListNode_remove( &( this->events ), EventManager_isEvent, FALSE );
+}
+
 bool EventManager_isEvent( void* registeredEvent ) {
 	if( registeredEvent == NULL ) {
 		return FALSE;
