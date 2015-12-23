@@ -3,6 +3,7 @@
 #include <types.h>
 #include <linkedlist.h>
 #include <res/globals.h>
+#include <utility.h>
 
 // bit of a crappy way to generate a function for a function predicate
 static EventManager_EventKey EventManager_isEvent_EVENT_KEY = EventManager_EVENT_NULL;
@@ -52,20 +53,16 @@ void EventManager_registerEvent( EventManager* this, void* hostInstance, EventMa
 		EventManager_EventListener* eventListener = LinkedListNode_findData( registeredEvent->listeners, EventManager_eventExists );
 		if( eventListener == NULL ) {
 			eventListener = Romble_alloc_d( sizeof( EventManager_EventListener ), TRUE, FILE_LINE() );
+			eventListener->instance = hostInstance;
+			eventListener->callback = callback;
+
 			LinkedListNode_insertEnd( registeredEvent->listeners, eventListener );
 		}
 	} else {
-		// This event does not have any listeners attached to it - The event object needs to be added,
+		// This event does not have any listeners attached to it - The event object needs to be created, added,
 		// and then the initial event listener needs to be added
 
-		// But wait! Does the first node need to be created?
-		if( this->events == NULL ) {
-			// Create the first node
-			this->events = Romble_alloc_d( sizeof( LinkedListNode ), TRUE, FILE_LINE() );
-			LinkedListNode_ctor( this->events );
-		}
-
-		// Craete the event object
+		// Create the event object
 		registeredEvent = Romble_alloc_d( sizeof( EventManager_RegisteredEvent ), TRUE, FILE_LINE() );
 		registeredEvent->eventKey = eventKey;
 		registeredEvent->listeners = Romble_alloc_d( sizeof( LinkedListNode ), TRUE, FILE_LINE() );
@@ -76,11 +73,21 @@ void EventManager_registerEvent( EventManager* this, void* hostInstance, EventMa
 		eventListener->instance = hostInstance;
 		eventListener->callback = callback;
 
-		// Add the event listener to the registered event object
-		LinkedListNode_insertEnd( registeredEvent->listeners, eventListener );
+		// Add the event listener to the registered event object; it is the first node, so insertEnd will not work properly!
+		registeredEvent->listeners->data = eventListener;
 
-		// Add the event object to this->events
-		LinkedListNode_insertEnd( this->events, registeredEvent );
+		// Add the event object to this->events. Check if this->events was created previously; if it wasn't, create this->events
+		// and set the pointer (insertEnd does not work in that instance!). If this->events exists, *THEN* use insertEnd.
+		// But wait! Does the first node need to be created?
+		if( this->events == NULL ) {
+			// Create the first node
+			this->events = Romble_alloc_d( sizeof( LinkedListNode ), TRUE, FILE_LINE() );
+			LinkedListNode_ctor( this->events );
+
+			this->events->data = registeredEvent;
+		} else {
+			LinkedListNode_insertEnd( this->events, registeredEvent );
+		}
 	}
 }
 

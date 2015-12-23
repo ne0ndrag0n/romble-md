@@ -3,6 +3,7 @@
 #include <test/bit_trie.h>
 #include <test/linkedlist.h>
 #include <test/vdp_manager.h>
+#include <test/event_manager.h>
 #include <timer.h>
 #include <stdio.h>
 
@@ -14,6 +15,7 @@ void SpecRunner_caseList() {
 	TestFramework_execute( "BitwiseTrieNode", 9, BitTrieTests );
 	TestFramework_execute( "Linked List", 6, LinkedListTests );
 	TestFramework_execute( "VDPManager", 8, VDPManagerTests );
+	TestFramework_execute( "EventManager", 2, EventManagerTests );
 }
 
 
