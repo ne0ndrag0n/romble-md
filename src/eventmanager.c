@@ -14,6 +14,27 @@ void EventManager_ctor( EventManager* this ) {
 
 void EventManager_dtor( EventManager* this ) {
 	// Iterate through each EventManager_RegisteredEvent, freeing the RAM occupied by each and the EventManager_EventListener within
+	LinkedListNode* currentEventNode = this->events;
+
+	while( currentEventNode != NULL ) {
+		LinkedListNode* currentListenerNode = ( ( EventManager_RegisteredEvent* )( currentEventNode->data ) )->listeners;
+
+		// Free all the data within each linked list node for this registered event's listeners
+		while( currentListenerNode != NULL ) {
+			Romble_free_d( currentListenerNode->data, FILE_LINE() );
+
+			currentListenerNode = currentListenerNode->next;
+		}
+
+		// Free the entire listeners chain
+		LinkedListNode_dtor( ( ( EventManager_RegisteredEvent* )( currentEventNode->data ) )->listeners );
+
+		// Free the actual event data
+		Romble_free_d( currentEventNode->data, FILE_LINE() );
+	}
+
+	// With all components within this->events freed, call destructor on the top-level linked list
+	LinkedListNode_dtor( this->events );
 }
 
 /**
