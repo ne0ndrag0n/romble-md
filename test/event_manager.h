@@ -17,6 +17,7 @@ typedef struct EventManagerTests_ExampleObject {
 
 TestFramework_TestResult EventManagerTests_verifyCtor();
 TestFramework_TestResult EventManagerTests_verifyRegisterSingleEvent();
+TestFramework_TestResult EventManagerTests_verifyRegisterTwoOfSameEvent();
 
 void EventManagerTests_eventTarget( void* context, void* payload );
 
