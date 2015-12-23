@@ -31,6 +31,8 @@ void EventManager_dtor( EventManager* this ) {
 
 		// Free the actual event data
 		Romble_free_d( currentEventNode->data, FILE_LINE() );
+
+		currentEventNode = currentEventNode->next;
 	}
 
 	// With all components within this->events freed, call destructor on the top-level linked list
