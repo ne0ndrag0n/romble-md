@@ -15,7 +15,7 @@ void SpecRunner_caseList() {
 	TestFramework_execute( "BitwiseTrieNode", 9, BitTrieTests );
 	TestFramework_execute( "Linked List", 6, LinkedListTests );
 	TestFramework_execute( "VDPManager", 8, VDPManagerTests );
-	TestFramework_execute( "EventManager", 3, EventManagerTests );
+	TestFramework_execute( "EventManager", 5, EventManagerTests );
 }
 
 

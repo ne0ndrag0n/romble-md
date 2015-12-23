@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <eventmanager.h>
+#include <linkedlist.h>
 
 const TestFramework_TestCaseDefinition EventManagerTests[] = {
 	{
@@ -18,6 +19,14 @@ const TestFramework_TestCaseDefinition EventManagerTests[] = {
 	{
 		"Should properly register two separate instances on one event",
 		EventManagerTests_verifyRegisterTwoOfSameEvent
+	},
+	{
+		"Should properly register two separate events",
+		EventManagerTests_verifyRegisterTwoSeparateEvents
+	},
+	{
+		"Should properly unregister one event listener",
+		EventManagerTests_verifyUnregisterOneItem
 	}
 };
 
@@ -111,6 +120,99 @@ finally:
 	free( exampleInstance2 );
 
 	return testResult;
+}
+
+TestFramework_TestResult EventManagerTests_verifyRegisterTwoSeparateEvents() {
+	TestFramework_TestResult testResult;
+	EventManager* eventManager;
+	EventManagerTests_ExampleObject* exampleInstance = calloc( 1, sizeof( EventManagerTests_ExampleObject ) );
+
+	eventManager = calloc( 1, sizeof( EventManager ) );
+	EventManager_ctor( eventManager );
+
+	// Register EventManagerTests_DEMO_EVENT_1 on exampleInstance with EventManagerTests_eventTarget
+	EventManager_registerEvent( eventManager, exampleInstance, EventManagerTests_DEMO_EVENT_1, EventManagerTests_eventTarget );
+	// Register EventManagerTests_DEMO_EVENT_2 on exampleInstance with EventManagerTests_eventTarget
+	EventManager_registerEvent( eventManager, exampleInstance, EventManagerTests_DEMO_EVENT_2, EventManagerTests_eventTarget );
+
+	TestFramework_EXPECT( eventManager->events != NULL, "not to add no events" );
+	TestFramework_EXPECT( eventManager->events->next != NULL, "not to add only one event" );
+	TestFramework_EXPECT( eventManager->events->next->next == NULL, "to only add two events" );
+
+	// Check first event
+	EventManager_RegisteredEvent* event = eventManager->events->data;
+	TestFramework_EXPECT( event->eventKey == EventManagerTests_DEMO_EVENT_1, "first registered event to have key EventManagerTests_DEMO_EVENT_1" );
+	EventManager_EventListener* listener = event->listeners->data;
+	TestFramework_EXPECT( event->listeners->next == NULL, "first listener to have no link to second listener" );
+	TestFramework_EXPECT( listener->instance == exampleInstance, "first listener to have instance exampleInstance" );
+	TestFramework_EXPECT( listener->callback == EventManagerTests_eventTarget, "first listener to have callback EventManagerTests_eventTarget" );
+
+	// Check second event
+	event = eventManager->events->next->data;
+	TestFramework_EXPECT( event->eventKey == EventManagerTests_DEMO_EVENT_2, "second registered event to have key EventManagerTests_DEMO_EVENT_2" );
+	listener = event->listeners->data;
+	TestFramework_EXPECT( event->listeners->next == NULL, "first listener in second event to have no link to second listener" );
+	TestFramework_EXPECT( listener->instance == exampleInstance, "first listener in second event to have instance exampleInstance" );
+	TestFramework_EXPECT( listener->callback == EventManagerTests_eventTarget, "first listener in second event to have callback EventManagerTests_eventTarget" );
+
+	testResult = TestFramework_TestResult_TEST_PASS;
+
+finally:
+	EventManager_dtor( eventManager );
+	free( exampleInstance );
+
+	return testResult;
+}
+
+TestFramework_TestResult EventManagerTests_verifyUnregisterOneItem() {
+	TestFramework_TestResult testResult;
+	EventManager* eventManager;
+	EventManagerTests_ExampleObject* exampleInstance = calloc( 1, sizeof( EventManagerTests_ExampleObject ) );
+
+	eventManager = calloc( 1, sizeof( EventManager ) );
+	EventManager_ctor( eventManager );
+
+	// Mock a correct event setup
+	EventManagerTests_setupMockEvents( eventManager, exampleInstance );
+
+	// Verify for testing purposes...
+	TestFramework_EXPECT( eventManager->events != NULL, "the events, pre-test, to be there" );
+
+	// Remove the event
+	EventManager_unregisterEvent( eventManager, exampleInstance, EventManagerTests_DEMO_EVENT_1 );
+
+	TestFramework_EXPECT( eventManager->events == NULL, "all events to be properly cleaned up" );
+
+	testResult = TestFramework_TestResult_TEST_PASS;
+
+finally:
+	EventManager_dtor( eventManager );
+	free( exampleInstance );
+
+	return testResult;
+}
+
+void EventManagerTests_setupMockEvents( EventManager* eventManager, void* instance ) {
+	// One RegisteredEvent
+	EventManager_RegisteredEvent* event = calloc( 1, sizeof( EventManager_RegisteredEvent ) );
+	event->eventKey = EventManagerTests_DEMO_EVENT_1;
+	event->listeners = calloc( 1, sizeof( LinkedListNode ) );
+	LinkedListNode_ctor( event->listeners );
+
+	// One listener for this instance
+	EventManager_EventListener* eventListener = calloc( 1, sizeof( EventManager_EventListener ) );
+	eventListener->instance = instance;
+	eventListener->callback = EventManagerTests_eventTarget;
+
+	// add EventListener to RegisteredEvent above
+	event->listeners->data = eventListener;
+
+	// Setup events linked list on eventManager
+	eventManager->events = calloc( 1, sizeof( LinkedListNode ) );
+	LinkedListNode_ctor( eventManager->events );
+
+	// Add the RegisteredEvent to the linked list
+	eventManager->events->data = event;
 }
 
 void EventManagerTests_eventTarget( void* context, void* payload ) {
