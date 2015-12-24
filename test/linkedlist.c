@@ -29,6 +29,10 @@ const TestFramework_TestCaseDefinition LinkedListTests[] = {
 	{
 		"Should free and null a single node that ended up removed",
 		LinkedListTests_removeSingleNode
+	},
+	{
+		"Should free the first item and stop properly",
+		LinkedListTests_removeFirstItem
 	}
 };
 
@@ -219,6 +223,35 @@ TestFramework_TestResult LinkedListTests_removeSingleNode() {
 	testResult = TestFramework_TestResult_TEST_PASS;
 
 finally:
+	return testResult;
+}
+
+TestFramework_TestResult LinkedListTests_removeFirstItem() {
+	TestFramework_TestResult testResult;
+	LinkedListNode* node;
+
+	int int1 = 2;
+	int int2 = 3;
+
+	node = calloc( 1, sizeof( LinkedListNode ) );
+	TestFramework_EXPECT( node != NULL, "no heap corruption" );
+	LinkedListNode_ctor( node );
+	node->data = &int1;
+
+	node->next = calloc( 1, sizeof( LinkedListNode ) );
+	LinkedListNode_ctor( node->next );
+	node->next->data = &int2;
+
+	LinkedListNode_remove( &node, LinkedListTests_searchFor2s, FALSE );
+
+	TestFramework_EXPECT( node != NULL, "pointer not to be null" );
+	TestFramework_EXPECT( node->data == &int2, "pointer to now be at the first node" );
+
+	testResult = TestFramework_TestResult_TEST_PASS;
+
+finally:
+	LinkedListNode_dtor( node );
+
 	return testResult;
 }
 

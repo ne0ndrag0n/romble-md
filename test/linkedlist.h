@@ -12,6 +12,7 @@ TestFramework_TestResult LinkedListTests_findData();
 TestFramework_TestResult LinkedListTests_removeItemsTest1();
 TestFramework_TestResult LinkedListTests_removeItemsTest2();
 TestFramework_TestResult LinkedListTests_removeSingleNode();
+TestFramework_TestResult LinkedListTests_removeFirstItem();
 
 bool LinkedListTests_searchPredicateStringDivisibleBy2( void* data );
 bool LinkedListTests_alwaysFalse( void* data );
