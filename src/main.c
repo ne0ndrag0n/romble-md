@@ -13,6 +13,7 @@
 #include <testview.h>
 #include <res/globals.h>
 #include <sram.h>
+#include <log.h>
 
 #ifdef UNIT_TEST_MODE
 	#include <test/specrunner.h>
@@ -45,6 +46,6 @@ int main( void ) {
 
 	JoyManager_displayCursor( joyManager, TRUE );
 
-	VDP_drawText( "Boot OK! "__DATE__" "__TIME__, 5, 27 );
+	Log_message( Log_Level_INFO, FILE_LINE(), "boot ok" );
 	while(1);
 }

@@ -14,10 +14,13 @@
 #include <vdpmanager.h>
 #include <eventmanager.h>
 #include <tags.h>
+#include <log.h>
 
 static u16 UNIQUE_ID = 0;
 
 void Romble_init() {
+	Log_message( Log_Level_INFO, FILE_LINE(), "** romble-md system client/0.0.3 "__DATE__" "__TIME__" **" );
+
 	VDP_resetScreen();
 	VDP_resetSprites();
 
@@ -32,8 +35,7 @@ void Romble_init() {
 
 	VDPManager_loadPalette( vdpManager, StandardColours, PAL_SYSTEM );
 
-	Debug_print( "Welcome to the Romble beta!" );
-	Debug_print( "Romble v0.0.3a (c) 2015 oaktree Games and Novelties. All rights reserved." );
+	Log_message( Log_Level_DEBUG, FILE_LINE(), "init complete" );
 }
 
 void Romble_assert( bool condition, char* failMessage ) {
