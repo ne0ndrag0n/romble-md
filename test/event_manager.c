@@ -39,6 +39,14 @@ const TestFramework_TestCaseDefinition EventManagerTests[] = {
 	{
 		"Should properly remove an entire registered event, leaving others unharmed (removing second)",
 		EventManagerTests_verifyUnregisterEntireSecondEventWithOthers
+	},
+	{
+		"Should properly trigger events",
+		EventManagerTests_verifyAbleToTrigger
+	},
+	{
+		"Should properly trigger events with payload",
+		EventManagerTests_verifyAbleToTriggerWithPayload
 	}
 };
 
@@ -319,6 +327,55 @@ TestFramework_TestResult EventManagerTests_verifyUnregisterEntireSecondEventWith
 	TestFramework_EXPECT( eventManager->events != NULL, "events pointer not to be NULL after removing RegisteredEvent with others remaining" );
 	TestFramework_EXPECT( firstRegisteredEvent->eventKey == EventManagerTests_DEMO_EVENT_1, "first RegisteredEvent key to now be EventManagerTests_DEMO_EVENT_1" );
 	TestFramework_EXPECT( eventManager->events->next == NULL, "first RegisteredEvent container node not to be pointing to anything more" );
+
+	testResult = TestFramework_TestResult_TEST_PASS;
+
+finally:
+	EventManager_dtor( eventManager );
+	free( exampleInstance );
+
+	return testResult;
+}
+
+TestFramework_TestResult EventManagerTests_verifyAbleToTrigger() {
+	TestFramework_TestResult testResult;
+	EventManager* eventManager;
+	EventManagerTests_ExampleObject* exampleInstance = calloc( 1, sizeof( EventManagerTests_ExampleObject ) );
+
+	eventManager = calloc( 1, sizeof( EventManager ) );
+	EventManager_ctor( eventManager );
+
+	EventManagerTests_setupMockEvents( eventManager, exampleInstance );
+
+	EventManager_trigger( eventManager, EventManagerTests_DEMO_EVENT_1, NULL );
+
+	TestFramework_EXPECT( exampleInstance->one == 0x01, "exampleInstance->one to be 0x01" );
+	TestFramework_EXPECT( exampleInstance->two == 0x00, "exampleInstance->two to be unmodified" );
+
+	testResult = TestFramework_TestResult_TEST_PASS;
+
+finally:
+	EventManager_dtor( eventManager );
+	free( exampleInstance );
+
+	return testResult;
+}
+
+TestFramework_TestResult EventManagerTests_verifyAbleToTriggerWithPayload() {
+	TestFramework_TestResult testResult;
+	EventManager* eventManager;
+	EventManagerTests_ExampleObject* exampleInstance = calloc( 1, sizeof( EventManagerTests_ExampleObject ) );
+
+	eventManager = calloc( 1, sizeof( EventManager ) );
+	EventManager_ctor( eventManager );
+
+	EventManagerTests_setupMockEvents( eventManager, exampleInstance );
+
+	void* payload = ( void* )0x01;
+	EventManager_trigger( eventManager, EventManagerTests_DEMO_EVENT_1, payload );
+
+	TestFramework_EXPECT( exampleInstance->one == 0x01, "exampleInstance->one to be 0x01" );
+	TestFramework_EXPECT( exampleInstance->two == 0x02, "exampleInstance->two to be 0x02" );
 
 	testResult = TestFramework_TestResult_TEST_PASS;
 

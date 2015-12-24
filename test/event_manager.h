@@ -25,6 +25,9 @@ TestFramework_TestResult EventManagerTests_verifyUnregisterOneEventListener();
 TestFramework_TestResult EventManagerTests_verifyUnregisterEntireEventWithOthers();
 TestFramework_TestResult EventManagerTests_verifyUnregisterEntireSecondEventWithOthers();
 
+TestFramework_TestResult EventManagerTests_verifyAbleToTrigger();
+TestFramework_TestResult EventManagerTests_verifyAbleToTriggerWithPayload();
+
 void EventManagerTests_eventTarget( void* context, void* payload );
 void EventManagerTests_setupMockEvents( EventManager* eventManager, void* instance );
 #endif
