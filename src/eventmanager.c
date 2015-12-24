@@ -106,18 +106,20 @@ void EventManager_unregisterEvent( EventManager* this, void* hostInstance, Event
 		EventManager_eventExists_INSTANCE_KEY = hostInstance;
 		// Get reference for when we need to free it based on the instance (will return NULL if not found as expected)
 		EventManager_EventListener* eventListener = LinkedListNode_findData( registeredEvent->listeners, EventManager_eventExists );
-		// Remove the event listener from the linked list of listeners, where hostInstance is the instance (will do nothing if not found, as expected)
-		LinkedListNode_remove( &( registeredEvent->listeners ), EventManager_eventExists, FALSE );
-		// Free the actual eventListener (removing the linked list node just leaves it in place)
-		Romble_free_d( eventListener, FILE_LINE() );
+		if( eventListener != NULL ) {
+			// Remove the event listener from the linked list of listeners, where hostInstance is the instance (will do nothing if not found, as expected)
+			LinkedListNode_remove( &( registeredEvent->listeners ), EventManager_eventExists, FALSE );
+			// Free the actual eventListener (removing the linked list node just leaves it in place)
+			Romble_free_d( eventListener, FILE_LINE() );
 
-		// If this was the last EventListener, clean up the RegisteredEvent
-		// LinkedListNode will set registeredEvent->listeners to a NULL pointer
-		if( registeredEvent->listeners == NULL ) {
-			EventManager_isEvent_EVENT_KEY = eventKey;
-			LinkedListNode_remove( &( this->events ), EventManager_isEvent, FALSE );
+			// If this was the last EventListener, clean up the RegisteredEvent
+			// LinkedListNode will set registeredEvent->listeners to a NULL pointer
+			if( registeredEvent->listeners == NULL ) {
+				EventManager_isEvent_EVENT_KEY = eventKey;
+				LinkedListNode_remove( &( this->events ), EventManager_isEvent, FALSE );
 
-			Romble_free_d( registeredEvent, FILE_LINE() );
+				Romble_free_d( registeredEvent, FILE_LINE() );
+			}
 		}
 	}
 
