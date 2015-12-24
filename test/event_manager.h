@@ -21,6 +21,7 @@ TestFramework_TestResult EventManagerTests_verifyRegisterTwoOfSameEvent();
 TestFramework_TestResult EventManagerTests_verifyRegisterTwoSeparateEvents();
 
 TestFramework_TestResult EventManagerTests_verifyUnregisterOneItem();
+TestFramework_TestResult EventManagerTests_verifyUnregisterOneEventListener();
 
 void EventManagerTests_eventTarget( void* context, void* payload );
 void EventManagerTests_setupMockEvents( EventManager* eventManager, void* instance );

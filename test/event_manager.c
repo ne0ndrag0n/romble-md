@@ -27,6 +27,10 @@ const TestFramework_TestCaseDefinition EventManagerTests[] = {
 	{
 		"Should properly unregister one event listener",
 		EventManagerTests_verifyUnregisterOneItem
+	},
+	{
+		"Should properly remove one event listener from a registered event",
+		EventManagerTests_verifyUnregisterOneEventListener
 	}
 };
 
@@ -188,6 +192,47 @@ TestFramework_TestResult EventManagerTests_verifyUnregisterOneItem() {
 finally:
 	EventManager_dtor( eventManager );
 	free( exampleInstance );
+
+	return testResult;
+}
+
+TestFramework_TestResult EventManagerTests_verifyUnregisterOneEventListener() {
+	TestFramework_TestResult testResult;
+	EventManager* eventManager;
+	EventManagerTests_ExampleObject* exampleInstance = calloc( 1, sizeof( EventManagerTests_ExampleObject ) );
+	EventManagerTests_ExampleObject* exampleInstance2 = calloc( 1, sizeof( EventManagerTests_ExampleObject ) );
+
+	eventManager = calloc( 1, sizeof( EventManager ) );
+	EventManager_ctor( eventManager );
+
+	EventManagerTests_setupMockEvents( eventManager, exampleInstance );
+	// Add another EventListener to first RegisteredEvent
+	EventManager_EventListener* secondListener = calloc( 1, sizeof( EventManager_EventListener ) );
+	secondListener->instance = exampleInstance2;
+	secondListener->callback = EventManagerTests_eventTarget;
+
+	EventManager_RegisteredEvent* first = eventManager->events->data;
+	first->listeners->next = calloc( 1, sizeof( LinkedListNode ) );
+	LinkedListNode_ctor( first->listeners->next );
+	first->listeners->next->data = secondListener;
+
+	EventManager_unregisterEvent( eventManager, exampleInstance, EventManagerTests_DEMO_EVENT_1 );
+
+	TestFramework_EXPECT( eventManager->events != NULL, "registered event to still be remaining for instance not removed" );
+
+	// Verify the first registered event only has the listener for exampleInstance2 present
+	first = eventManager->events->data;
+	EventManager_EventListener* firstListener = first->listeners->data;
+
+	TestFramework_EXPECT( firstListener->instance == exampleInstance2, "remaining event listener to be for exampleInstance2" );
+	TestFramework_EXPECT( first->listeners->next == NULL, "remaining event listener to be the only event listener" );
+
+	testResult = TestFramework_TestResult_TEST_PASS;
+
+finally:
+	EventManager_dtor( eventManager );
+	free( exampleInstance );
+	free( exampleInstance2 );
 
 	return testResult;
 }
