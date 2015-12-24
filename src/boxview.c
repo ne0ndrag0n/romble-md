@@ -12,6 +12,11 @@ BoxView_vtable BoxView_table = {
 	BaseView_setPlane,
 	BaseView_placeTile,
 	BaseView_placeTileSeries,
+
+	BaseView_listenToView,
+	BaseView_stopListeningView,
+	BaseView_trigger,
+
 	BaseView_checkTileBoundary
 };
 

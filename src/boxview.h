@@ -4,6 +4,7 @@
 #include <types.h>
 #include <baseview.h>
 #include <res/globals.h>
+#include <eventmanager.h>
 
 struct BoxView;
 
@@ -16,6 +17,11 @@ typedef struct {
 	void ( *setPlane )( struct BaseView*, u16 );
 	void ( *placeTile )( struct BaseView*, s16, s16, u8, u16, bool, bool );
 	void ( *placeTileSeries )( struct BaseView*, s16, s16, s16, s16, u8, u16, bool );
+
+	void ( *listenToView )( struct BaseView*, struct BaseView*, EventManager_EventKey, EventManager_Callback );
+	void ( *stopListeningView )( struct BaseView*, struct BaseView*, EventManager_EventKey );
+	void ( *trigger )( struct BaseView*, EventManager_EventKey, void* );
+
 	bool ( *checkTileBoundary )( struct BaseView*, s16, s16 );
 } BoxView_vtable;
 
