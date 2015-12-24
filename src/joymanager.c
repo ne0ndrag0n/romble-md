@@ -74,7 +74,16 @@ void JoyManager_registerElement( JoyManager* this, s16 x, s16 y, s16 w, s16 h, v
 }
 
 void JoyManager_unregisterElement( JoyManager* this, s16 x, s16 y ) {
-	Romble_secureFree_d( ( void* ) &( this->registeredElements[ y ][ x ] ), FILE_LINE() );
+	SelectableElement* toBeRemoved = this->registeredElements[ y ][ x ];
+
+	if( this->currentElement != NULL && toBeRemoved == this->currentElement ) {
+		Romble_secureFree_d( ( void* ) &( this->registeredElements[ y ][ x ] ), FILE_LINE() );
+		// We need to set a new current element and show it
+		JoyManager_setDefaultCurrentElement( joyManager );
+		JoyManager_displayCursor( joyManager, TRUE );
+	} else {
+		Romble_secureFree_d( ( void* ) &( this->registeredElements[ y ][ x ] ), FILE_LINE() );
+	}
 }
 
 void JoyManager_unregisterAll( JoyManager* this ) {
