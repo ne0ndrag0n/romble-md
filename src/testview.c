@@ -54,6 +54,8 @@ void TestView_dtor( TestView* this ) {
 void TestView_render( TestView* this ) {
 	BaseView_render( CLASS( BaseView, this ) );
 
+	// Refresh the JoyManager and prepare it for a new set of clickables
+	JoyManager_unregisterAll( joyManager );
 	FUNCTIONS( ButtonView, BaseView, this->button1 )->setClickable( this->button1, TRUE );
 	JoyManager_setDefaultCurrentElement( joyManager );
 }

@@ -58,6 +58,7 @@ void JoyManager_dtor( JoyManager* this );
 
 void JoyManager_registerElement( JoyManager* this, s16 x, s16 y, s16 w, s16 h, void* instance, JoyManager_Callback callback );
 void JoyManager_unregisterElement( JoyManager* this, s16 x, s16 y );
+void JoyManager_unregisterAll( JoyManager* this );
 
 void JoyManager_displayCursor( JoyManager* this, bool show );
 void JoyManager_positionSprites( JoyManager* this, SelectableElement* targetElement );

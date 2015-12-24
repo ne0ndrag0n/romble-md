@@ -77,6 +77,19 @@ void JoyManager_unregisterElement( JoyManager* this, s16 x, s16 y ) {
 	Romble_secureFree_d( ( void* ) &( this->registeredElements[ y ][ x ] ), FILE_LINE() );
 }
 
+void JoyManager_unregisterAll( JoyManager* this ) {
+	for( u8 y = 0; y != this->registerableY; y++ ) {
+		for( u8 x = 0; x != this->registerableX; x++ ) {
+			if( this->registeredElements[ y ][ x ] != NULL ) {
+				JoyManager_unregisterElement( this, x, y );
+			}
+		}
+	}
+
+	this->currentElement = NULL;
+	VDP_resetSprites();
+}
+
 void JoyManager_displayCursor( JoyManager* this, bool show ) {
 	// If show is true, call the renderSprites function
 	if( show == TRUE ) {
