@@ -5,6 +5,7 @@
 #include <vdp.h>
 #include <res/globals.h>
 #include <linkedlist.h>
+#include <eventmanager.h>
 
 struct BaseView;
 
@@ -40,6 +41,7 @@ typedef struct BaseView {
 
 	struct BaseView* parent;
 	LinkedListNode* children;
+	EventManager* events;
 
 	vtable functions;
 } BaseView;
@@ -56,8 +58,18 @@ void BaseView_addChildView( BaseView* this, BaseView* childView );
 
 void BaseView_setPlane( BaseView* this, u16 plane );
 void BaseView_placeTile( BaseView* this, s16 x, s16 y, u8 pal, u16 tileIndex, bool flipV, bool flipH );
-
 void BaseView_placeTileSeries( BaseView* this, s16 x, s16 y, s16 w, s16 h, u8 pal, u16 tileIndex, bool autoInc );
+
+/**
+ * Target will have an event registered in its local EventManager, with this as the callback context. Your callbacks should be located
+ * in "this", the originator of the listenTo call.
+ */
+void BaseView_listenToView( BaseView* this, BaseView* target, EventManager_EventKey event, EventManager_Callback callback );
+void BaseView_stopListeningView( BaseView* this, BaseView* target, EventManager_EventKey event );
+/**
+ * Trigger fires off all events of type "event" in this's eventManager
+ */
+void BaseView_trigger( BaseView* this, EventManager_EventKey event, void* payload );
 
 bool BaseView_checkTileBoundary( BaseView* this, s16 x, s16 y );
 bool BaseView_isView( void* view );

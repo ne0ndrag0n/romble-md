@@ -17,6 +17,7 @@
 #include <timer.h>
 #include <joymanager.h>
 #include <linkedlist.h>
+#include <eventmanager.h>
 
 static u16 BaseView_isView_ID = 0;
 
@@ -54,9 +55,14 @@ void BaseView_ctor( BaseView* this, s16 x, s16 y, s16 width, s16 height ) {
 
 	this->children = NULL;
 	this->parent = NULL;
+	this->events = Romble_alloc_d( sizeof( EventManager ), TRUE, FILE_LINE() );
+
+	EventManager_ctor( this->events );
 }
 
 void BaseView_dtor( BaseView* this ) {
+	EventManager_dtor( this->events );
+
 	LinkedListNode_dtor( this->children );
 }
 
@@ -134,6 +140,28 @@ void BaseView_placeTileSeries( BaseView* this, s16 x, s16 y, s16 w, s16 h, u8 pa
 				tileIndex++;
 			}
 		}
+	}
+}
+
+void BaseView_listenToView( BaseView* this, BaseView* target, EventManager_EventKey event, EventManager_Callback callback ) {
+	EventManager* targetEventManager = target->events;
+
+	if( targetEventManager != NULL ) {
+		EventManager_registerEvent( targetEventManager, this, event, callback );
+	}
+}
+
+void BaseView_stopListeningView( BaseView* this, BaseView* target, EventManager_EventKey event ) {
+	EventManager* targetEventManager = target->events;
+
+	if( targetEventManager != NULL ) {
+		EventManager_unregisterEvent( targetEventManager, this, event );
+	}
+}
+
+void BaseView_trigger( BaseView* this, EventManager_EventKey event, void* payload ) {
+	if( this->events != NULL ) {
+		EventManager_trigger( this->events, event, payload );
 	}
 }
 
