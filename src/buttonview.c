@@ -7,6 +7,9 @@
 #include <res/globals.h>
 #include <utility.h>
 #include <joymanager.h>
+#include <log.h>
+#include <stdio.h>
+#include <baseview.h>
 
 ButtonView_vtable ButtonView_table = {
 	BaseView_dtor,
@@ -64,9 +67,17 @@ void ButtonView_setClickable( ButtonView* this, bool clickable ) {
 		);
 	} else {
 		// Unregister element
+		JoyManager_unregisterElement(
+			joyManager,
+			CLASS( BaseView, this )->absX,
+			CLASS( BaseView, this )->absY
+		);
 	}
 }
 
 void ButtonView_onClick( void* instance, u16 button ) {
-	Debug_print( "Click" );
+	char test[ 25 ] = { 0 };
+	ButtonView* this = ( ButtonView* ) instance;
+	snprintf( test, 24, "Button (%d) onClick", CLASS( BaseView, this )->id );
+	Log_message( Log_Level_DEBUG, FILE_LINE(), test );
 }

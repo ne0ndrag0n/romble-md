@@ -28,7 +28,14 @@ typedef struct {
 typedef struct TestView {
 	BaseView super;
 
-	ButtonView* button1;
+	ButtonView* hi;
+	ButtonView* bye;
+	ButtonView* obscenity;
+
+	SimpleTextView* textView;
+	ButtonView* displayedText;
+	ButtonView* clear;
+
 	VDPManager_TileIndex buttonStyle;
 } TestView;
 

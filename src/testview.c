@@ -56,17 +56,34 @@ void TestView_render( TestView* this ) {
 
 	// Refresh the JoyManager and prepare it for a new set of clickables
 	JoyManager_unregisterAll( joyManager );
-	FUNCTIONS( ButtonView, BaseView, this->button1 )->setClickable( this->button1, TRUE );
+	FUNCTIONS( ButtonView, BaseView, this->hi )->setClickable( this->hi, TRUE );
+	FUNCTIONS( ButtonView, BaseView, this->bye )->setClickable( this->bye, TRUE );
+	FUNCTIONS( ButtonView, BaseView, this->obscenity )->setClickable( this->obscenity, TRUE );
+	FUNCTIONS( ButtonView, BaseView, this->clear )->setClickable( this->clear, TRUE );
 	JoyManager_setDefaultCurrentElement( joyManager );
 }
 
 void TestView_setupChildren( TestView* this ) {
-	NEW_OBJECT( ButtonView, this->button1, this->buttonStyle, 0, 0, 0, 10 );
+	NEW_OBJECT( ButtonView, this->hi, this->buttonStyle, 0, 0, 0, 10 );
+	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->hi ) );
+	FUNCTIONS( ButtonView, BaseView, this->hi )->setText( this->hi, "Say Hi", FALSE );
 
-	FUNCTIONS( TestView, BaseView, this )->addChildView(
-		CLASS( BaseView, this ),
-		CLASS( BaseView, this->button1 )
-	);
+	NEW_OBJECT( ButtonView, this->bye, this->buttonStyle, 0, 0, 4, 10 );
+	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->bye ) );
+	FUNCTIONS( ButtonView, BaseView, this->bye )->setText( this->bye, "Say Bye", FALSE );
 
-	FUNCTIONS( ButtonView, BaseView, this->button1 )->setText( this->button1, "Test It!", FALSE );
+	NEW_OBJECT( ButtonView, this->obscenity, this->buttonStyle, 0, 0, 8, 10 );
+	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->obscenity ) );
+	FUNCTIONS( ButtonView, BaseView, this->obscenity )->setText( this->obscenity, "OH SHIT!", FALSE );
+
+	NEW_OBJECT( ButtonView, this->displayedText, this->buttonStyle, 0, 12, 4, 20 );
+	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->displayedText ) );
+	FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "(Press any button)", FALSE );
+
+	NEW_OBJECT( ButtonView, this->clear, this->buttonStyle, 0, 12, 8, 20 );
+	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->clear ) );
+	FUNCTIONS( ButtonView, BaseView, this->clear )->setText( this->clear, "Clear Text", FALSE );
+
+	NEW_OBJECT( SimpleTextView, this->textView, "Romble Event Tester", 12, 1 );
+	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->textView ) );
 }

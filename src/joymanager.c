@@ -187,7 +187,7 @@ void JoyManager_animateCursorMovement( JoyManager* this, SelectableElement* newL
 	s16 endH   = newLocation->h * 8;
 
 	size_t i;
-	for( i = 0; i <= 100; i+=2 ) {
+	for( i = 0; i <= 100; i+=4 ) {
 		currentPosition.x = Utility_lerp( endX, startX, i );
 		currentPosition.y = Utility_lerp( endY, startY, i );
 		currentPosition.w = Utility_lerp( endW, startW, i );
