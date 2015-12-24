@@ -31,6 +31,14 @@ const TestFramework_TestCaseDefinition EventManagerTests[] = {
 	{
 		"Should properly remove one event listener from a registered event",
 		EventManagerTests_verifyUnregisterOneEventListener
+	},
+	{
+		"Should properly remove an entire registered event, leaving others unharmed (removing first)",
+		EventManagerTests_verifyUnregisterEntireEventWithOthers
+	},
+	{
+		"Should properly remove an entire registered event, leaving others unharmed (removing second)",
+		EventManagerTests_verifyUnregisterEntireSecondEventWithOthers
 	}
 };
 
@@ -233,6 +241,90 @@ finally:
 	EventManager_dtor( eventManager );
 	free( exampleInstance );
 	free( exampleInstance2 );
+
+	return testResult;
+}
+
+TestFramework_TestResult EventManagerTests_verifyUnregisterEntireEventWithOthers() {
+	TestFramework_TestResult testResult;
+	EventManager* eventManager;
+	EventManagerTests_ExampleObject* exampleInstance = calloc( 1, sizeof( EventManagerTests_ExampleObject ) );
+
+	eventManager = calloc( 1, sizeof( EventManager ) );
+	EventManager_ctor( eventManager );
+
+	EventManagerTests_setupMockEvents( eventManager, exampleInstance );
+
+	// Add one for DEMO_EVENT_2
+	EventManager_RegisteredEvent* secondEvent = calloc( 1, sizeof( EventManager_RegisteredEvent ) );
+	secondEvent->eventKey = EventManagerTests_DEMO_EVENT_2;
+	secondEvent->listeners = calloc( 1, sizeof( LinkedListNode ) );
+	LinkedListNode_ctor( secondEvent->listeners );
+
+	EventManager_EventListener* eventListener2 = calloc( 1, sizeof( EventManager_EventListener ) );
+	eventListener2->instance = exampleInstance;
+	eventListener2->callback = EventManagerTests_eventTarget;
+
+	secondEvent->listeners->data = eventListener2;
+
+	eventManager->events->next = calloc( 1, sizeof( LinkedListNode ) );
+	LinkedListNode_ctor( eventManager->events->next );
+	eventManager->events->next->data = secondEvent;
+
+	EventManager_unregisterEvent( eventManager, exampleInstance, EventManagerTests_DEMO_EVENT_1 );
+
+	EventManager_RegisteredEvent* firstRegisteredEvent = eventManager->events->data;
+	TestFramework_EXPECT( eventManager->events != NULL, "events pointer not to be NULL after removing RegisteredEvent with others remaining" );
+	TestFramework_EXPECT( firstRegisteredEvent->eventKey == EventManagerTests_DEMO_EVENT_2, "first RegisteredEvent key to now be EventManagerTests_DEMO_EVENT_2" );
+	TestFramework_EXPECT( eventManager->events->next == NULL, "first RegisteredEvent container node not to be pointing to anything more" );
+
+	testResult = TestFramework_TestResult_TEST_PASS;
+
+finally:
+	EventManager_dtor( eventManager );
+	free( exampleInstance );
+
+	return testResult;
+}
+
+TestFramework_TestResult EventManagerTests_verifyUnregisterEntireSecondEventWithOthers() {
+	TestFramework_TestResult testResult;
+	EventManager* eventManager;
+	EventManagerTests_ExampleObject* exampleInstance = calloc( 1, sizeof( EventManagerTests_ExampleObject ) );
+
+	eventManager = calloc( 1, sizeof( EventManager ) );
+	EventManager_ctor( eventManager );
+
+	EventManagerTests_setupMockEvents( eventManager, exampleInstance );
+
+	// Add one for DEMO_EVENT_2
+	EventManager_RegisteredEvent* secondEvent = calloc( 1, sizeof( EventManager_RegisteredEvent ) );
+	secondEvent->eventKey = EventManagerTests_DEMO_EVENT_2;
+	secondEvent->listeners = calloc( 1, sizeof( LinkedListNode ) );
+	LinkedListNode_ctor( secondEvent->listeners );
+
+	EventManager_EventListener* eventListener2 = calloc( 1, sizeof( EventManager_EventListener ) );
+	eventListener2->instance = exampleInstance;
+	eventListener2->callback = EventManagerTests_eventTarget;
+
+	secondEvent->listeners->data = eventListener2;
+
+	eventManager->events->next = calloc( 1, sizeof( LinkedListNode ) );
+	LinkedListNode_ctor( eventManager->events->next );
+	eventManager->events->next->data = secondEvent;
+
+	EventManager_unregisterEvent( eventManager, exampleInstance, EventManagerTests_DEMO_EVENT_2 );
+
+	EventManager_RegisteredEvent* firstRegisteredEvent = eventManager->events->data;
+	TestFramework_EXPECT( eventManager->events != NULL, "events pointer not to be NULL after removing RegisteredEvent with others remaining" );
+	TestFramework_EXPECT( firstRegisteredEvent->eventKey == EventManagerTests_DEMO_EVENT_1, "first RegisteredEvent key to now be EventManagerTests_DEMO_EVENT_1" );
+	TestFramework_EXPECT( eventManager->events->next == NULL, "first RegisteredEvent container node not to be pointing to anything more" );
+
+	testResult = TestFramework_TestResult_TEST_PASS;
+
+finally:
+	EventManager_dtor( eventManager );
+	free( exampleInstance );
 
 	return testResult;
 }
