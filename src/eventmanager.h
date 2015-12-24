@@ -34,6 +34,8 @@ typedef struct EventManager {
 	LinkedListNode* events;
 } EventManager;
 
+extern EventManager* eventManager;
+
 void EventManager_ctor( EventManager* this );
 void EventManager_dtor( EventManager* this );
 

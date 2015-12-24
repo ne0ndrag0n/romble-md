@@ -9,6 +9,8 @@
 static EventManager_EventKey EventManager_isEvent_EVENT_KEY = EventManager_EVENT_NULL;
 static void* EventManager_eventExists_INSTANCE_KEY = NULL;
 
+EventManager* eventManager;
+
 void EventManager_ctor( EventManager* this ) {
 	this->events = NULL;
 }

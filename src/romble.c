@@ -12,6 +12,7 @@
 #include <romble.h>
 #include <utility.h>
 #include <vdpmanager.h>
+#include <eventmanager.h>
 #include <tags.h>
 
 static u16 UNIQUE_ID = 0;
@@ -25,6 +26,9 @@ void Romble_init() {
 
 	joyManager = Romble_alloc_d( sizeof( JoyManager ), TRUE, FILE_LINE() );
 	JoyManager_ctor( joyManager, 40, 28 );
+
+	eventManager = Romble_alloc_d( sizeof( EventManager ), TRUE, FILE_LINE() );
+	EventManager_ctor( eventManager );
 
 	VDPManager_loadPalette( vdpManager, StandardColours, PAL_SYSTEM );
 
