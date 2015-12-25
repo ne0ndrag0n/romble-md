@@ -2,6 +2,7 @@
 #include <baseview.h>
 #include <res/globals.h>
 #include <stddef.h>
+#include <vdpmanager.h>
 
 BoxView_vtable BoxView_table = {
 	BaseView_dtor,
@@ -34,33 +35,33 @@ void BoxView_render( BoxView* this ) {
 
 	BaseView_render( super );
 
-	void ( *placeTile )( struct BaseView*, s16, s16, u8, u16, bool, bool ) = FUNCTIONS( BoxView, BaseView, this )->placeTile;
+	void ( *placeTile )( struct BaseView*, s16, s16, s16, u8, u16, bool, bool ) = FUNCTIONS( BoxView, BaseView, this )->placeTile;
 
 	// Place corner tiles
-	placeTile( super, 0, 0, PAL0, this->boxDrawingIndex, FALSE, FALSE );
-	placeTile( super, super->width - 1, 0, PAL0, this->boxDrawingIndex, FALSE, TRUE );
-	placeTile( super, super->width - 1, super->height - 1, PAL0, this->boxDrawingIndex, TRUE, TRUE );
-	placeTile( super, 0, super->height - 1, PAL0, this->boxDrawingIndex, TRUE, FALSE );
+	placeTile( super, VDPManager_LAYER_BASE, 0, 0, PAL0, this->boxDrawingIndex, FALSE, FALSE );
+	placeTile( super, VDPManager_LAYER_BASE, super->width - 1, 0, PAL0, this->boxDrawingIndex, FALSE, TRUE );
+	placeTile( super, VDPManager_LAYER_BASE, super->width - 1, super->height - 1, PAL0, this->boxDrawingIndex, TRUE, TRUE );
+	placeTile( super, VDPManager_LAYER_BASE, 0, super->height - 1, PAL0, this->boxDrawingIndex, TRUE, FALSE );
 
 	// Place tile runs
 	size_t i;
 	for( i = 1; i != super->width - 1; i++ ) {
 		// Horizontal runs
-		placeTile( super, i, 0, PAL0, this->boxDrawingIndex + 1, FALSE, FALSE );
-		placeTile( super, i, super->height - 1, PAL0, this->boxDrawingIndex + 1, TRUE, FALSE );
+		placeTile( super, VDPManager_LAYER_BASE, i, 0, PAL0, this->boxDrawingIndex + 1, FALSE, FALSE );
+		placeTile( super, VDPManager_LAYER_BASE, i, super->height - 1, PAL0, this->boxDrawingIndex + 1, TRUE, FALSE );
 	}
 
 	for( i = 1; i != super->height - 1; i++ ) {
 		// Vertical runs
-		placeTile( super, 0, i, PAL0, this->boxDrawingIndex + 2, FALSE, TRUE );
-		placeTile( super, super->width - 1, i, PAL0, this->boxDrawingIndex + 2, FALSE, FALSE );
+		placeTile( super, VDPManager_LAYER_BASE, 0, i, PAL0, this->boxDrawingIndex + 2, FALSE, TRUE );
+		placeTile( super, VDPManager_LAYER_BASE, super->width - 1, i, PAL0, this->boxDrawingIndex + 2, FALSE, FALSE );
 	}
 
 	// Make the inside solid
 	/*
 	for ( i = 1; i != super->height - 1; i++ ) {
 		for( j = 1; j != super->width - 1; j++ ) {
-			placeTile( super, j, i, PAL0, this->fillTileIndex, FALSE, FALSE );
+			placeTile( super, VDPManager_LAYER_BASE, j, i, PAL0, this->fillTileIndex, FALSE, FALSE );
 		}
 	}*/
 }

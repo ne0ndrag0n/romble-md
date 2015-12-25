@@ -19,8 +19,8 @@ typedef struct {
 	void ( *renderChildren )( struct BaseView* );
 	void ( *addChildView )( struct BaseView*, struct BaseView* );
 	void ( *setPlane )( struct BaseView*, u16 );
-	void ( *placeTile )( struct BaseView*, s16, s16, u8, u16, bool, bool );
-	void ( *placeTileSeries )( struct BaseView*, s16, s16, s16, s16, u8, u16, bool );
+	void ( *placeTile )( struct BaseView*, s16, s16, s16, u8, u16, bool, bool );
+	void ( *placeTileSeries )( struct BaseView*, s16, s16, s16, s16, s16, u8, u16, bool );
 
 	void ( *listenToView )( struct BaseView*, struct BaseView*, EventManager_EventKey, EventManager_Callback );
 	void ( *stopListeningView )( struct BaseView*, struct BaseView*, EventManager_EventKey );

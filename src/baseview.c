@@ -18,6 +18,7 @@
 #include <joymanager.h>
 #include <linkedlist.h>
 #include <eventmanager.h>
+#include <vdpmanager.h>
 
 static u16 BaseView_isView_ID = 0;
 
@@ -121,25 +122,25 @@ void BaseView_setPlane( BaseView* this, u16 plane ) {
 	this->plane = plane;
 }
 
-void BaseView_placeTile( BaseView* this, s16 x, s16 y, u8 pal, u16 tileIndex, bool flipV, bool flipH ) {
+void BaseView_placeTile( BaseView* this, s16 plane, s16 x, s16 y, u8 pal, u16 tileIndex, bool flipV, bool flipH ) {
 	// If x or y lie outside the boundaries, the tile will not be visible. Do not draw it.
 	s16 absX = x + this->absX;
 	s16 absY = y + this->absY;
 
 	// Check that the tile can be placed within this container as well as all parent containers
 	if( FUNCTIONS( BaseView, BaseView, this )->checkTileBoundary( this, absX, absY ) ) {
-		VDP_setTileMapXY( this->plane, TILE_ATTR_FULL( pal, PRIORITY_LOW, flipV, flipH, tileIndex ), absX, absY );
+		VDP_setTileMapXY( plane, TILE_ATTR_FULL( pal, PRIORITY_LOW, flipV, flipH, tileIndex ), absX, absY );
 	}
 }
 
-void BaseView_placeTileSeries( BaseView* this, s16 x, s16 y, s16 w, s16 h, u8 pal, u16 tileIndex, bool autoInc ) {
+void BaseView_placeTileSeries( BaseView* this, s16 plane, s16 x, s16 y, s16 w, s16 h, u8 pal, u16 tileIndex, bool autoInc ) {
 	u8 i = 0, j = 0;
 
-	void ( *placeTile )( struct BaseView*, s16, s16, u8, u16, bool, bool ) = FUNCTIONS( BaseView, BaseView, this )->placeTile;
+	void ( *placeTile )( struct BaseView*, s16, s16, s16, u8, u16, bool, bool ) = FUNCTIONS( BaseView, BaseView, this )->placeTile;
 
 	for( j = 0; j != h; j++ ) {
 		for( i = 0; i != w; i++ ) {
-			placeTile( this, x + i, y + j, pal, tileIndex, FALSE, FALSE );
+			placeTile( this, plane, x + i, y + j, pal, tileIndex, FALSE, FALSE );
 
 			if( autoInc == TRUE ) {
 				tileIndex++;

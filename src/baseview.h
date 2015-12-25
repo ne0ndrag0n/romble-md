@@ -16,8 +16,8 @@ typedef struct {
 	void ( *renderChildren )( struct BaseView* );
 	void ( *addChildView )( struct BaseView*, struct BaseView* );
 	void ( *setPlane )( struct BaseView*, u16 );
-	void ( *placeTile )( struct BaseView*, s16, s16, u8, u16, bool, bool );
-	void ( *placeTileSeries )( struct BaseView*, s16, s16, s16, s16, u8, u16, bool );
+	void ( *placeTile )( struct BaseView*, s16, s16, s16, u8, u16, bool, bool );
+	void ( *placeTileSeries )( struct BaseView*, s16, s16, s16, s16, s16, u8, u16, bool );
 
 	void ( *listenToView )( struct BaseView*, struct BaseView*, EventManager_EventKey, EventManager_Callback );
 	void ( *stopListeningView )( struct BaseView*, struct BaseView*, EventManager_EventKey );
@@ -62,8 +62,8 @@ void BaseView_renderChildren( BaseView* this );
 void BaseView_addChildView( BaseView* this, BaseView* childView );
 
 void BaseView_setPlane( BaseView* this, u16 plane );
-void BaseView_placeTile( BaseView* this, s16 x, s16 y, u8 pal, u16 tileIndex, bool flipV, bool flipH );
-void BaseView_placeTileSeries( BaseView* this, s16 x, s16 y, s16 w, s16 h, u8 pal, u16 tileIndex, bool autoInc );
+void BaseView_placeTile( BaseView* this, s16 plane, s16 x, s16 y, u8 pal, u16 tileIndex, bool flipV, bool flipH );
+void BaseView_placeTileSeries( BaseView* this, s16 plane, s16 x, s16 y, s16 w, s16 h, u8 pal, u16 tileIndex, bool autoInc );
 
 /**
  * Target will have an event registered in its local EventManager, with this as the callback context. Your callbacks should be located
