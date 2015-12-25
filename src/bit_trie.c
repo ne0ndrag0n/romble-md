@@ -20,7 +20,6 @@ void BitwiseTrieNode_ctor( BitwiseTrieNode* this, bool leaf ) {
 	} else {
 		// Allocate four child elements; they will be zeroed out
 		this->children = Romble_alloc_d( sizeof( BitwiseTrieNode* ) * 4, TRUE, FILE_LINE() );
-		Romble_assert( this->children != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 	}
 }
 
@@ -39,7 +38,6 @@ void BitwiseTrieNode_insert( BitwiseTrieNode* this, u8 key, void* value ) {
 		if( current->children[ index ] == NULL ) {
 			// Need to create a new BitwiseTrieNode
 			current->children[ index ] = Romble_alloc_d( sizeof( BitwiseTrieNode ), TRUE, FILE_LINE() );
-			Romble_assert( current->children[ index ] != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 			// Now initialize the four items inside
 			BitwiseTrieNode_ctor( current->children[ index ], FALSE );
 		}
@@ -54,7 +52,6 @@ void BitwiseTrieNode_insert( BitwiseTrieNode* this, u8 key, void* value ) {
 	// If it DOES exist, we will simply overwrite it
 	if( current->children[ index ] == NULL ) {
 		current->children[ index ] = Romble_alloc_d( sizeof( BitwiseTrieNode ), TRUE, FILE_LINE() );
-		Romble_assert( current->children[ index ] != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 		BitwiseTrieNode_ctor( current->children[ index ], TRUE );
 	}
 

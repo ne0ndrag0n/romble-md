@@ -63,7 +63,6 @@ void SimpleTextView_setText( SimpleTextView* this, char* text ) {
 
 	Romble_secureFree( ( void* ) &( this->text ) );
 	this->text = Romble_alloc_d( width * sizeof( char ) + 1, TRUE, FILE_LINE() );
-	Romble_assert( this->text != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 	strcpy( this->text, text );
 
 	CLASS( BaseView, this )->width = width;

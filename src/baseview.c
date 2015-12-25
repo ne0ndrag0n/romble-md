@@ -104,7 +104,6 @@ void BaseView_addChildView( BaseView* this, BaseView* childView ) {
 	// Populate the first node
 	if( this->children == NULL ) {
 		this->children = Romble_alloc_d( sizeof( LinkedListNode ), TRUE, FILE_LINE() );
-		Romble_assert( this->children != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 		LinkedListNode_ctor( this->children );
 		this->children->data = childView;
 	} else {

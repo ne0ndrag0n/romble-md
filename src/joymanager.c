@@ -25,12 +25,9 @@ const u32 HaloTiles[ 24 ] = {
 void JoyManager_ctor( JoyManager* this, u8 registerableX, u8 registerableY ) {
 	this->registeredElements = Romble_alloc_d( registerableY * sizeof( SelectableElement** ), TRUE, FILE_LINE() );
 
-	Romble_assert( this->registeredElements != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
-
 	size_t i;
 	for( i = 0; i < registerableY; i++ ) {
 		this->registeredElements[ i ] = Romble_alloc_d( registerableX * sizeof( SelectableElement* ), TRUE, FILE_LINE() );
-		Romble_assert( this->registeredElements[ i ] != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 	}
 
 	this->registerableX = registerableX;
@@ -276,7 +273,6 @@ SelectableElementList JoyManager_retrieveSelectableElements( JoyManager* this, E
 			for( xIndex = x; xIndex != stopX; xIndex++ ) {
 				if( this->registeredElements[ y ][ xIndex ] != NULL ) {
 					SelectableElement** resized = Romble_realloc_d( result.list, sizeof( SelectableElement* ) * ++result.length, FILE_LINE() );
-					Romble_assert( resized != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 
 					result.list = resized;
 

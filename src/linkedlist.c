@@ -29,7 +29,6 @@ void LinkedListNode_insertEnd( LinkedListNode* this, void* data ) {
 	}
 
 	current->next = Romble_alloc_d( sizeof( LinkedListNode ), TRUE, FILE_LINE() );
-	Romble_assert( current->next != NULL, FILE_LINE( EXCEPTION_OUT_OF_MEMORY ) );
 	LinkedListNode_ctor( current->next );
 	current = current->next;
 	current->data = data;
