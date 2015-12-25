@@ -15,5 +15,6 @@ typedef enum {
 } Log_Level;
 
 void Log_message( Log_Level level, char* module, char* message );
+void Log_fmessage( Log_Level level, char* module, char* format, ... );
 
 #endif

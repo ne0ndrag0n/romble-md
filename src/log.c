@@ -4,6 +4,7 @@
 #include <utility.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdarg.h>
 
 void Log_message( Log_Level level, char* module, char* message ) {
 	// Verify the current log level is equal to or less than this level
@@ -36,4 +37,15 @@ void Log_message( Log_Level level, char* module, char* message ) {
 
 		Debug_print( messageBuffer );
 	}
+}
+
+void Log_fmessage( Log_Level level, char* module, char* format, ... ) {
+	va_list args;
+	va_start( args, format );
+
+	char string[ 100 ];
+	vsnprintf( string, 99, format, args );
+	va_end( args );
+
+	Log_message( level, module, string );
 }

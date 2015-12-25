@@ -107,7 +107,7 @@ void TestView_onButtonClick( void* instance, void* payload ) {
 	TestView* this = instance;
 	ButtonView* button = payload;
 
-	Log_message( Log_Level_DEBUG, FILE_LINE(), "testview received button click" );
+	Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "testview received button click from %p", button );
 
 	if( button == this->hi ) {
 		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "Hi!               ", TRUE );
