@@ -25,7 +25,6 @@ TestView_vtable TestView_table = {
 	BaseView_position,
 	BaseView_renderChildren,
 	BaseView_addChildView,
-	BaseView_setPlane,
 	BaseView_placeTile,
 	BaseView_placeTileSeries,
 

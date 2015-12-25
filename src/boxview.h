@@ -14,7 +14,6 @@ typedef struct {
 	void ( *position )( struct BaseView* );
 	void ( *renderChildren )( struct BaseView* );
 	void ( *addChildView )( struct BaseView*, struct BaseView* );
-	void ( *setPlane )( struct BaseView*, u16 );
 	void ( *placeTile )( struct BaseView*, s16, s16, s16, u8, u16, bool, bool );
 	void ( *placeTileSeries )( struct BaseView*, s16, s16, s16, s16, s16, u8, u16, bool );
 

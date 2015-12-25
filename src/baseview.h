@@ -15,7 +15,6 @@ typedef struct {
 	void ( *position )( struct BaseView* );
 	void ( *renderChildren )( struct BaseView* );
 	void ( *addChildView )( struct BaseView*, struct BaseView* );
-	void ( *setPlane )( struct BaseView*, u16 );
 	void ( *placeTile )( struct BaseView*, s16, s16, s16, u8, u16, bool, bool );
 	void ( *placeTileSeries )( struct BaseView*, s16, s16, s16, s16, s16, u8, u16, bool );
 
@@ -42,7 +41,6 @@ typedef struct BaseView {
 	s16 scrollY;
 
 	u8 numChildren;
-	u16 plane;
 
 	struct BaseView* parent;
 	LinkedListNode* children;
@@ -61,7 +59,6 @@ void BaseView_position( BaseView* this );
 void BaseView_renderChildren( BaseView* this );
 void BaseView_addChildView( BaseView* this, BaseView* childView );
 
-void BaseView_setPlane( BaseView* this, u16 plane );
 void BaseView_placeTile( BaseView* this, s16 plane, s16 x, s16 y, u8 pal, u16 tileIndex, bool flipV, bool flipH );
 void BaseView_placeTileSeries( BaseView* this, s16 plane, s16 x, s16 y, s16 w, s16 h, u8 pal, u16 tileIndex, bool autoInc );
 

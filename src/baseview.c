@@ -28,7 +28,6 @@ BaseView_vtable BaseView_table = {
 	BaseView_position,
 	BaseView_renderChildren,
 	BaseView_addChildView,
-	BaseView_setPlane,
 	BaseView_placeTile,
 	BaseView_placeTileSeries,
 
@@ -57,7 +56,6 @@ void BaseView_ctor( BaseView* this, s16 x, s16 y, s16 width, s16 height ) {
 	this->scrollY = 0;
 
 	this->numChildren = 0;
-	this->plane = VDP_PLAN_A;
 
 	this->children = NULL;
 	this->parent = NULL;
@@ -116,10 +114,6 @@ void BaseView_addChildView( BaseView* this, BaseView* childView ) {
 
 	childView->parent = this;
 	this->numChildren++;
-}
-
-void BaseView_setPlane( BaseView* this, u16 plane ) {
-	this->plane = plane;
 }
 
 void BaseView_placeTile( BaseView* this, s16 plane, s16 x, s16 y, u8 pal, u16 tileIndex, bool flipV, bool flipH ) {
