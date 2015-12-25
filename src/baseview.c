@@ -60,13 +60,13 @@ void BaseView_ctor( BaseView* this, s16 x, s16 y, s16 width, s16 height ) {
 
 	this->children = NULL;
 	this->parent = NULL;
-	this->events = Romble_alloc_d( sizeof( EventManager ), TRUE, FILE_LINE() );
-
-	EventManager_ctor( this->events );
+	this->events = NULL;
 }
 
 void BaseView_dtor( BaseView* this ) {
-	EventManager_dtor( this->events );
+	if( this->events != NULL ) {
+		EventManager_dtor( this->events );
+	}
 
 	LinkedListNode_dtor( this->children );
 }
