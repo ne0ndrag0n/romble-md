@@ -19,7 +19,7 @@
 static u16 UNIQUE_ID = 0;
 
 void Romble_init() {
-	Log_message( Log_Level_INFO, FILE_LINE(), "** romble-md system client/0.0.3 "__DATE__" "__TIME__" **" );
+	Log_message( Log_Level_INFO, FILE_LINE(), "** romble-md system client/0.0.4 "__DATE__" "__TIME__" **" );
 
 	VDP_resetScreen();
 	VDP_resetSprites();
