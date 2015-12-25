@@ -10,6 +10,8 @@
 #include <log.h>
 #include <stdio.h>
 #include <baseview.h>
+#include <eventmanager.h>
+#include <tags.h>
 
 ButtonView_vtable ButtonView_table = {
 	BaseView_dtor,
@@ -42,6 +44,10 @@ void ButtonView_ctor( ButtonView* this, u16 boxDrawingIndex, u16 fillTileIndex, 
 		CLASS( BaseView, this ),
 		CLASS( BaseView, this->label )
 	);
+
+	// Make use of the event manager pointer
+	CLASS( BaseView, this )->events = Romble_alloc_d( sizeof( EventManager ), TRUE, FILE_LINE() );
+	EventManager_ctor( CLASS( BaseView, this )->events );
 }
 
 void ButtonView_dtor( ButtonView* this ) {
@@ -81,8 +87,7 @@ void ButtonView_setClickable( ButtonView* this, bool clickable ) {
 }
 
 void ButtonView_onClick( void* instance, u16 button ) {
-	char test[ 25 ] = { 0 };
-	ButtonView* this = ( ButtonView* ) instance;
-	snprintf( test, 24, "Button (%d) onClick", CLASS( BaseView, this )->id );
-	Log_message( Log_Level_DEBUG, FILE_LINE(), test );
+	ButtonView* this = instance;
+
+	FUNCTIONS( ButtonView, BaseView, this )->trigger( CLASS( BaseView, this ), EVENT_CLICK, this );
 }

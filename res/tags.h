@@ -7,6 +7,9 @@
 #define TILES_HALO					3
 
 // ------------------------ All Palette Tags ------------------------
-#define	PAL_SYSTEM				1
+#define	PAL_SYSTEM					1
+
+// ------------------------ Events/Event IDs ------------------------
+#define	EVENT_CLICK					0x0001
 
 #endif

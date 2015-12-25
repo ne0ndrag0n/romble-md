@@ -16,6 +16,8 @@
 #include <utility.h>
 #include <vdpmanager.h>
 #include <tags.h>
+#include <eventmanager.h>
+#include <log.h>
 
 TestView_vtable TestView_table = {
 	TestView_dtor,
@@ -48,6 +50,9 @@ void TestView_ctor( TestView* this, s16 x, s16 y, s16 width, s16 height ) {
 		// Need to load the tiles
 		this->buttonStyle = VDPManager_loadTiles( vdpManager, BoxDrawingCharacters, 3, TILES_BOX_DRAWING_BETA );
 	}
+
+	CLASS( BaseView, this )->events = Romble_alloc_d( sizeof( EventManager ), TRUE, FILE_LINE() );
+	EventManager_ctor( CLASS( BaseView, this )->events );
 
 	FUNCTIONS( TestView, BaseView, this )->setupChildren( this );
 }
@@ -91,4 +96,29 @@ void TestView_setupChildren( TestView* this ) {
 
 	NEW_OBJECT( SimpleTextView, this->textView, "Romble Event Tester", 12, 1 );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->textView ) );
+
+	// Setup event listeners
+	FUNCTIONS( TestView, BaseView, this )->listenToView( CLASS( BaseView, this ), CLASS( BaseView, this->hi ), EVENT_CLICK, TestView_onButtonClick );
+	FUNCTIONS( TestView, BaseView, this )->listenToView( CLASS( BaseView, this ), CLASS( BaseView, this->bye ), EVENT_CLICK, TestView_onButtonClick );
+	FUNCTIONS( TestView, BaseView, this )->listenToView( CLASS( BaseView, this ), CLASS( BaseView, this->obscenity ), EVENT_CLICK, TestView_onButtonClick );
+	FUNCTIONS( TestView, BaseView, this )->listenToView( CLASS( BaseView, this ), CLASS( BaseView, this->clear ), EVENT_CLICK, TestView_onButtonClick );
+}
+
+void TestView_onButtonClick( void* instance, void* payload ) {
+	TestView* this = instance;
+	ButtonView* button = payload;
+
+	Log_message( Log_Level_DEBUG, FILE_LINE(), "testview received button click" );
+
+	if( button == this->hi ) {
+		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "Hi!               ", TRUE );
+	} else if( button == this->bye ) {
+		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "Bye!              ", TRUE );
+	} else if( button == this->obscenity ) {
+		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "Watch ur language!", TRUE );
+	} else if( button == this->clear ) {
+		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "(Press any button)", TRUE );
+	} else {
+		Log_message( Log_Level_WARNING, FILE_LINE(), "Invalid payload for event listener TestView_onButtonClick" );
+	}
 }

@@ -52,4 +52,6 @@ void TestView_render( TestView* this );
 
 void TestView_setupChildren( TestView* this );
 
+void TestView_onButtonClick( void* instance, void* payload );
+
 #endif
