@@ -6,6 +6,8 @@
 #include <res/globals.h>
 #include <eventmanager.h>
 
+#define		SimpleTextView_MAXIMUM_BUFFER_SIZE		35
+
 struct SimpleTextView;
 
 typedef struct {
@@ -23,19 +25,20 @@ typedef struct {
 
 	bool ( *checkTileBoundary )( struct BaseView*, s16, s16 );
 
-	void( *setText )( struct SimpleTextView*, char* );
+	void( *setText )( struct SimpleTextView*, char*, bool );
 } SimpleTextView_vtable;
 
 typedef struct SimpleTextView {
 	BaseView super;
 
 	char* text;
+	char* buffer;
 } SimpleTextView;
 
-void SimpleTextView_ctor( SimpleTextView* this, char* text, s16 x, s16 y );
+void SimpleTextView_ctor( SimpleTextView* this, char* text, s16 x, s16 y, bool copy );
 void SimpleTextView_dtor( SimpleTextView* this );
 void SimpleTextView_render( SimpleTextView* this );
 
-void SimpleTextView_setText( SimpleTextView* this, char* text );
+void SimpleTextView_setText( SimpleTextView* this, char* text, bool copy );
 
 #endif

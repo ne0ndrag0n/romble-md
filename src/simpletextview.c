@@ -9,6 +9,7 @@
 #include <lang.h>
 #include <romble.h>
 #include <vdpmanager.h>
+#include <log.h>
 
 SimpleTextView_vtable SimpleTextView_table = {
 	SimpleTextView_dtor,
@@ -28,16 +29,19 @@ SimpleTextView_vtable SimpleTextView_table = {
 	SimpleTextView_setText
 };
 
-void SimpleTextView_ctor( SimpleTextView* this, char* text, s16 x, s16 y ) {
+void SimpleTextView_ctor( SimpleTextView* this, char* text, s16 x, s16 y, bool copy ) {
 	BaseView_ctor( ( BaseView* ) this, x, y, 0, 1 );
 	this->super.functions = &SimpleTextView_table;
 
 	this->text = NULL;
-	FUNCTIONS( SimpleTextView, BaseView, this )->setText( this, text );
+	this->buffer = NULL;
+	FUNCTIONS( SimpleTextView, BaseView, this )->setText( this, text, copy );
 }
 
 void SimpleTextView_dtor( SimpleTextView* this ) {
-	Romble_secureFree( ( void* ) &( this->text ) );
+	Romble_free_d( this->buffer, FILE_LINE() );
+	this->buffer = NULL;
+
 	this->text = NULL;
 
 	BaseView_dtor( ( BaseView* ) this );
@@ -58,12 +62,33 @@ void SimpleTextView_render( SimpleTextView* this ) {
 	}
 }
 
-void SimpleTextView_setText( SimpleTextView* this, char* text ) {
+void SimpleTextView_setText( SimpleTextView* this, char* text, bool copy ) {
 	u8 width = strlen( text );
 
-	Romble_secureFree( ( void* ) &( this->text ) );
-	this->text = Romble_alloc_d( width * sizeof( char ) + 1, TRUE, FILE_LINE() );
-	strcpy( this->text, text );
+	// Whether you're copying a string or using a string byref, always free + null the buffer. On calling this function,
+	// nothing in this->buffer will ever be valid: if you're using byref string (located in ROM), this is no good. If you're
+	// copying a new string, it will be overwritten.
+	Romble_free_d( this->buffer, FILE_LINE() );
+	this->buffer = NULL;
+
+	if( copy == TRUE ) {
+		// Copy text into this->buffer
+		// Restrict the buffer size
+		if( width > SimpleTextView_MAXIMUM_BUFFER_SIZE ) {
+			width = SimpleTextView_MAXIMUM_BUFFER_SIZE;
+		}
+
+		this->buffer = Romble_alloc_d( width * sizeof( char ) + 1, TRUE, FILE_LINE() );
+		this->buffer[ 0 ] = 0;
+		strncat( this->buffer, text, width );
+
+		// this->text should NEVER have free called directly on it; it only ever points
+		// to other usable memory (ROM or RAM)
+		this->text = this->buffer;
+	} else {
+		// Set the pointer direct!
+		this->text = text;
+	}
 
 	CLASS( BaseView, this )->width = width;
 }

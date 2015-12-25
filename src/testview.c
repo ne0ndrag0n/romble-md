@@ -75,25 +75,25 @@ void TestView_render( TestView* this ) {
 void TestView_setupChildren( TestView* this ) {
 	NEW_OBJECT( ButtonView, this->hi, this->buttonStyle, 0, 0, 0, 10 );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->hi ) );
-	FUNCTIONS( ButtonView, BaseView, this->hi )->setText( this->hi, "Say Hi", FALSE );
+	FUNCTIONS( ButtonView, BaseView, this->hi )->setText( this->hi, "Say Hi", FALSE, TRUE );
 
 	NEW_OBJECT( ButtonView, this->bye, this->buttonStyle, 0, 0, 4, 10 );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->bye ) );
-	FUNCTIONS( ButtonView, BaseView, this->bye )->setText( this->bye, "Say Bye", FALSE );
+	FUNCTIONS( ButtonView, BaseView, this->bye )->setText( this->bye, "Say Bye", FALSE, TRUE );
 
 	NEW_OBJECT( ButtonView, this->obscenity, this->buttonStyle, 0, 0, 8, 10 );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->obscenity ) );
-	FUNCTIONS( ButtonView, BaseView, this->obscenity )->setText( this->obscenity, "OH SHIT!", FALSE );
+	FUNCTIONS( ButtonView, BaseView, this->obscenity )->setText( this->obscenity, "OH SHIT!", FALSE, TRUE );
 
 	NEW_OBJECT( ButtonView, this->displayedText, this->buttonStyle, 0, 12, 4, 20 );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->displayedText ) );
-	FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "(Press any button)", FALSE );
+	FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "(Press any button)", FALSE, TRUE );
 
 	NEW_OBJECT( ButtonView, this->clear, this->buttonStyle, 0, 12, 8, 20 );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->clear ) );
-	FUNCTIONS( ButtonView, BaseView, this->clear )->setText( this->clear, "Clear Text", FALSE );
+	FUNCTIONS( ButtonView, BaseView, this->clear )->setText( this->clear, "Clear Text", FALSE, TRUE );
 
-	NEW_OBJECT( SimpleTextView, this->textView, "Romble Event Tester", 12, 1 );
+	NEW_OBJECT( SimpleTextView, this->textView, "Romble Event Tester", 12, 1, TRUE );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->textView ) );
 
 	// Setup event listeners
@@ -110,13 +110,13 @@ void TestView_onButtonClick( void* instance, void* payload ) {
 	Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "testview received button click from %p", button );
 
 	if( button == this->hi ) {
-		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "Hi!               ", TRUE );
+		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "Hi!               ", TRUE, TRUE );
 	} else if( button == this->bye ) {
-		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "Bye!              ", TRUE );
+		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "Bye!              ", TRUE, TRUE );
 	} else if( button == this->obscenity ) {
-		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "Watch ur language!", TRUE );
+		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "Watch ur language!", TRUE, TRUE );
 	} else if( button == this->clear ) {
-		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "(Press any button)", TRUE );
+		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "(Press any button)", TRUE, TRUE );
 	} else {
 		Log_message( Log_Level_WARNING, FILE_LINE(), "Invalid payload for event listener TestView_onButtonClick" );
 	}

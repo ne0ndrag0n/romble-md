@@ -37,7 +37,7 @@ void ButtonView_ctor( ButtonView* this, u16 boxDrawingIndex, u16 fillTileIndex, 
 	BoxView_ctor( CLASS( BoxView, this ), boxDrawingIndex, fillTileIndex, x, y, width, 3 );
 	CLASS( BaseView, this )->functions = &ButtonView_table;
 
-	NEW_OBJECT( SimpleTextView, this->label, "Button", 1, 1 );
+	NEW_OBJECT( SimpleTextView, this->label, "Button", 1, 1, TRUE );
 
 	FUNCTIONS( ButtonView, BaseView, this )->addChildView(
 		CLASS( BaseView, this ),
@@ -55,8 +55,8 @@ void ButtonView_dtor( ButtonView* this ) {
 	FUNCTIONS( SimpleTextView, BaseView, this->label )->destroy( this->label );
 }
 
-void ButtonView_setText( ButtonView* this, char* label, bool render ) {
-	FUNCTIONS( SimpleTextView, BaseView, this->label )->setText( this->label, label );
+void ButtonView_setText( ButtonView* this, char* label, bool render, bool copy ) {
+	FUNCTIONS( SimpleTextView, BaseView, this->label )->setText( this->label, label, copy );
 
 	if( render == TRUE ) {
 		FUNCTIONS( SimpleTextView, BaseView, this->label )->render( this->label );

@@ -25,7 +25,7 @@ typedef struct {
 
 	bool ( *checkTileBoundary )( struct BaseView*, s16, s16 );
 
-	void ( *setText )( struct ButtonView*, char*, bool );
+	void ( *setText )( struct ButtonView*, char*, bool, bool );
 	void ( *setClickable )( struct ButtonView*, bool );
 	void ( *onClick )( void*, u16 );
 } ButtonView_vtable;
@@ -44,7 +44,7 @@ typedef struct ButtonView {
 void ButtonView_ctor( ButtonView* this, u16 boxDrawingIndex, u16 fillTileIndex, s16 x, s16 y, s16 width );
 void ButtonView_dtor( ButtonView* this );
 
-void ButtonView_setText( ButtonView* this, char* label, bool render );
+void ButtonView_setText( ButtonView* this, char* label, bool render, bool copy );
 void ButtonView_setClickable( ButtonView* this, bool clickable );
 
 void ButtonView_onClick( void* instance, u16 button );
