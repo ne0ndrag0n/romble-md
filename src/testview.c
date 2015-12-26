@@ -81,6 +81,8 @@ void TestView_dtor( TestView* this ) {
 void TestView_render( TestView* this ) {
 	BaseView_render( CLASS( BaseView, this ) );
 
+	Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "sup complete, rendering testview located at %p...", this );
+
 	// Refresh the JoyManager and prepare it for a new set of clickables
 	JoyManager_unregisterAll( joyManager );
 	FUNCTIONS( ButtonView, BaseView, this->hi )->setClickable( this->hi, TRUE );
@@ -89,6 +91,9 @@ void TestView_render( TestView* this ) {
 	FUNCTIONS( ButtonView, BaseView, this->clear )->setClickable( this->clear, TRUE );
 	FUNCTIONS( ButtonView, BaseView, this->allPurpose )->setClickable( this->allPurpose, TRUE );
 	JoyManager_setDefaultCurrentElement( joyManager );
+	JoyManager_displayCursor( joyManager, TRUE );
+
+	Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "Done rendering testview located at %p.", this );
 }
 
 void TestView_setupChildren( TestView* this ) {
@@ -120,6 +125,13 @@ void TestView_setupChildren( TestView* this ) {
 	NEW_OBJECT( SimpleTextView, this->textView, TestView_HEADER, 12, 1, FALSE );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->textView ) );
 
+	// Send this ButtonView in with only the tag 0x7175
+	ButtonView* lostReference;
+	NEW_OBJECT( ButtonView, lostReference, this->buttonStyle, 0, 0, 16, 32 );
+	CLASS( BaseView, lostReference )->tag = 0x7175;
+	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, lostReference ) );
+	FUNCTIONS( ButtonView, BaseView, lostReference )->setText( lostReference, "Delete this button...", FALSE, TRUE );
+
 	// Setup event listeners
 	FUNCTIONS( TestView, BaseView, this )->listenToView( CLASS( BaseView, this ), CLASS( BaseView, this->hi ), EVENT_CLICK, TestView_onButtonClick );
 	FUNCTIONS( TestView, BaseView, this )->listenToView( CLASS( BaseView, this ), CLASS( BaseView, this->bye ), EVENT_CLICK, TestView_onButtonClick );
@@ -144,8 +156,9 @@ void TestView_onButtonClick( void* instance, void* payload ) {
 		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, TestView_STRING_DEFAULT, TRUE, FALSE );
 	} else if( button == this->allPurpose ) {
 		Log_message( Log_Level_DEBUG, FILE_LINE(), "The all-purpose button was clicked." );
-		BaseView* obscenity = FUNCTIONS( TestView, BaseView, this )->getChildByTag( CLASS( BaseView, this ), 0xF0CC );
-		Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "Wanted: %p Got: %p", this->obscenity, obscenity );
+		BaseView* lostReference = FUNCTIONS( TestView, BaseView, this )->getChildByTag( CLASS( BaseView, this ), 0x7175 );
+		Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "Got: %p, removing child...", lostReference );
+		FUNCTIONS( TestView, BaseView, this )->removeChild( CLASS( BaseView, this ), lostReference );
 	} else {
 		Log_message( Log_Level_WARNING, FILE_LINE(), "Invalid payload for event listener TestView_onButtonClick" );
 	}

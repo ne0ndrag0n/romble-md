@@ -11,7 +11,7 @@
 struct ButtonView;
 
 typedef struct {
-	void ( *destroy )( struct BaseView* );
+	void ( *destroy )( struct ButtonView* );
 	void ( *render )( struct BoxView* );
 	void ( *position )( struct BaseView* );
 	void ( *renderChildren )( struct BaseView* );

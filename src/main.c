@@ -42,8 +42,6 @@ int main( void ) {
 	FUNCTIONS( BaseView, BaseView, root )->addChildView( root, CLASS( BaseView, test ) );
 	FUNCTIONS( BaseView, BaseView, root )->render( root );
 
-	JoyManager_displayCursor( joyManager, TRUE );
-
 	Log_message( Log_Level_INFO, FILE_LINE(), "boot ok" );
 	while(1);
 }

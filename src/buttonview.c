@@ -12,9 +12,10 @@
 #include <baseview.h>
 #include <eventmanager.h>
 #include <tags.h>
+#include <log.h>
 
 ButtonView_vtable ButtonView_table = {
-	BaseView_dtor,
+	ButtonView_dtor,
 	BoxView_render,
 	BaseView_position,
 	BaseView_renderChildren,
@@ -54,6 +55,8 @@ void ButtonView_ctor( ButtonView* this, u16 boxDrawingIndex, u16 fillTileIndex, 
 }
 
 void ButtonView_dtor( ButtonView* this ) {
+	Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "dtor called for ButtonView %p", this );
+
 	// Remove this button from the JoyManager if it exists
 	FUNCTIONS( ButtonView, BaseView, this )->setClickable( this, FALSE );
 

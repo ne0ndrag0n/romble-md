@@ -67,14 +67,16 @@ void JoyManager_dtor( JoyManager* this ) {
 }
 
 void JoyManager_registerElement( JoyManager* this, s16 x, s16 y, s16 w, s16 h, void* instance, JoyManager_Callback callback ) {
-	this->registeredElements[ y ][ x ] = Romble_alloc_d( sizeof( SelectableElement ), FALSE, FILE_LINE() );
+	if( this->registeredElements[ y ][ x ] == NULL ) {
+		this->registeredElements[ y ][ x ] = Romble_alloc_d( sizeof( SelectableElement ), FALSE, FILE_LINE() );
 
-	this->registeredElements[ y ][ x ]->x = x;
-	this->registeredElements[ y ][ x ]->y = y;
-	this->registeredElements[ y ][ x ]->w = w;
-	this->registeredElements[ y ][ x ]->h = h;
-	this->registeredElements[ y ][ x ]->instance = instance;
-	this->registeredElements[ y ][ x ]->callback = callback;
+		this->registeredElements[ y ][ x ]->x = x;
+		this->registeredElements[ y ][ x ]->y = y;
+		this->registeredElements[ y ][ x ]->w = w;
+		this->registeredElements[ y ][ x ]->h = h;
+		this->registeredElements[ y ][ x ]->instance = instance;
+		this->registeredElements[ y ][ x ]->callback = callback;
+	}
 }
 
 void JoyManager_unregisterElement( JoyManager* this, s16 x, s16 y ) {

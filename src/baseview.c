@@ -19,6 +19,7 @@
 #include <linkedlist.h>
 #include <eventmanager.h>
 #include <vdpmanager.h>
+#include <log.h>
 
 static u16 BaseView_isView_ID = 0;
 static u16 BaseView_isViewByTag_TAG = 0x0000;
@@ -186,19 +187,29 @@ BaseView* BaseView_getChildByTag( BaseView* this, u16 tag ) {
 void BaseView_removeChild( BaseView* this, BaseView* childInstance ) {
 
 	if( childInstance != NULL && this->children != NULL ) {
+		Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "View %p is removing child %p", this, childInstance );
+
 		// Pass to LinkedListNode methods
 		// FALSE for removeAll - there should be only one instance at a time in the list of child views, if not, there's a bug elsewhere
 		BaseView_isInstance_INSTANCE = childInstance;
 		LinkedListNode_remove( &( this->children ), BaseView_isInstance, FALSE );
 
+		Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "Child %p removed from this->children, preparing to destroy...", childInstance );
+
 		// Destroy childInstance (ask this object to clean up after itself and free objects it may own)
-		FUNCTIONS( BaseView, BaseView, this )->destroy( childInstance );
+		FUNCTIONS( BaseView, BaseView, childInstance )->destroy( childInstance );
+
+		Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "Freeing ram at %p...", childInstance );
 
 		// Free the memory located at childInstance - remember, all views should be on the heap!
 		Romble_free_d( childInstance, FILE_LINE() );
 
+		Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "Re-rendering %p...", this );
+
 		// Redraw the parent view
 		FUNCTIONS( BaseView, BaseView, this )->render( this );
+	} else {
+		Log_fmessage( Log_Level_WARNING, FILE_LINE(), "Could not remove child %p: No children exist for %p or you have passed a null pointer.", childInstance, this );
 	}
 
 }
