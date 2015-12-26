@@ -28,6 +28,7 @@ ButtonView_vtable ButtonView_table = {
 
 	BaseView_getChildById,
 	BaseView_getChildByTag,
+	BaseView_removeChild,
 
 	BaseView_checkTileBoundary,
 	ButtonView_setText,
@@ -53,6 +54,9 @@ void ButtonView_ctor( ButtonView* this, u16 boxDrawingIndex, u16 fillTileIndex, 
 }
 
 void ButtonView_dtor( ButtonView* this ) {
+	// Remove this button from the JoyManager if it exists
+	FUNCTIONS( ButtonView, BaseView, this )->setClickable( this, FALSE );
+
 	BaseView_dtor( CLASS( BaseView, this ) );
 
 	FUNCTIONS( SimpleTextView, BaseView, this->label )->destroy( this->label );

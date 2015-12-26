@@ -48,6 +48,7 @@ TestView_vtable TestView_table = {
 
 	BaseView_getChildById,
 	BaseView_getChildByTag,
+	BaseView_removeChild,
 
 	BaseView_checkTileBoundary,
 
@@ -143,7 +144,7 @@ void TestView_onButtonClick( void* instance, void* payload ) {
 		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, TestView_STRING_DEFAULT, TRUE, FALSE );
 	} else if( button == this->allPurpose ) {
 		Log_message( Log_Level_DEBUG, FILE_LINE(), "The all-purpose button was clicked." );
-		BaseView* obscenity = FUNCTIONS( TestView, BaseView, this )->getChildByTag( this, 0xF0CC );
+		BaseView* obscenity = FUNCTIONS( TestView, BaseView, this )->getChildByTag( CLASS( BaseView, this ), 0xF0CC );
 		Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "Wanted: %p Got: %p", this->obscenity, obscenity );
 	} else {
 		Log_message( Log_Level_WARNING, FILE_LINE(), "Invalid payload for event listener TestView_onButtonClick" );

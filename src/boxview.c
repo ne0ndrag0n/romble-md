@@ -19,6 +19,7 @@ BoxView_vtable BoxView_table = {
 
 	BaseView_getChildById,
 	BaseView_getChildByTag,
+	BaseView_removeChild,
 
 	BaseView_checkTileBoundary
 };

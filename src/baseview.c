@@ -22,6 +22,7 @@
 
 static u16 BaseView_isView_ID = 0;
 static u16 BaseView_isViewByTag_TAG = 0x0000;
+static BaseView* BaseView_isInstance_INSTANCE = NULL;
 
 BaseView_vtable BaseView_table = {
 	BaseView_dtor,
@@ -38,6 +39,7 @@ BaseView_vtable BaseView_table = {
 
 	BaseView_getChildById,
 	BaseView_getChildByTag,
+	BaseView_removeChild,
 
 	BaseView_checkTileBoundary
 };
@@ -181,6 +183,26 @@ BaseView* BaseView_getChildByTag( BaseView* this, u16 tag ) {
 	return LinkedListNode_findData( this->children, BaseView_isViewByTag );
 }
 
+void BaseView_removeChild( BaseView* this, BaseView* childInstance ) {
+
+	if( childInstance != NULL && this->children != NULL ) {
+		// Pass to LinkedListNode methods
+		// FALSE for removeAll - there should be only one instance at a time in the list of child views, if not, there's a bug elsewhere
+		BaseView_isInstance_INSTANCE = childInstance;
+		LinkedListNode_remove( &( this->children ), BaseView_isInstance, FALSE );
+
+		// Destroy childInstance (ask this object to clean up after itself and free objects it may own)
+		FUNCTIONS( BaseView, BaseView, this )->destroy( childInstance );
+
+		// Free the memory located at childInstance - remember, all views should be on the heap!
+		Romble_free_d( childInstance, FILE_LINE() );
+
+		// Redraw the parent view
+		FUNCTIONS( BaseView, BaseView, this )->render( this );
+	}
+
+}
+
 bool BaseView_checkTileBoundary( BaseView* this, s16 x, s16 y ) {
 
 	// Check self
@@ -207,4 +229,10 @@ bool BaseView_isViewByTag( void* instance ) {
 	BaseView* view = ( BaseView* ) instance;
 
 	return view->tag == BaseView_isViewByTag_TAG;
+}
+
+bool BaseView_isInstance( void* instance ) {
+	BaseView* view = ( BaseView* ) instance;
+
+	return view == BaseView_isInstance_INSTANCE;
 }

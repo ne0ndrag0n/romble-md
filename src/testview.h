@@ -27,6 +27,7 @@ typedef struct {
 
 	struct BaseView* ( *getChildById )( struct BaseView*, u16 );
 	struct BaseView* ( *getChildByTag )( struct BaseView*, u16 );
+	void ( *removeChild )( struct BaseView* , struct BaseView* );
 
 	bool ( *checkTileBoundary )( struct BaseView*, s16, s16 );
 
