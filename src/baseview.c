@@ -71,10 +71,17 @@ void BaseView_ctor( BaseView* this, s16 x, s16 y, s16 width, s16 height ) {
 }
 
 void BaseView_dtor( BaseView* this ) {
+	Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "dtor called for BaseView %p", this );
+
 	if( this->events != NULL ) {
 		EventManager_dtor( this->events );
 	}
 
+	// Destroy & free all children of this view
+	Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "%p is removing each of its children...", this );
+	LinkedListNode_each( this->children, BaseView_freeInstance );
+	Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "Done removing children for %p!", this );
+	// Destroy the list of children itself
 	LinkedListNode_dtor( this->children );
 }
 
@@ -246,4 +253,14 @@ bool BaseView_isInstance( void* instance ) {
 	BaseView* view = ( BaseView* ) instance;
 
 	return view == BaseView_isInstance_INSTANCE;
+}
+
+void BaseView_freeInstance( void* instance ) {
+	// Call the destructor and free the view instance
+	BaseView* view = instance;
+
+	Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "Destroying %p (vtable function %p)...", view, FUNCTIONS( BaseView, BaseView, view )->destroy );
+	FUNCTIONS( BaseView, BaseView, view )->destroy( view );
+	Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "Freeing %p...", view );
+	Romble_free_d( view, FILE_LINE() );
 }

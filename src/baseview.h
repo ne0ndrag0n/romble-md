@@ -87,5 +87,6 @@ bool BaseView_checkTileBoundary( BaseView* this, s16 x, s16 y );
 bool BaseView_isView( void* view );
 bool BaseView_isViewByTag( void* instance );
 bool BaseView_isInstance( void* instance );
+void BaseView_freeInstance( void* instance );
 
 #endif

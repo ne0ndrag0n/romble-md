@@ -60,9 +60,8 @@ void ButtonView_dtor( ButtonView* this ) {
 	// Remove this button from the JoyManager if it exists
 	FUNCTIONS( ButtonView, BaseView, this )->setClickable( this, FALSE );
 
+	// This will remove anything added using addChildView for us
 	BaseView_dtor( CLASS( BaseView, this ) );
-
-	FUNCTIONS( SimpleTextView, BaseView, this->label )->destroy( this->label );
 }
 
 void ButtonView_setText( ButtonView* this, char* label, bool render, bool copy ) {

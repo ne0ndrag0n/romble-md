@@ -35,7 +35,7 @@ SimpleTextView_vtable SimpleTextView_table = {
 
 void SimpleTextView_ctor( SimpleTextView* this, char* text, s16 x, s16 y, bool copy ) {
 	BaseView_ctor( ( BaseView* ) this, x, y, 0, 1 );
-	this->super.functions = &SimpleTextView_table;
+	CLASS( BaseView, this )->functions = &SimpleTextView_table;
 
 	this->text = NULL;
 	this->buffer = NULL;
@@ -43,6 +43,8 @@ void SimpleTextView_ctor( SimpleTextView* this, char* text, s16 x, s16 y, bool c
 }
 
 void SimpleTextView_dtor( SimpleTextView* this ) {
+	Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "dtor called for SimpleTextView %p", this );
+
 	Romble_free_d( this->buffer, FILE_LINE() );
 	this->buffer = NULL;
 

@@ -79,3 +79,13 @@ void LinkedListNode_remove( LinkedListNode** this, LinkedListNode_SearchPredicat
 		}
 	}
 }
+
+void LinkedListNode_each( LinkedListNode* this, LinkedListNode_IteratorFunction iteratorFunction ) {
+	LinkedListNode* current = this;
+
+	while( current != NULL ) {
+		iteratorFunction( current->data );
+
+		current = current->next;
+	}
+}

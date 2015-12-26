@@ -12,6 +12,7 @@ typedef struct LinkedListNode {
 } LinkedListNode;
 
 typedef bool ( *LinkedListNode_SearchPredicate )( void* );
+typedef void ( *LinkedListNode_IteratorFunction )( void* );
 
 void LinkedListNode_ctor( LinkedListNode* this );
 void LinkedListNode_dtor( LinkedListNode* this );
@@ -45,5 +46,12 @@ void* LinkedListNode_findData( LinkedListNode* this, LinkedListNode_SearchPredic
  * @param		{bool}									removeAll				If TRUE, continue to remove after the first removal.
  */
 void LinkedListNode_remove( LinkedListNode** this, LinkedListNode_SearchPredicate predicateFunction, bool removeAll );
+
+/**
+ * Call iteratorFunction on each instance of data in this linked list.
+ *
+ * @param		{LinkedListNode_IteratorFunction}		iteratorFunction		This function will be called with each "data" pointer as an argument.
+ */
+void LinkedListNode_each( LinkedListNode* this, LinkedListNode_IteratorFunction iteratorFunction );
 
 #endif
