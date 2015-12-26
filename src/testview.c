@@ -19,6 +19,18 @@
 #include <eventmanager.h>
 #include <log.h>
 
+static char* TestView_HEADER = "Romble Event Tester";
+
+static char* TestView_STRING_HI = "Hi!               ";
+static char* TestView_STRING_BYE = "Bye!              ";
+static char* TestView_STRING_DEFAULT = "(Press any button)";
+static char* TestView_STRING_OBSCENE = "Watch ur language!";
+
+static char* TestView_SAY_HI = "Say Hi";
+static char* TestView_SAY_BYE = "Say Bye";
+static char* TestView_SAY_OBSCENE = "OH SHIT!";
+static char* TestView_SAY_RESET = "Clear Text";
+
 TestView_vtable TestView_table = {
 	TestView_dtor,
 	TestView_render,
@@ -75,25 +87,25 @@ void TestView_render( TestView* this ) {
 void TestView_setupChildren( TestView* this ) {
 	NEW_OBJECT( ButtonView, this->hi, this->buttonStyle, 0, 0, 0, 10 );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->hi ) );
-	FUNCTIONS( ButtonView, BaseView, this->hi )->setText( this->hi, "Say Hi", FALSE, TRUE );
+	FUNCTIONS( ButtonView, BaseView, this->hi )->setText( this->hi, TestView_SAY_HI, FALSE, FALSE );
 
 	NEW_OBJECT( ButtonView, this->bye, this->buttonStyle, 0, 0, 4, 10 );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->bye ) );
-	FUNCTIONS( ButtonView, BaseView, this->bye )->setText( this->bye, "Say Bye", FALSE, TRUE );
+	FUNCTIONS( ButtonView, BaseView, this->bye )->setText( this->bye, TestView_SAY_BYE, FALSE, FALSE );
 
 	NEW_OBJECT( ButtonView, this->obscenity, this->buttonStyle, 0, 0, 8, 10 );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->obscenity ) );
-	FUNCTIONS( ButtonView, BaseView, this->obscenity )->setText( this->obscenity, "OH SHIT!", FALSE, TRUE );
+	FUNCTIONS( ButtonView, BaseView, this->obscenity )->setText( this->obscenity, TestView_SAY_OBSCENE, FALSE, FALSE );
 
 	NEW_OBJECT( ButtonView, this->displayedText, this->buttonStyle, 0, 12, 4, 20 );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->displayedText ) );
-	FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "(Press any button)", FALSE, TRUE );
+	FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, TestView_STRING_DEFAULT, FALSE, FALSE );
 
 	NEW_OBJECT( ButtonView, this->clear, this->buttonStyle, 0, 12, 8, 20 );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->clear ) );
-	FUNCTIONS( ButtonView, BaseView, this->clear )->setText( this->clear, "Clear Text", FALSE, TRUE );
+	FUNCTIONS( ButtonView, BaseView, this->clear )->setText( this->clear, TestView_SAY_RESET, FALSE, FALSE );
 
-	NEW_OBJECT( SimpleTextView, this->textView, "Romble Event Tester", 12, 1, TRUE );
+	NEW_OBJECT( SimpleTextView, this->textView, TestView_HEADER, 12, 1, FALSE );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->textView ) );
 
 	// Setup event listeners
@@ -110,13 +122,13 @@ void TestView_onButtonClick( void* instance, void* payload ) {
 	Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "testview received button click from %p", button );
 
 	if( button == this->hi ) {
-		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "Hi!               ", TRUE, TRUE );
+		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, TestView_STRING_HI, TRUE, FALSE );
 	} else if( button == this->bye ) {
-		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "Bye!              ", TRUE, TRUE );
+		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, TestView_STRING_BYE, TRUE, FALSE );
 	} else if( button == this->obscenity ) {
-		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "Watch ur language!", TRUE, TRUE );
+		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, TestView_STRING_OBSCENE, TRUE, FALSE );
 	} else if( button == this->clear ) {
-		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, "(Press any button)", TRUE, TRUE );
+		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, TestView_STRING_DEFAULT, TRUE, FALSE );
 	} else {
 		Log_message( Log_Level_WARNING, FILE_LINE(), "Invalid payload for event listener TestView_onButtonClick" );
 	}
