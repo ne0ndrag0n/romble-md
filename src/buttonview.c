@@ -26,6 +26,8 @@ ButtonView_vtable ButtonView_table = {
 	BaseView_stopListeningView,
 	BaseView_trigger,
 
+	BaseView_getChildById,
+
 	BaseView_checkTileBoundary,
 	ButtonView_setText,
 	ButtonView_setClickable,

@@ -44,6 +44,8 @@ TestView_vtable TestView_table = {
 	BaseView_stopListeningView,
 	BaseView_trigger,
 
+	BaseView_getChildById,
+
 	BaseView_checkTileBoundary,
 
 	TestView_setupChildren

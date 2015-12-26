@@ -24,6 +24,8 @@ SimpleTextView_vtable SimpleTextView_table = {
 	BaseView_stopListeningView,
 	BaseView_trigger,
 
+	BaseView_getChildById,
+
 	BaseView_checkTileBoundary,
 
 	SimpleTextView_setText

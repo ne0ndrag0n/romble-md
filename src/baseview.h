@@ -22,11 +22,14 @@ typedef struct {
 	void ( *stopListeningView )( struct BaseView*, struct BaseView*, EventManager_EventKey );
 	void ( *trigger )( struct BaseView*, EventManager_EventKey, void* );
 
+	struct BaseView* ( *getChildById )( struct BaseView*, u16 );
+
 	bool ( *checkTileBoundary )( struct BaseView*, s16, s16 );
 } BaseView_vtable;
 
 typedef struct BaseView {
 	u16 id;
+	u16 tag;
 
 	s16 x;
 	s16 y;
@@ -73,7 +76,10 @@ void BaseView_stopListeningView( BaseView* this, BaseView* target, EventManager_
  */
 void BaseView_trigger( BaseView* this, EventManager_EventKey event, void* payload );
 
+BaseView* BaseView_getChildById( BaseView* this, u16 id );
+
 bool BaseView_checkTileBoundary( BaseView* this, s16 x, s16 y );
 bool BaseView_isView( void* view );
+bool BaseView_isViewByTag( void* instance );
 
 #endif

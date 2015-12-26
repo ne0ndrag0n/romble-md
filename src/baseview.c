@@ -21,6 +21,7 @@
 #include <vdpmanager.h>
 
 static u16 BaseView_isView_ID = 0;
+static u16 BaseView_isViewByTag_TAG = 0x0000;
 
 BaseView_vtable BaseView_table = {
 	BaseView_dtor,
@@ -35,11 +36,14 @@ BaseView_vtable BaseView_table = {
 	BaseView_stopListeningView,
 	BaseView_trigger,
 
+	BaseView_getChildById,
+
 	BaseView_checkTileBoundary
 };
 
 void BaseView_ctor( BaseView* this, s16 x, s16 y, s16 width, s16 height ) {
 	this->id = Romble_getUniqueId();
+	this->tag = 0x0000;
 
 	this->functions = &BaseView_table;
 
@@ -164,6 +168,12 @@ void BaseView_trigger( BaseView* this, EventManager_EventKey event, void* payloa
 	}
 }
 
+BaseView* BaseView_getChildById( BaseView* this, u16 id ) {
+	// Let the LinkedListNode do the work
+	BaseView_isView_ID = id;
+	return LinkedListNode_findData( this->children, BaseView_isView );
+}
+
 bool BaseView_checkTileBoundary( BaseView* this, s16 x, s16 y ) {
 
 	// Check self
@@ -184,4 +194,10 @@ bool BaseView_isView( void* view ) {
 	BaseView* asView = ( BaseView* ) view;
 
 	return asView->id == BaseView_isView_ID;
+}
+
+bool BaseView_isViewByTag( void* instance ) {
+	BaseView* view = ( BaseView* ) instance;
+
+	return view->tag == BaseView_isViewByTag_TAG;
 }
