@@ -37,6 +37,7 @@ BaseView_vtable BaseView_table = {
 	BaseView_trigger,
 
 	BaseView_getChildById,
+	BaseView_getChildByTag,
 
 	BaseView_checkTileBoundary
 };
@@ -172,6 +173,12 @@ BaseView* BaseView_getChildById( BaseView* this, u16 id ) {
 	// Let the LinkedListNode do the work
 	BaseView_isView_ID = id;
 	return LinkedListNode_findData( this->children, BaseView_isView );
+}
+
+BaseView* BaseView_getChildByTag( BaseView* this, u16 tag ) {
+	// Let the LinkedListNode do the work
+	BaseView_isViewByTag_TAG = tag;
+	return LinkedListNode_findData( this->children, BaseView_isViewByTag );
 }
 
 bool BaseView_checkTileBoundary( BaseView* this, s16 x, s16 y ) {

@@ -24,6 +24,7 @@ typedef struct {
 	void ( *trigger )( struct BaseView*, EventManager_EventKey, void* );
 
 	struct BaseView* ( *getChildById )( struct BaseView*, u16 );
+	struct BaseView* ( *getChildByTag )( struct BaseView*, u16 );
 
 	bool ( *checkTileBoundary )( struct BaseView*, s16, s16 );
 

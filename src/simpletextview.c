@@ -25,6 +25,7 @@ SimpleTextView_vtable SimpleTextView_table = {
 	BaseView_trigger,
 
 	BaseView_getChildById,
+	BaseView_getChildByTag,
 
 	BaseView_checkTileBoundary,
 

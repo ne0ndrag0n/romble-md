@@ -47,6 +47,7 @@ TestView_vtable TestView_table = {
 	BaseView_trigger,
 
 	BaseView_getChildById,
+	BaseView_getChildByTag,
 
 	BaseView_checkTileBoundary,
 
@@ -101,6 +102,7 @@ void TestView_setupChildren( TestView* this ) {
 	NEW_OBJECT( ButtonView, this->obscenity, this->buttonStyle, 0, 0, 8, 10 );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->obscenity ) );
 	FUNCTIONS( ButtonView, BaseView, this->obscenity )->setText( this->obscenity, TestView_SAY_OBSCENE, FALSE, FALSE );
+	CLASS( BaseView, this->obscenity )->tag = 0xF0CC;
 
 	NEW_OBJECT( ButtonView, this->displayedText, this->buttonStyle, 0, 12, 4, 20 );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->displayedText ) );
@@ -141,6 +143,8 @@ void TestView_onButtonClick( void* instance, void* payload ) {
 		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, TestView_STRING_DEFAULT, TRUE, FALSE );
 	} else if( button == this->allPurpose ) {
 		Log_message( Log_Level_DEBUG, FILE_LINE(), "The all-purpose button was clicked." );
+		BaseView* obscenity = FUNCTIONS( TestView, BaseView, this )->getChildByTag( this, 0xF0CC );
+		Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "Wanted: %p Got: %p", this->obscenity, obscenity );
 	} else {
 		Log_message( Log_Level_WARNING, FILE_LINE(), "Invalid payload for event listener TestView_onButtonClick" );
 	}

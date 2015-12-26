@@ -27,6 +27,7 @@ ButtonView_vtable ButtonView_table = {
 	BaseView_trigger,
 
 	BaseView_getChildById,
+	BaseView_getChildByTag,
 
 	BaseView_checkTileBoundary,
 	ButtonView_setText,
