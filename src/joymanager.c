@@ -327,7 +327,7 @@ void JoyManager_handleInput( JoyManager* this, u16 joy, u16 changed, u16 state )
 
 			// buttons
 			if( state & ( BUTTON_A | BUTTON_B | BUTTON_C ) ) {
-				if( this->currentElement->callback != NULL ) {
+				if( this->currentElement != NULL && this->currentElement->callback != NULL ) {
 					this->currentElement->callback( this->currentElement->instance, state );
 				}
 			}
