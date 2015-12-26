@@ -13,6 +13,13 @@
 #include <joy.h>
 #include <tags.h>
 #include <vdpmanager.h>
+#include <timer.h>
+
+/**
+ * Animation delay (in subticks). The Genesis will delay this many subticks
+ * in between animation frames when moving the on-screen cursor.
+ */
+#define		JoyManager_ANIMATION_DELAY		75
 
 JoyManager* joyManager;
 
@@ -184,7 +191,7 @@ void JoyManager_animateCursorMovement( JoyManager* this, SelectableElement* newL
 	s16 endH   = newLocation->h * 8;
 
 	size_t i;
-	for( i = 0; i <= 100; i+=4 ) {
+	for( i = 0; i <= 100; i++ ) {
 		currentPosition.x = Utility_lerp( endX, startX, i );
 		currentPosition.y = Utility_lerp( endY, startY, i );
 		currentPosition.w = Utility_lerp( endW, startW, i );
@@ -202,7 +209,7 @@ void JoyManager_animateCursorMovement( JoyManager* this, SelectableElement* newL
 		this->corners[ SELECTOR_LOWER_LEFT ].posx = currentPosition.x - 4;
 		this->corners[ SELECTOR_LOWER_LEFT ].posy = currentPosition.y + currentPosition.h - 4;
 
-		VDP_waitVSync();
+		waitSubTick( JoyManager_ANIMATION_DELAY );
 		VDP_setSpritesDirect( 0, this->corners, 4 );
 	}
 
