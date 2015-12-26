@@ -43,6 +43,8 @@ typedef struct TestView {
 	ButtonView* displayedText;
 	ButtonView* clear;
 
+	ButtonView* allPurpose;
+
 	VDPManager_TileIndex buttonStyle;
 } TestView;
 

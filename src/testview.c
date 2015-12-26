@@ -31,6 +31,8 @@ static char* TestView_SAY_BYE = "Say Bye";
 static char* TestView_SAY_OBSCENE = "OH SHIT!";
 static char* TestView_SAY_RESET = "Clear Text";
 
+static char* TestView_BUTTON_LOG = "debug action-check event log";
+
 TestView_vtable TestView_table = {
 	TestView_dtor,
 	TestView_render,
@@ -83,6 +85,7 @@ void TestView_render( TestView* this ) {
 	FUNCTIONS( ButtonView, BaseView, this->bye )->setClickable( this->bye, TRUE );
 	FUNCTIONS( ButtonView, BaseView, this->obscenity )->setClickable( this->obscenity, TRUE );
 	FUNCTIONS( ButtonView, BaseView, this->clear )->setClickable( this->clear, TRUE );
+	FUNCTIONS( ButtonView, BaseView, this->allPurpose )->setClickable( this->allPurpose, TRUE );
 	JoyManager_setDefaultCurrentElement( joyManager );
 }
 
@@ -107,6 +110,10 @@ void TestView_setupChildren( TestView* this ) {
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->clear ) );
 	FUNCTIONS( ButtonView, BaseView, this->clear )->setText( this->clear, TestView_SAY_RESET, FALSE, FALSE );
 
+	NEW_OBJECT( ButtonView, this->allPurpose, this->buttonStyle, 0, 0, 12, 32 );
+	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->allPurpose ) );
+	FUNCTIONS( ButtonView, BaseView, this->allPurpose )->setText( this->allPurpose, TestView_BUTTON_LOG, FALSE, FALSE );
+
 	NEW_OBJECT( SimpleTextView, this->textView, TestView_HEADER, 12, 1, FALSE );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->textView ) );
 
@@ -115,6 +122,7 @@ void TestView_setupChildren( TestView* this ) {
 	FUNCTIONS( TestView, BaseView, this )->listenToView( CLASS( BaseView, this ), CLASS( BaseView, this->bye ), EVENT_CLICK, TestView_onButtonClick );
 	FUNCTIONS( TestView, BaseView, this )->listenToView( CLASS( BaseView, this ), CLASS( BaseView, this->obscenity ), EVENT_CLICK, TestView_onButtonClick );
 	FUNCTIONS( TestView, BaseView, this )->listenToView( CLASS( BaseView, this ), CLASS( BaseView, this->clear ), EVENT_CLICK, TestView_onButtonClick );
+	FUNCTIONS( TestView, BaseView, this )->listenToView( CLASS( BaseView, this ), CLASS( BaseView, this->allPurpose ), EVENT_CLICK, TestView_onButtonClick );
 }
 
 void TestView_onButtonClick( void* instance, void* payload ) {
@@ -131,6 +139,8 @@ void TestView_onButtonClick( void* instance, void* payload ) {
 		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, TestView_STRING_OBSCENE, TRUE, FALSE );
 	} else if( button == this->clear ) {
 		FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, TestView_STRING_DEFAULT, TRUE, FALSE );
+	} else if( button == this->allPurpose ) {
+		Log_message( Log_Level_DEBUG, FILE_LINE(), "The all-purpose button was clicked." );
 	} else {
 		Log_message( Log_Level_WARNING, FILE_LINE(), "Invalid payload for event listener TestView_onButtonClick" );
 	}

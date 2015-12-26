@@ -10,8 +10,8 @@
 #define		VDPManager_TAG_NULL			0
 #define		VDPManager_INDEX_NULL		0
 
-#define		VDPManager_LAYER_BASE				VDP_PLAN_A
-#define		VDPManager_LAYER_TRANSPARENT		VDP_PLAN_B
+#define		VDPManager_LAYER_BASE				VDP_PLAN_B
+#define		VDPManager_LAYER_TRANSPARENT		VDP_PLAN_A
 
 typedef u16  VDPManager_TileIndex;
 typedef const u32* VDPManager_Tiles;
