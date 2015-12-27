@@ -94,7 +94,6 @@ void TestView_render( TestView* this ) {
 
 	// Paint the TestView background green and clear the foreground (transparent) layer
 	size_t i,j;
-	BaseView* super = CLASS( BaseView, this );
 	for ( i = 0; i != CLASS( BaseView, this )->height - 1; i++ ) {
 		for( j = 0; j != CLASS( BaseView, this )->width - 1; j++ ) {
 			FUNCTIONS( TestView, BaseView, this )->placeTile( CLASS( BaseView, this ), VDPManager_LAYER_BASE, j, i, systemPalette, 0x0008, FALSE, FALSE );
