@@ -79,9 +79,30 @@ void TestView_dtor( TestView* this ) {
 }
 
 void TestView_render( TestView* this ) {
-	BaseView_render( CLASS( BaseView, this ) );
 
-	Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "sup complete, rendering testview located at %p...", this );
+	Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "Rendering view %p...", this );
+
+	FUNCTIONS( TestView, BaseView, this )->position( CLASS( BaseView, this ) );
+
+	// Get system palette
+	VDPManager_PaletteIndex systemPalette = VDPManager_getPaletteByTag( vdpManager, PAL_SYSTEM );
+	if( systemPalette == VDPManager_Palette_INVALID ) {
+		// Need to load the system palette - Ordinarily, this should never be done.
+		Log_message( Log_Level_WARNING, FILE_LINE(), "system palette wasn't loaded when initialising TestView" );
+		systemPalette = VDPManager_loadPalette( vdpManager, StandardColours, PAL_SYSTEM );
+	}
+
+	// Paint the TestView background green and clear the foreground (transparent) layer
+	size_t i,j;
+	BaseView* super = CLASS( BaseView, this );
+	for ( i = 0; i != CLASS( BaseView, this )->height - 1; i++ ) {
+		for( j = 0; j != CLASS( BaseView, this )->width - 1; j++ ) {
+			FUNCTIONS( TestView, BaseView, this )->placeTile( CLASS( BaseView, this ), VDPManager_LAYER_BASE, j, i, systemPalette, 0x0008, FALSE, FALSE );
+			FUNCTIONS( TestView, BaseView, this )->placeTile( CLASS( BaseView, this ), VDPManager_LAYER_TRANSPARENT, j, i, systemPalette, 0x0000, FALSE, FALSE );
+		}
+	}
+
+	FUNCTIONS( TestView, BaseView, this )->renderChildren( CLASS( BaseView, this ) );
 
 	// Refresh the JoyManager and prepare it for a new set of clickables
 	JoyManager_unregisterAll( joyManager );
@@ -97,28 +118,28 @@ void TestView_render( TestView* this ) {
 }
 
 void TestView_setupChildren( TestView* this ) {
-	NEW_OBJECT( ButtonView, this->hi, this->buttonStyle, 0, 0, 0, 10 );
+	NEW_OBJECT( ButtonView, this->hi, this->buttonStyle, TestView_BOX_FILL_TILE, 0, 0, 10 );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->hi ) );
 	FUNCTIONS( ButtonView, BaseView, this->hi )->setText( this->hi, TestView_SAY_HI, FALSE, FALSE );
 
-	NEW_OBJECT( ButtonView, this->bye, this->buttonStyle, 0, 0, 4, 10 );
+	NEW_OBJECT( ButtonView, this->bye, this->buttonStyle, TestView_BOX_FILL_TILE, 0, 4, 10 );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->bye ) );
 	FUNCTIONS( ButtonView, BaseView, this->bye )->setText( this->bye, TestView_SAY_BYE, FALSE, FALSE );
 
-	NEW_OBJECT( ButtonView, this->obscenity, this->buttonStyle, 0, 0, 8, 10 );
+	NEW_OBJECT( ButtonView, this->obscenity, this->buttonStyle, TestView_BOX_FILL_TILE, 0, 8, 10 );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->obscenity ) );
 	FUNCTIONS( ButtonView, BaseView, this->obscenity )->setText( this->obscenity, TestView_SAY_OBSCENE, FALSE, FALSE );
 	CLASS( BaseView, this->obscenity )->tag = 0xF0CC;
 
-	NEW_OBJECT( ButtonView, this->displayedText, this->buttonStyle, 0, 12, 4, 20 );
+	NEW_OBJECT( ButtonView, this->displayedText, this->buttonStyle, TestView_BOX_FILL_TILE, 12, 4, 20 );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->displayedText ) );
 	FUNCTIONS( ButtonView, BaseView, this->displayedText )->setText( this->displayedText, TestView_STRING_DEFAULT, FALSE, FALSE );
 
-	NEW_OBJECT( ButtonView, this->clear, this->buttonStyle, 0, 12, 8, 20 );
+	NEW_OBJECT( ButtonView, this->clear, this->buttonStyle, TestView_BOX_FILL_TILE, 12, 8, 20 );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->clear ) );
 	FUNCTIONS( ButtonView, BaseView, this->clear )->setText( this->clear, TestView_SAY_RESET, FALSE, FALSE );
 
-	NEW_OBJECT( ButtonView, this->allPurpose, this->buttonStyle, 0, 0, 12, 32 );
+	NEW_OBJECT( ButtonView, this->allPurpose, this->buttonStyle, TestView_BOX_FILL_TILE, 0, 12, 32 );
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, this->allPurpose ) );
 	FUNCTIONS( ButtonView, BaseView, this->allPurpose )->setText( this->allPurpose, TestView_BUTTON_LOG, FALSE, FALSE );
 
@@ -127,10 +148,10 @@ void TestView_setupChildren( TestView* this ) {
 
 	// Send this ButtonView in with only the tag 0x7175
 	ButtonView* lostReference;
-	NEW_OBJECT( ButtonView, lostReference, this->buttonStyle, 0, 0, 16, 32 );
+	NEW_OBJECT( ButtonView, lostReference, this->buttonStyle, TestView_BOX_FILL_TILE, 0, 16, 32 );
 	CLASS( BaseView, lostReference )->tag = 0x7175;
 	FUNCTIONS( TestView, BaseView, this )->addChildView( CLASS( BaseView, this ), CLASS( BaseView, lostReference ) );
-	FUNCTIONS( ButtonView, BaseView, lostReference )->setText( lostReference, "Delete this button...", FALSE, TRUE );
+	FUNCTIONS( ButtonView, BaseView, lostReference )->setText( lostReference, "This button will be deleted...", FALSE, TRUE );
 
 	// Setup event listeners
 	FUNCTIONS( TestView, BaseView, this )->listenToView( CLASS( BaseView, this ), CLASS( BaseView, this->hi ), EVENT_CLICK, TestView_onButtonClick );

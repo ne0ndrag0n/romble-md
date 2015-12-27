@@ -10,6 +10,8 @@
 #include <vdpmanager.h>
 #include <eventmanager.h>
 
+#define		TestView_BOX_FILL_TILE		0
+
 struct TestView;
 
 typedef struct {
