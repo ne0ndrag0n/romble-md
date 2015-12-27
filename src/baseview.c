@@ -60,9 +60,6 @@ void BaseView_ctor( BaseView* this, s16 x, s16 y, s16 width, s16 height ) {
 	this->width = width;
 	this->height = height;
 
-	this->scrollX = 0;
-	this->scrollY = 0;
-
 	this->numChildren = 0;
 
 	this->children = NULL;
@@ -97,8 +94,8 @@ void BaseView_position( BaseView* this ) {
 		this->absX = this->x;
 		this->absY = this->y;
 	} else {
-		this->absX = this->x + this->parent->absX + this->parent->scrollX;
-		this->absY = this->y + this->parent->absY + this->parent->scrollY;
+		this->absX = this->x + this->parent->absX;
+		this->absY = this->y + this->parent->absY;
 	}
 }
 

@@ -42,9 +42,6 @@ typedef struct BaseView {
 	s16 absX;
 	s16 absY;
 
-	s16 scrollX;
-	s16 scrollY;
-
 	u8 numChildren;
 
 	struct BaseView* parent;
