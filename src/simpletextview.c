@@ -58,14 +58,7 @@ void SimpleTextView_render( SimpleTextView* this ) {
 
 	FUNCTIONS( SimpleTextView, BaseView, this )->position( super );
 
-	void ( *placeTile )( struct BaseView*, s16, s16, s16, u8, u16, bool, bool ) = FUNCTIONS( SimpleTextView, BaseView, this )->placeTile;
-
-	// Place this->text character by character (visibility verification will be done each step of the way)
-	size_t i;
-	size_t len = strlen( this->text );
-	for( i = 0; i != len; i++ ) {
-		placeTile( super, VDPManager_LAYER_TRANSPARENT, i, 0, PAL0, TILE_FONTINDEX + ( this->text[ i ] - 32 ), FALSE, FALSE );
-	}
+	VDP_drawText( this->text, super->absX, super->absY );
 }
 
 void SimpleTextView_setText( SimpleTextView* this, char* text, bool copy ) {

@@ -37,7 +37,7 @@ int main( void ) {
 
 	TestView* test;
 	test = Romble_alloc_d( sizeof( TestView ), TRUE, FILE_LINE() );
-	TestView_ctor( test, 2, 2, 35, 25 );
+	TestView_ctor( test, 2, 2, 35, 20 );
 
 	FUNCTIONS( BaseView, BaseView, root )->addChildView( root, CLASS( BaseView, test ) );
 	FUNCTIONS( BaseView, BaseView, root )->render( root );

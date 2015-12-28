@@ -92,14 +92,29 @@ void TestView_render( TestView* this ) {
 		systemPalette = VDPManager_loadPalette( vdpManager, StandardColours, PAL_SYSTEM );
 	}
 
-	// Paint the TestView background green and clear the foreground (transparent) layer
-	size_t i,j;
-	for ( i = 0; i != CLASS( BaseView, this )->height - 1; i++ ) {
-		for( j = 0; j != CLASS( BaseView, this )->width - 1; j++ ) {
-			FUNCTIONS( TestView, BaseView, this )->placeTile( CLASS( BaseView, this ), VDPManager_LAYER_BASE, j, i, systemPalette, 0x0008, FALSE, FALSE );
-			FUNCTIONS( TestView, BaseView, this )->placeTile( CLASS( BaseView, this ), VDPManager_LAYER_TRANSPARENT, j, i, systemPalette, 0x0000, FALSE, FALSE );
-		}
-	}
+	// Clear VIEW
+	FUNCTIONS( TestView, BaseView, this )->placeTileSeries(
+		CLASS( BaseView, this ),
+		VDPManager_LAYER_BASE,
+		0,
+		0,
+		CLASS( BaseView, this )->width,
+		CLASS( BaseView, this )->height,
+		systemPalette,
+		0x0008,
+		FALSE
+	);
+	FUNCTIONS( TestView, BaseView, this )->placeTileSeries(
+		CLASS( BaseView, this ),
+		VDPManager_LAYER_TRANSPARENT,
+		0,
+		0,
+		CLASS( BaseView, this )->width,
+		CLASS( BaseView, this )->height,
+		systemPalette,
+		0x0000,
+		FALSE
+	);
 
 	FUNCTIONS( TestView, BaseView, this )->renderChildren( CLASS( BaseView, this ) );
 

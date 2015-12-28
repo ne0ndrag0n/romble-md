@@ -128,29 +128,22 @@ void BaseView_addChildView( BaseView* this, BaseView* childView ) {
 }
 
 void BaseView_placeTile( BaseView* this, s16 plane, s16 x, s16 y, u8 pal, u16 tileIndex, bool flipV, bool flipH ) {
-	// If x or y lie outside the boundaries, the tile will not be visible. Do not draw it.
 	s16 absX = x + this->absX;
 	s16 absY = y + this->absY;
 
-	// Check that the tile can be placed within this container as well as all parent containers
-	if( FUNCTIONS( BaseView, BaseView, this )->checkTileBoundary( this, absX, absY ) ) {
-		VDP_setTileMapXY( plane, TILE_ATTR_FULL( pal, PRIORITY_LOW, flipV, flipH, tileIndex ), absX, absY );
-	}
+	VDP_setTileMapXY( plane, TILE_ATTR_FULL( pal, PRIORITY_LOW, flipV, flipH, tileIndex ), absX, absY );
 }
 
 void BaseView_placeTileSeries( BaseView* this, s16 plane, s16 x, s16 y, s16 w, s16 h, u8 pal, u16 tileIndex, bool autoInc ) {
-	u8 i = 0, j = 0;
+	// Use VDP_fillTileMapRect/VDP_fillTileMapRectInc for speed. This won't check within the bounds for a view,
+	// but that costs too much computation for too little benefit on this platform.
+	s16 absX = x + this->absX;
+	s16 absY = y + this->absY;
 
-	void ( *placeTile )( struct BaseView*, s16, s16, s16, u8, u16, bool, bool ) = FUNCTIONS( BaseView, BaseView, this )->placeTile;
-
-	for( j = 0; j != h; j++ ) {
-		for( i = 0; i != w; i++ ) {
-			placeTile( this, plane, x + i, y + j, pal, tileIndex, FALSE, FALSE );
-
-			if( autoInc == TRUE ) {
-				tileIndex++;
-			}
-		}
+	if( autoInc == TRUE ) {
+		VDP_fillTileMapRectInc( plane, TILE_ATTR_FULL( pal, PRIORITY_LOW, FALSE, FALSE, tileIndex ), absX, absY, w, h );
+	} else {
+		VDP_fillTileMapRect( plane, TILE_ATTR_FULL( pal, PRIORITY_LOW, FALSE, FALSE, tileIndex ), absX, absY, w, h );
 	}
 }
 
