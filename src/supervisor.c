@@ -97,7 +97,7 @@ void Supervisor_changeState( Supervisor* this, Supervisor_State state ) {
 	// Destroy + remove the stateView (added as this->stateView). This will re-render the supervisor,
 	// clearing both VDP planes.
 	if( this->stateView != NULL ) {
-		FUNCTIONS( Supervisor, BaseView, this )->removeChild( CLASS( BaseView, this ), this->stateView );
+		FUNCTIONS( Supervisor, BaseView, this )->removeChild( CLASS( BaseView, this ), this->stateView, FALSE );
 		this->stateView = NULL;
 	} else {
 		// Make sure the view is positioned and cleared without the overhead of removeChild

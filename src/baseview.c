@@ -181,7 +181,7 @@ BaseView* BaseView_getChildByTag( BaseView* this, u16 tag ) {
 	return LinkedListNode_findData( this->children, BaseView_isViewByTag );
 }
 
-void BaseView_removeChild( BaseView* this, BaseView* childInstance ) {
+void BaseView_removeChild( BaseView* this, BaseView* childInstance, bool rerender ) {
 
 	if( childInstance != NULL && this->children != NULL ) {
 		Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "View %p is removing child %p", this, childInstance );
@@ -204,7 +204,9 @@ void BaseView_removeChild( BaseView* this, BaseView* childInstance ) {
 		Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "Re-rendering %p...", this );
 
 		// Redraw the parent view
-		FUNCTIONS( BaseView, BaseView, this )->render( this );
+		if( rerender == TRUE ) {
+			FUNCTIONS( BaseView, BaseView, this )->render( this );
+		}
 	} else {
 		Log_fmessage( Log_Level_WARNING, FILE_LINE(), "Could not remove child %p: No children exist for %p or you have passed a null pointer.", childInstance, this );
 	}

@@ -193,7 +193,7 @@ void TestView_onButtonClick( void* instance, void* payload ) {
 		Log_message( Log_Level_DEBUG, FILE_LINE(), "The all-purpose button was clicked." );
 		BaseView* lostReference = FUNCTIONS( TestView, BaseView, this )->getChildByTag( CLASS( BaseView, this ), 0x7175 );
 		Log_fmessage( Log_Level_DEBUG, FILE_LINE(), "Got: %p, removing child...", lostReference );
-		FUNCTIONS( TestView, BaseView, this )->removeChild( CLASS( BaseView, this ), lostReference );
+		FUNCTIONS( TestView, BaseView, this )->removeChild( CLASS( BaseView, this ), lostReference, TRUE );
 	} else {
 		Log_message( Log_Level_WARNING, FILE_LINE(), "Invalid payload for event listener TestView_onButtonClick" );
 	}

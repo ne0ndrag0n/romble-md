@@ -24,7 +24,7 @@ typedef struct {
 
 	struct BaseView* ( *getChildById )( struct BaseView*, u16 );
 	struct BaseView* ( *getChildByTag )( struct BaseView*, u16 );
-	void ( *removeChild )( struct BaseView* , struct BaseView* );
+	void ( *removeChild )( struct BaseView* , struct BaseView*, bool );
 
 	bool ( *checkTileBoundary )( struct BaseView*, s16, s16 );
 } BaseView_vtable;
@@ -78,7 +78,7 @@ void BaseView_trigger( BaseView* this, EventManager_EventKey event, void* payloa
 BaseView* BaseView_getChildById( BaseView* this, u16 id );
 BaseView* BaseView_getChildByTag( BaseView* this, u16 tag );
 
-void BaseView_removeChild( BaseView* this, BaseView* childInstance );
+void BaseView_removeChild( BaseView* this, BaseView* childInstance, bool rerender );
 
 bool BaseView_checkTileBoundary( BaseView* this, s16 x, s16 y );
 bool BaseView_isView( void* view );
