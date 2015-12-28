@@ -101,7 +101,7 @@ void TestView_render( TestView* this ) {
 		CLASS( BaseView, this )->width,
 		CLASS( BaseView, this )->height,
 		systemPalette,
-		0x0008,
+		0x0001,
 		FALSE
 	);
 	FUNCTIONS( TestView, BaseView, this )->placeTileSeries(

@@ -13,6 +13,9 @@
 #define		VDPManager_LAYER_BASE				VDP_PLAN_B
 #define		VDPManager_LAYER_TRANSPARENT		VDP_PLAN_A
 
+#define		VDPManager_PLANE_MAX_X		64
+#define		VDPManager_PLANE_MAX_Y		64
+
 typedef u16  VDPManager_TileIndex;
 typedef const u32* VDPManager_Tiles;
 typedef const u16* VDPManager_Palette;

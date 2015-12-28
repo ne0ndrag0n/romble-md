@@ -10,10 +10,12 @@
 #include <vdp_tile.h>
 #include <romble.h>
 #include <joymanager.h>
+#include <lang.h>
 #include <testview.h>
 #include <res/globals.h>
 #include <sram.h>
 #include <log.h>
+#include <supervisor.h>
 
 #ifdef UNIT_TEST_MODE
 	#include <test/specrunner.h>
@@ -31,16 +33,10 @@ int main( void ) {
 
 	Romble_init();
 
-	BaseView* root;
-	root = Romble_alloc_d( sizeof( BaseView ), TRUE, FILE_LINE() );
-	BaseView_ctor( root, 0, 0, 40, 28 );
-
-	TestView* test;
-	test = Romble_alloc_d( sizeof( TestView ), TRUE, FILE_LINE() );
-	TestView_ctor( test, 2, 2, 35, 20 );
-
-	FUNCTIONS( BaseView, BaseView, root )->addChildView( root, CLASS( BaseView, test ) );
-	FUNCTIONS( BaseView, BaseView, root )->render( root );
+	// Setup a Supervisor and change its state to Supervisor_State_BETATEST as an initial state
+	Supervisor* supervisor = NULL;
+	NEW_OBJECT( Supervisor, supervisor );
+	FUNCTIONS( Supervisor, BaseView, supervisor )->changeState( supervisor, Supervisor_State_BETATEST );
 
 	Log_message( Log_Level_INFO, FILE_LINE(), "boot ok" );
 	while(1);

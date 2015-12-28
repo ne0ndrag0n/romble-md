@@ -11,5 +11,6 @@
 
 // ------------------------ Events/Event IDs ------------------------
 #define	EVENT_CLICK					0x0001
+#define EVENT_NAVIGATE				0x0002
 
 #endif
