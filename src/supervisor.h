@@ -4,15 +4,9 @@
 #include <types.h>
 #include <res/globals.h>
 #include <baseview.h>
+#include <supervisor_states.h>
 
 struct Supervisor;
-
-typedef enum {
-	Supervisor_State_DEFAULT = 0,
-	Supervisor_State_WELCOME,
-	Supervisor_State_LOGIN,
-	Supervisor_State_BETATEST
-} Supervisor_State;
 
 typedef struct {
 	void ( *destroy )( struct BaseView* );

@@ -16,6 +16,7 @@
 #include <sram.h>
 #include <log.h>
 #include <supervisor.h>
+#include <supervisor_states.h>
 
 #ifdef UNIT_TEST_MODE
 	#include <test/specrunner.h>
