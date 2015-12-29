@@ -40,5 +40,7 @@ int main( void ) {
 	FUNCTIONS( Supervisor, BaseView, supervisor )->changeState( supervisor, Supervisor_State_BETATEST );
 
 	Log_message( Log_Level_INFO, FILE_LINE(), "boot ok" );
-	while(1);
+	while(1) {
+
+	}
 }
