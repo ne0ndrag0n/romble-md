@@ -13,6 +13,10 @@ typedef struct {
 	void ( *execute )( struct Microtask* );
 } Microtask_vtable;
 
+extern const Microtask_State Microtask_State_COMPLETE;
+extern const Microtask_State Microtask_State_RUNNING;
+extern const Microtask_State Microtask_State_PAUSED;
+
 typedef struct Microtask {
 	Microtask_Tag taskTag;
 	Microtask_State currentState;
